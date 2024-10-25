@@ -1,19 +1,11 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { AppRouter } from "./providers/router";
-import { PageLoader } from "@/widgets/PageLoader";
+import { Loader } from "@/shared/ui";
 
 const App = () => {
-	useEffect(() => {
-		if (user) setAuthData(user);
-	}, [user]);
-
-	if (isLoading) {
-		return <PageLoader />;
-	}
-
 	return (
 		<div>
-			<Suspense fallback={<PageLoader />}>
+			<Suspense fallback={<Loader />}>
 				<div className="content-page">
 					<AppRouter />
 				</div>
