@@ -3,13 +3,13 @@ import { AppRouter } from "./providers/router";
 import { PageLoader } from "@/widgets/PageLoader";
 
 const App = () => {
-	useEffect(() => {
-		if (user) setAuthData(user);
-	}, [user]);
+	// useEffect(() => {
+	// 	if (user) setAuthData(user);
+	// }, [user]);
 
-	if (isLoading) {
-		return <PageLoader />;
-	}
+	// if (isLoading) {
+	// 	return <PageLoader />;
+	// }
 
 	return (
 		<div>
