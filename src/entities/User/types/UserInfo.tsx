@@ -11,5 +11,5 @@ export interface UserInfo {
 	family_name: string;
 	email: string;
 	app?: AppUserInfo;
-	roles: Array<string>;
+	roles?: Array<string>;
 }

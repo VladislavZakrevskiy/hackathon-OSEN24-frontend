@@ -1,6 +1,5 @@
-import { UserRoles } from "@/entities/User";
+import { UserRoles, useUserStore } from "@/entities/User";
 import { getRouteMain, getRouteNotFound } from "@/shared/consts/router";
-import { useAppSelector } from "@/shared/lib/hooks";
 import { FC, ReactNode, useMemo } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
@@ -10,18 +9,18 @@ interface Props {
 }
 
 export const RequireAuth: FC<Props> = ({ children, roles }) => {
-	const auth = useAppSelector((state) => state.user.authData);
 	const location = useLocation();
-	const userRoles = auth?.roles;
+	const { userInfo } = useUserStore();
+	const userRoles = userInfo?.roles;
 
 	const hasRequiredRoles = useMemo(() => {
 		if (!roles) {
 			return true;
 		}
-		return roles.some((requireRole) => userRoles?.includes(requireRole));
+		return roles.some((requireRole) => (userRoles as UserRoles[])?.includes(requireRole));
 	}, [roles, userRoles]);
 
-	if (!auth) {
+	if (!userInfo) {
 		return <Navigate to={getRouteMain()} state={{ from: location }} replace />;
 	}
 
