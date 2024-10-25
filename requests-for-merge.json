@@ -1,0 +1,188 @@
+[
+  {
+    "name": "searchDoctorType",
+    "body": "query searchDoctorType($searchStr: String!) {\n  searchDoctorType(\n    cond: \"(it.id + it.name).$upper $like '%' + ${searchStr}.$upper + '%' && it.isDel == false\"\n  ) @strExpr(string: $searchStr) {\n    elems {\n      ...DoctorTypeAttributes\n    }\n  }\n}\n    fragment DoctorTypeAttributes on _E_DoctorType {\n  id\n  __typename\n  name\n  description\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "updateOrCreateDoctorType",
+    "body": "mutation updateOrCreateDoctorType($id: ID!, $name: String!, $description: String) {\n  dictionaryPacket {\n    updateOrCreateDoctorType(\n      input: {id: $id, name: $name, description: $description, isDel: false}\n    ) {\n      returning {\n        ...DoctorTypeAttributes\n      }\n    }\n  }\n}\n    fragment DoctorTypeAttributes on _E_DoctorType {\n  id\n  __typename\n  name\n  description\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteDoctorType",
+    "body": "mutation deleteDoctorType($id: ID!) {\n  dictionaryPacket {\n    getDoctorType(id: \"find: it.id == ${id}\", failOnEmpty: true) {\n      id\n    }\n    updateOrCreateDoctorType(\n      input: {id: $id, name: \"\", isDel: false}\n      exist: {update: {isDel: true}}\n    ) {\n      returning {\n        ...DoctorTypeAttributes\n      }\n    }\n  }\n}\n    fragment DoctorTypeAttributes on _E_DoctorType {\n  id\n  __typename\n  name\n  description\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchPerson",
+    "body": "query searchPerson($searchStr: String!) {\n  searchPerson(\n    cond: \"(it.firstName+it.lastName).$upper $like '%' + ${searchStr}.$upper + '%'\"\n  ) @strExpr(string: $searchStr) {\n    elems {\n      ...PersonAttributes\n    }\n  }\n}\n    fragment PersonAttributes on _E_Person {\n  id\n  __typename\n  firstName\n  lastName\n  inn\n  birthDate\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createPerson",
+    "body": "mutation createPerson($input: _CreatePersonInput!) {\n  packet {\n    createPerson(input: $input) {\n      ...PersonAttributes\n    }\n  }\n}\n    fragment PersonAttributes on _E_Person {\n  id\n  __typename\n  firstName\n  lastName\n  inn\n  birthDate\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "updatePerson",
+    "body": "mutation updatePerson($input: _UpdatePersonInput!) {\n  packet {\n    updatePerson(input: $input) {\n      ...PersonAttributes\n    }\n  }\n}\n    fragment PersonAttributes on _E_Person {\n  id\n  __typename\n  firstName\n  lastName\n  inn\n  birthDate\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deletePerson",
+    "body": "mutation deletePerson($id: ID!) {\n  packet {\n    deletePerson(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchDoctor",
+    "body": "query searchDoctor($searchStr: String!) {\n  searchDoctor(\n    cond: \"(it.person.entity.firstName+it.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'\"\n  ) @strExpr(string: $searchStr) {\n    elems {\n      ...DoctorAttributes\n    }\n  }\n}\n    fragment DoctorAttributes on _E_Doctor {\n  id\n  __typename\n  doctorType {\n    id\n    name\n  }\n  person {\n    entityId\n    entity {\n      firstName\n      lastName\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createDoctor",
+    "body": "mutation createDoctor($doctorTypeId: ID!, $personId: String!) {\n  packet {\n    createDoctor(input: {doctorType: $doctorTypeId, person: {entityId: $personId}}) {\n      ...DoctorAttributes\n    }\n  }\n}\n    fragment DoctorAttributes on _E_Doctor {\n  id\n  __typename\n  doctorType {\n    id\n    name\n  }\n  person {\n    entityId\n    entity {\n      firstName\n      lastName\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "updateDoctor",
+    "body": "mutation updateDoctor($id: ID!, $doctorTypeId: ID!, $personId: String!) {\n  packet {\n    updateDoctor(\n      input: {id: $id, doctorType: $doctorTypeId, person: {entityId: $personId}}\n    ) {\n      ...DoctorAttributes\n    }\n  }\n}\n    fragment DoctorAttributes on _E_Doctor {\n  id\n  __typename\n  doctorType {\n    id\n    name\n  }\n  person {\n    entityId\n    entity {\n      firstName\n      lastName\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteDoctor",
+    "body": "mutation deleteDoctor($id: ID!) {\n  packet {\n    deleteDoctor(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchCustomer",
+    "body": "query searchCustomer($searchStr: String!) {\n  searchCustomer(\n    cond: \"(it.person.entity.firstName+it.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'\"\n  ) @strExpr(string: $searchStr) {\n    elems {\n      ...CustomerAttributes\n    }\n  }\n}\n    fragment CustomerAttributes on _E_Customer {\n  id\n  __typename\n  insurancePolicyNumber\n  phoneNumber\n  person {\n    entityId\n    entity {\n      firstName\n      lastName\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createCustomer",
+    "body": "mutation createCustomer($personId: String!, $insurancePolicyNumber: String!, $phoneNumber: String) {\n  packet {\n    createCustomer(\n      input: {person: {entityId: $personId}, insurancePolicyNumber: $insurancePolicyNumber, phoneNumber: $phoneNumber}\n    ) {\n      ...CustomerAttributes\n    }\n  }\n}\n    fragment CustomerAttributes on _E_Customer {\n  id\n  __typename\n  insurancePolicyNumber\n  phoneNumber\n  person {\n    entityId\n    entity {\n      firstName\n      lastName\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "updateCustomer",
+    "body": "mutation updateCustomer($id: ID!, $phoneNumber: String) {\n  packet {\n    updateCustomer(input: {id: $id, phoneNumber: $phoneNumber}) {\n      ...CustomerAttributes\n    }\n  }\n}\n    fragment CustomerAttributes on _E_Customer {\n  id\n  __typename\n  insurancePolicyNumber\n  phoneNumber\n  person {\n    entityId\n    entity {\n      firstName\n      lastName\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteCustomer",
+    "body": "mutation deleteCustomer($id: ID!) {\n  packet {\n    deleteCustomer(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchClinic",
+    "body": "query searchClinic($searchStr: String!) {\n  searchClinic(cond: \"(it.name).$upper $like '%' + ${searchStr}.$upper + '%'\") @strExpr(string: $searchStr) {\n    elems {\n      ...ClinicAttributes\n    }\n  }\n}\n    fragment ClinicAttributes on _E_Clinic {\n  id\n  __typename\n  name\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createClinic",
+    "body": "mutation createClinic($name: String!) {\n  packet {\n    createClinic(input: {name: $name}) {\n      ...ClinicAttributes\n    }\n  }\n}\n    fragment ClinicAttributes on _E_Clinic {\n  id\n  __typename\n  name\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "updateClinic",
+    "body": "mutation updateClinic($id: ID!, $name: String!) {\n  packet {\n    updateClinic(input: {id: $id, name: $name}) {\n      ...ClinicAttributes\n    }\n  }\n}\n    fragment ClinicAttributes on _E_Clinic {\n  id\n  __typename\n  name\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteClinic",
+    "body": "mutation deleteClinic($id: ID!) {\n  packet {\n    deleteClinic(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchClinicOffice",
+    "body": "query searchClinicOffice($clinicId: String!, $officeNumber: String!) {\n  searchClinicOffice(\n    cond: \"it.clinic.id == ${clinicId} && it.officeNumber.$upper $like '%' + ${officeNumber}.$upper + '%'\"\n  ) @strExpr(strings: [$clinicId, $officeNumber]) {\n    elems {\n      ...ClinicOfficeAttributes\n    }\n  }\n}\n    fragment ClinicOfficeAttributes on _E_ClinicOffice {\n  id\n  __typename\n  clinic {\n    id\n    name\n  }\n  officeNumber\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createClinicOffice",
+    "body": "mutation createClinicOffice($clinicId: ID!, $officeNumber: String!) {\n  packet {\n    createClinicOffice(input: {clinic: $clinicId, officeNumber: $officeNumber}) {\n      ...ClinicOfficeAttributes\n    }\n  }\n}\n    fragment ClinicOfficeAttributes on _E_ClinicOffice {\n  id\n  __typename\n  clinic {\n    id\n    name\n  }\n  officeNumber\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteClinicOffice",
+    "body": "mutation deleteClinicOffice($id: ID!) {\n  packet {\n    deleteClinicOffice(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchClinicDoctor",
+    "body": "query searchClinicDoctor($clinicId: String!, $searchStr: String!) {\n  searchClinicDoctor(\n    cond: \"it.clinic.id == ${clinicId} && (it.doctor.entity.person.entity.firstName+it.doctor.entity.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'\"\n  ) @strExpr(strings: [$clinicId, $searchStr]) {\n    elems {\n      ...ClinicDoctorAttributes\n    }\n  }\n}\n    fragment ClinicDoctorAttributes on _E_ClinicDoctor {\n  id\n  __typename\n  clinic {\n    id\n    name\n  }\n  doctor {\n    entityId\n    entity {\n      doctorType {\n        id\n        name\n      }\n      person {\n        entityId\n        entity {\n          firstName\n          lastName\n          inn\n          birthDate\n        }\n      }\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createClinicDoctor",
+    "body": "mutation createClinicDoctor($clinicId: ID!, $doctorId: String!) {\n  packet {\n    createClinicDoctor(input: {clinic: $clinicId, doctor: {entityId: $doctorId}}) {\n      ...ClinicDoctorAttributes\n    }\n  }\n}\n    fragment ClinicDoctorAttributes on _E_ClinicDoctor {\n  id\n  __typename\n  clinic {\n    id\n    name\n  }\n  doctor {\n    entityId\n    entity {\n      doctorType {\n        id\n        name\n      }\n      person {\n        entityId\n        entity {\n          firstName\n          lastName\n          inn\n          birthDate\n        }\n      }\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteClinicDoctor",
+    "body": "mutation deleteClinicDoctor($id: ID!) {\n  packet {\n    deleteClinicDoctor(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchClinicDoctorAvailability",
+    "body": "query searchClinicDoctorAvailability($clinicDoctorId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {\n  searchClinicDoctorAvailability(\n    cond: \"it.clinicDoctor.id == ${clinicDoctorId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}\"\n  ) @strExpr(string: $clinicDoctorId, dateTimes: [$dateFrom, $dateTo]) {\n    elems {\n      ...ClinicDoctorAvailabilityAttributes\n    }\n  }\n}\n    fragment ClinicDoctorAvailabilityAttributes on _E_ClinicDoctorAvailability {\n  id\n  __typename\n  beginDate\n  endDate\n  clinicOffice {\n    id\n    officeNumber\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createClinicDoctorAvailability",
+    "body": "mutation createClinicDoctorAvailability($clinicDoctorId: ID!, $beginDate: _DateTime!, $endDate: _DateTime!, $clinicOfficeId: ID!) {\n  packet {\n    getClinicDoctor(\n      id: \"find: it.id == ${clinicDoctorId} && ${beginDate} < ${endDate} && !it.clinicDoctorAvailabilityList{cond = it.endDate >= ${beginDate} && it.beginDate<=${endDate}}.$exists\"\n      failOnEmpty: true\n      lock: WAIT\n    ) {\n      id\n    }\n    getClinicOffice(\n      id: \"find: it.id == ${clinicOfficeId} && !entities{type = ClinicDoctorAvailability, cond = it.clinicOffice.id == ${clinicOfficeId} && it.endDate >= ${beginDate} && it.beginDate<=${endDate}}.$exists\"\n      failOnEmpty: true\n      lock: WAIT\n    ) {\n      id\n    }\n    createClinicDoctorAvailability(\n      input: {clinicDoctor: $clinicDoctorId, clinicOffice: $clinicOfficeId, beginDate: $beginDate, endDate: $endDate}\n    ) {\n      ...ClinicDoctorAvailabilityAttributes\n    }\n  }\n}\n    fragment ClinicDoctorAvailabilityAttributes on _E_ClinicDoctorAvailability {\n  id\n  __typename\n  beginDate\n  endDate\n  clinicOffice {\n    id\n    officeNumber\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteClinicDoctorAvailability",
+    "body": "mutation deleteClinicDoctorAvailability($id: ID!) {\n  packet {\n    deleteClinicDoctorAvailability(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "searchClinicTable",
+    "body": "query searchClinicTable($clinicId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {\n  searchClinicTable(\n    cond: \"it.clinic.id == ${clinicId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}\"\n  ) @strExpr(string: $clinicId, dateTimes: [$dateFrom, $dateTo]) {\n    elems {\n      ...ClinicTableAttributes\n    }\n  }\n}\n    fragment ClinicTableAttributes on _E_ClinicTable {\n  id\n  __typename\n  beginDate\n  endDate\n  clinicOffice {\n    id\n    officeNumber\n  }\n  customer {\n    entityId\n    entity {\n      person {\n        entityId\n        entity {\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n  clinicDoctor {\n    id\n    doctor {\n      entityId\n      entity {\n        person {\n          entityId\n          entity {\n            firstName\n            lastName\n          }\n        }\n      }\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "createClinicTable",
+    "body": "mutation createClinicTable($clinicId: ID!, $clinicDoctorId: ID!, $beginDate: _DateTime!, $endDate: _DateTime!, $clinicOfficeId: ID!, $customerId: String!) {\n  packet {\n    getClinicDoctor(\n      id: \"find: it.id == ${clinicDoctorId} && ${beginDate} < ${endDate} && it.clinicDoctorAvailabilityList{cond = it.clinicOffice = ${cliniOffice} && it.beginDate <= ${beginDate} && it.endDate>=${endDate}}.$exists\"\n      failOnEmpty: true\n      lock: WAIT\n    ) {\n      id\n    }\n    getClinic(\n      id: \"find: it.id == ${clinicId} && ${beginDate} < ${endDate} && !it.clinicTableList{cond = it.endDate >= ${beginDate} && it.beginDate<=${endDate} && (it.clinicDoctor.id == ${clinicDoctorId} || it.clinicOffice.id == ${clinicOfficeId} || it.customer.entityId == ${customerId})}.$exists\"\n      failOnEmpty: true\n      lock: WAIT\n    ) {\n      id\n    }\n    createClinicTable(\n      input: {clinic: $clinicId, clinicDoctor: $clinicDoctorId, clinicOffice: $clinicOfficeId, customer: {entityId: $customerId}, beginDate: $beginDate, endDate: $endDate}\n    ) {\n      ...ClinicTableAttributes\n    }\n  }\n}\n    fragment ClinicTableAttributes on _E_ClinicTable {\n  id\n  __typename\n  beginDate\n  endDate\n  clinicOffice {\n    id\n    officeNumber\n  }\n  customer {\n    entityId\n    entity {\n      person {\n        entityId\n        entity {\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n  clinicDoctor {\n    id\n    doctor {\n      entityId\n      entity {\n        person {\n          entityId\n          entity {\n            firstName\n            lastName\n          }\n        }\n      }\n    }\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  },
+  {
+    "name": "deleteClinicTable",
+    "body": "mutation deleteClinicTable($id: ID!) {\n  packet {\n    deleteClinicTable(id: $id)\n  }\n}",
+    "allowEmptyChecks": true,
+    "disableJwtVerification": true
+  }
+]

@@ -1,0 +1,8 @@
+{
+    "realm": "clinic",
+    "auth-server-url": "ENTER_YOUR_KEYCLOAK_ENDPOINT_HERE",
+    "ssl-required": "external",
+    "resource": "clinic",
+    "public-client": true,
+    "confidential-port": 0
+}

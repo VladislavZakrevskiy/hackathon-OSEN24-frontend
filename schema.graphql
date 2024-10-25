@@ -1,0 +1,1882 @@
+schema {
+  query: _Query
+  mutation: _Mutation
+}
+
+directive @strExpr(
+  char: Char
+  chars: [Char!]
+  string: String
+  strings: [String!]
+  byte: Byte
+  bytes: [Byte!]
+  short: Short
+  shorts: [Short!]
+  int: Int
+  ints: [Int!]
+  long: Long
+  longs: [Long!]
+  float: _Float4
+  floats: [_Float4!]
+  double: Float
+  doubles: [Float!]
+  bigDecimal: BigDecimal
+  bigDecimals: [BigDecimal!]
+  date: _Date
+  dates: [_Date!]
+  dateTime: _DateTime
+  dateTimes: [_DateTime!]
+  offsetDateTime: _OffsetDateTime
+  offsetDateTimes: [_OffsetDateTime!]
+  time: _Time
+  times: [_Time!]
+  boolean: Boolean
+  booleans: [Boolean!]
+) on FIELD
+
+directive @mergeReqSpec(cond: String) on INLINE_FRAGMENT
+
+directive @dependsOnByGet(
+  commandId: String!
+  dependency: _DependsOnDependencyByGet!
+) on FIELD
+
+directive @dependsOnByUpdateOrCreate(
+  commandId: String!
+  dependency: _DependsOnDependencyByUpdateOrCreate!
+) on FIELD
+
+# java.math.BigDecimal
+scalar BigDecimal
+
+# Byte as Int
+scalar Byte
+
+# Char as Character
+scalar Char
+
+interface Clinic {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  name: String
+  type: String!
+  classOfficeList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicOffice!
+  clinicDoctorList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicDoctor!
+  clinicTableList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicTable!
+  _calc: _Calculation!
+}
+
+interface ClinicDoctor {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  clinic(alias: String): Clinic!
+  aggregateRoot(alias: String): Clinic
+  clinicDoctorAvailabilityList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicDoctorAvailability!
+  doctor: _G_DoctorReference!
+  _calc: _Calculation!
+}
+
+interface ClinicDoctorAvailability {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beginDate: _DateTime!
+  endDate: _DateTime!
+  type: String!
+  clinicDoctor(alias: String): ClinicDoctor!
+  clinicOffice(alias: String): ClinicOffice!
+  aggregateRoot(alias: String): Clinic
+  _calc: _Calculation!
+}
+
+interface ClinicOffice {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  officeNumber: String
+  type: String!
+  clinic(alias: String): Clinic!
+  aggregateRoot(alias: String): Clinic
+  _calc: _Calculation!
+}
+
+interface ClinicTable {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beginDate: _DateTime!
+  comment: String
+  endDate: _DateTime!
+  type: String!
+  clinic(alias: String): Clinic!
+  clinicDoctor(alias: String): ClinicDoctor!
+  clinicOffice(alias: String): ClinicOffice!
+  aggregateRoot(alias: String): Clinic
+  customer: _G_CustomerReference!
+  _calc: _Calculation!
+}
+
+interface Customer {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  insurancePolicyNumber: String!
+  phoneNumber: String
+  type: String!
+  person: _G_PersonReference!
+  _calc: _Calculation!
+}
+
+interface Doctor {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  doctorType(alias: String): DoctorType!
+  person: _G_PersonReference!
+  _calc: _Calculation!
+}
+
+interface DoctorType {
+  id: ID!
+  description: String
+  isDel: Boolean!
+  name: String!
+  type: String!
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+# Long type
+scalar Long
+
+interface Person {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  birthDate: _Date
+  firstName: String!
+  inn: String
+  lastName: String!
+  type: String!
+  _calc: _Calculation!
+}
+
+interface RootDictionary {
+  id: ID!
+  type: String!
+  _calc: _Calculation!
+}
+
+# Short as Int
+scalar Short
+
+interface Stakeholder {
+  id: ID!
+  chgCnt: Long
+  code: String
+  lastChangeDate: _DateTime
+  name: String
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+interface Status {
+  id: ID!
+  chgCnt: Long
+  code: String
+  description: String
+  initial: Boolean
+  lastChangeDate: _DateTime
+  name: String
+  statusType: String
+  stakeholder(alias: String): Stakeholder
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+interface StatusGraph {
+  id: ID!
+  chgCnt: Long
+  code: String
+  label: String
+  lastChangeDate: _DateTime
+  name: String
+  statusFrom(alias: String): Status
+  statusTo(alias: String): Status
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+interface SysAdminSettings {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  key: String
+  value: String
+  rootSecurity(alias: String): SysRootSecurity!
+  aggregateRoot(alias: String): SysRootSecurity
+  _calc: _Calculation!
+}
+
+interface SysCheckSelect {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beforeCommitEnable: Boolean
+  beforeOperationDisable: Boolean
+  conditionValue: String
+  description: String
+  orderValue: Int
+  typeName: String
+  operation(alias: String): SysOperation!
+  aggregateRoot(alias: String): SysRootSecurity
+  _calc: _Calculation!
+}
+
+interface SysOperation {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  allowEmptyChecks: Boolean
+  body: String
+  disableJwtVerification: Boolean
+  hashValue: String
+  rootSecurity(alias: String): SysRootSecurity!
+  aggregateRoot(alias: String): SysRootSecurity
+  checkSelects(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysCheckSelect!
+  paramAdditions(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysParamAddition!
+  _calc: _Calculation!
+}
+
+interface SysParamAddition {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  paramAddition: String
+  paramName: String
+  operation(alias: String): SysOperation!
+  aggregateRoot(alias: String): SysRootSecurity
+  _calc: _Calculation!
+}
+
+interface SysRootSecurity {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  adminSettings(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysAdminSettings!
+  operations(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysOperation!
+  _calc: _Calculation!
+}
+
+scalar _ByteArray
+
+type _Calculation {
+  char(expr: String!): Char
+  string(expr: String!): String
+  byte(expr: String!): Byte
+  short(expr: String!): Short
+  int(expr: String!): Int
+  long(expr: String!): Long
+  float(expr: String!): _Float4
+  double(expr: String!): Float
+  bigDecimal(expr: String!): BigDecimal
+  date(expr: String!): _Date
+  dateTime(expr: String!): _DateTime
+  offsetDateTime(expr: String!): _OffsetDateTime
+  time(expr: String!): _Time
+  boolean(expr: String!): Boolean
+  byteArray(expr: String!): _ByteArray
+}
+
+input _CompareClinicDoctorAvailabilityInput {
+  beginDate: _DateTime
+  endDate: _DateTime
+}
+
+input _CompareClinicInput {
+  name: String
+}
+
+input _CompareClinicOfficeInput {
+  officeNumber: String
+}
+
+input _CompareClinicTableInput {
+  beginDate: _DateTime
+  endDate: _DateTime
+  comment: String
+}
+
+input _CompareCustomerInput {
+  phoneNumber: String
+  insurancePolicyNumber: String
+}
+
+input _CompareDoctorTypeInput {
+  name: String
+  description: String
+}
+
+input _ComparePersonInput {
+  firstName: String
+  lastName: String
+  inn: String
+  birthDate: _Date
+}
+
+input _CreateClinicDoctorAvailabilityInput {
+  beginDate: _DateTime!
+  clinicOffice: ID!
+  endDate: _DateTime!
+  clinicDoctor: ID!
+}
+
+input _CreateClinicDoctorInput {
+  doctor: _SingleReferenceInput!
+  clinic: ID!
+}
+
+input _CreateClinicInput {
+  name: String
+}
+
+input _CreateClinicOfficeInput {
+  officeNumber: String
+  clinic: ID!
+}
+
+input _CreateClinicTableInput {
+  beginDate: _DateTime!
+  clinicOffice: ID!
+  endDate: _DateTime!
+  clinicDoctor: ID!
+  comment: String
+  clinic: ID!
+  customer: _SingleReferenceInput!
+}
+
+input _CreateCustomerInput {
+  phoneNumber: String
+  insurancePolicyNumber: String!
+  person: _SingleReferenceInput!
+}
+
+input _CreateDoctorInput {
+  doctorType: ID!
+  person: _SingleReferenceInput!
+}
+
+input _CreateDoctorTypeInput {
+  name: String!
+  description: String
+  id: ID!
+  isDel: Boolean!
+}
+
+input _CreatePersonInput {
+  firstName: String!
+  lastName: String!
+  inn: String
+  birthDate: _Date
+}
+
+scalar _Date
+
+scalar _DateTime
+
+input _DeleteManyClinicDoctorAvailabilityInput {
+  id: ID!
+  compare: _CompareClinicDoctorAvailabilityInput
+}
+
+input _DeleteManyClinicInput {
+  id: ID!
+  compare: _CompareClinicInput
+}
+
+input _DeleteManyClinicOfficeInput {
+  id: ID!
+  compare: _CompareClinicOfficeInput
+}
+
+input _DeleteManyClinicTableInput {
+  id: ID!
+  compare: _CompareClinicTableInput
+}
+
+input _DeleteManyCustomerInput {
+  id: ID!
+  compare: _CompareCustomerInput
+}
+
+input _DeleteManyPersonInput {
+  id: ID!
+  compare: _ComparePersonInput
+}
+
+enum _DependsOnDependencyByGet {
+  # EXISTS
+  EXISTS
+
+  # NOT_EXISTS
+  NOT_EXISTS
+}
+
+enum _DependsOnDependencyByUpdateOrCreate {
+  # CREATED
+  CREATED
+
+  # NOT_CREATED
+  NOT_CREATED
+}
+
+type _DictionaryPacket {
+  getDoctorType(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): DoctorType
+  updateOrCreateDoctorType(
+    input: _CreateDoctorTypeInput!
+    exist: _ExistDoctorTypeInput
+  ): _UpdateOrCreateDoctorTypeResponse
+  updateOrCreateManyDoctorType(
+    input: [_UpdateOrCreateManyDoctorTypeInput]!
+  ): [_UpdateOrCreateManyResponse]
+}
+
+type _EC_Clinic {
+  elems: [Clinic!]!
+  count: Int!
+}
+
+type _EC_ClinicDoctor {
+  elems: [ClinicDoctor!]!
+  count: Int!
+}
+
+type _EC_ClinicDoctorAvailability {
+  elems: [ClinicDoctorAvailability!]!
+  count: Int!
+}
+
+type _EC_ClinicOffice {
+  elems: [ClinicOffice!]!
+  count: Int!
+}
+
+type _EC_ClinicTable {
+  elems: [ClinicTable!]!
+  count: Int!
+}
+
+type _EC_Customer {
+  elems: [Customer!]!
+  count: Int!
+}
+
+type _EC_Doctor {
+  elems: [Doctor!]!
+  count: Int!
+}
+
+type _EC_DoctorType {
+  elems: [DoctorType!]!
+  count: Int!
+}
+
+type _EC_Person {
+  elems: [Person!]!
+  count: Int!
+}
+
+type _EC_RootDictionary {
+  elems: [RootDictionary!]!
+  count: Int!
+}
+
+type _EC_Stakeholder {
+  elems: [Stakeholder!]!
+  count: Int!
+}
+
+type _EC_Status {
+  elems: [Status!]!
+  count: Int!
+}
+
+type _EC_StatusGraph {
+  elems: [StatusGraph!]!
+  count: Int!
+}
+
+type _EC_SysAdminSettings {
+  elems: [SysAdminSettings!]!
+  count: Int!
+}
+
+type _EC_SysCheckSelect {
+  elems: [SysCheckSelect!]!
+  count: Int!
+}
+
+type _EC_SysOperation {
+  elems: [SysOperation!]!
+  count: Int!
+}
+
+type _EC_SysParamAddition {
+  elems: [SysParamAddition!]!
+  count: Int!
+}
+
+type _EC_SysRootSecurity {
+  elems: [SysRootSecurity!]!
+  count: Int!
+}
+
+type _E_Clinic implements _Entity & Clinic {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  name: String
+  type: String!
+  classOfficeList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicOffice!
+  clinicDoctorList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicDoctor!
+  clinicTableList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicTable!
+  _calc: _Calculation!
+}
+
+type _E_ClinicDoctor implements _Entity & ClinicDoctor {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  clinic(alias: String): Clinic!
+  aggregateRoot(alias: String): Clinic
+  clinicDoctorAvailabilityList(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicDoctorAvailability!
+  doctor: _G_DoctorReference!
+  _calc: _Calculation!
+}
+
+type _E_ClinicDoctorAvailability implements _Entity & ClinicDoctorAvailability {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beginDate: _DateTime!
+  endDate: _DateTime!
+  type: String!
+  clinicDoctor(alias: String): ClinicDoctor!
+  clinicOffice(alias: String): ClinicOffice!
+  aggregateRoot(alias: String): Clinic
+  _calc: _Calculation!
+}
+
+type _E_ClinicOffice implements _Entity & ClinicOffice {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  officeNumber: String
+  type: String!
+  clinic(alias: String): Clinic!
+  aggregateRoot(alias: String): Clinic
+  _calc: _Calculation!
+}
+
+type _E_ClinicTable implements _Entity & ClinicTable {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beginDate: _DateTime!
+  comment: String
+  endDate: _DateTime!
+  type: String!
+  clinic(alias: String): Clinic!
+  clinicDoctor(alias: String): ClinicDoctor!
+  clinicOffice(alias: String): ClinicOffice!
+  aggregateRoot(alias: String): Clinic
+  customer: _G_CustomerReference!
+  _calc: _Calculation!
+}
+
+type _E_Customer implements _Entity & Customer {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  insurancePolicyNumber: String!
+  phoneNumber: String
+  type: String!
+  person: _G_PersonReference!
+  _calc: _Calculation!
+}
+
+type _E_Doctor implements _Entity & Doctor {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  doctorType(alias: String): DoctorType!
+  person: _G_PersonReference!
+  _calc: _Calculation!
+}
+
+type _E_DoctorType implements _Entity & DoctorType {
+  id: ID!
+  description: String
+  isDel: Boolean!
+  name: String!
+  type: String!
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+type _E_Person implements _Entity & Person {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  birthDate: _Date
+  firstName: String!
+  inn: String
+  lastName: String!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _E_RootDictionary implements _Entity & RootDictionary {
+  id: ID!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _E_Stakeholder implements _Entity & Stakeholder {
+  id: ID!
+  chgCnt: Long
+  code: String
+  lastChangeDate: _DateTime
+  name: String
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+type _E_Status implements _Entity & Status {
+  id: ID!
+  chgCnt: Long
+  code: String
+  description: String
+  initial: Boolean
+  lastChangeDate: _DateTime
+  name: String
+  statusType: String
+  stakeholder(alias: String): Stakeholder
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+type _E_StatusGraph implements _Entity & StatusGraph {
+  id: ID!
+  chgCnt: Long
+  code: String
+  label: String
+  lastChangeDate: _DateTime
+  name: String
+  statusFrom(alias: String): Status
+  statusTo(alias: String): Status
+  aggregateRoot(alias: String): RootDictionary
+  _calc: _Calculation!
+}
+
+type _E_SysAdminSettings implements _Entity & SysAdminSettings {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  key: String
+  value: String
+  rootSecurity(alias: String): SysRootSecurity!
+  aggregateRoot(alias: String): SysRootSecurity
+  _calc: _Calculation!
+}
+
+type _E_SysCheckSelect implements _Entity & SysCheckSelect {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beforeCommitEnable: Boolean
+  beforeOperationDisable: Boolean
+  conditionValue: String
+  description: String
+  orderValue: Int
+  typeName: String
+  operation(alias: String): SysOperation!
+  aggregateRoot(alias: String): SysRootSecurity
+  _calc: _Calculation!
+}
+
+type _E_SysOperation implements _Entity & SysOperation {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  allowEmptyChecks: Boolean
+  body: String
+  disableJwtVerification: Boolean
+  hashValue: String
+  rootSecurity(alias: String): SysRootSecurity!
+  aggregateRoot(alias: String): SysRootSecurity
+  checkSelects(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysCheckSelect!
+  paramAdditions(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysParamAddition!
+  _calc: _Calculation!
+}
+
+type _E_SysParamAddition implements _Entity & SysParamAddition {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  paramAddition: String
+  paramName: String
+  operation(alias: String): SysOperation!
+  aggregateRoot(alias: String): SysRootSecurity
+  _calc: _Calculation!
+}
+
+type _E_SysRootSecurity implements _Entity & SysRootSecurity {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  adminSettings(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysAdminSettings!
+  operations(
+    elemAlias: String
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysOperation!
+  _calc: _Calculation!
+}
+
+interface _Entity {
+  id: ID!
+}
+
+input _ExistDoctorTypeInput {
+  update: _ExistUpdateDoctorTypeInput
+  compare: _CompareDoctorTypeInput
+}
+
+input _ExistUpdateDoctorTypeInput {
+  name: String
+  description: String
+  isDel: Boolean
+}
+
+scalar _Float4
+
+type _G_CustomerReference {
+  entityId: String
+  entity(alias: String): Customer
+}
+
+type _G_DoctorReference {
+  entityId: String
+  entity(alias: String): Doctor
+}
+
+type _G_PersonReference {
+  entityId: String
+  entity(alias: String): Person
+}
+
+enum _GetLockMode {
+  # NOT_USE
+  NOT_USE
+
+  # WAIT
+  WAIT
+
+  # NOWAIT
+  NOWAIT
+}
+
+type _MergedEntitiesCollection {
+  elems: [_Entity!]!
+  count: Int!
+}
+
+type _Mutation {
+  packet(
+    aggregateVersion: Long
+    idempotencePacketId: String
+    enableBuffering: Boolean
+  ): _Packet
+  dictionaryPacket: _DictionaryPacket
+}
+
+scalar _OffsetDateTime
+
+type _Packet {
+  getStatus(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): Status
+  createClinicDoctorAvailability(
+    input: _CreateClinicDoctorAvailabilityInput!
+  ): ClinicDoctorAvailability
+  updateClinicDoctorAvailability(
+    input: _UpdateClinicDoctorAvailabilityInput!
+    compare: _CompareClinicDoctorAvailabilityInput
+  ): ClinicDoctorAvailability
+  getClinicDoctorAvailability(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): ClinicDoctorAvailability
+  deleteClinicDoctorAvailability(
+    id: ID!
+    compare: _CompareClinicDoctorAvailabilityInput
+  ): String
+  createClinicOffice(input: _CreateClinicOfficeInput!): ClinicOffice
+  updateClinicOffice(
+    input: _UpdateClinicOfficeInput!
+    compare: _CompareClinicOfficeInput
+  ): ClinicOffice
+  getClinicOffice(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): ClinicOffice
+  deleteClinicOffice(id: ID!, compare: _CompareClinicOfficeInput): String
+  createCustomer(input: _CreateCustomerInput!): Customer
+  updateCustomer(
+    input: _UpdateCustomerInput!
+    compare: _CompareCustomerInput
+  ): Customer
+  getCustomer(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): Customer
+  deleteCustomer(id: ID!, compare: _CompareCustomerInput): String
+  createDoctor(input: _CreateDoctorInput!): Doctor
+  updateDoctor(input: _UpdateDoctorInput!): Doctor
+  getDoctor(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): Doctor
+  deleteDoctor(id: ID!): String
+  getStatusGraph(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): StatusGraph
+  createClinic(input: _CreateClinicInput!): Clinic
+  updateClinic(input: _UpdateClinicInput!, compare: _CompareClinicInput): Clinic
+  getClinic(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): Clinic
+  deleteClinic(id: ID!, compare: _CompareClinicInput): String
+  createClinicTable(input: _CreateClinicTableInput!): ClinicTable
+  updateClinicTable(
+    input: _UpdateClinicTableInput!
+    compare: _CompareClinicTableInput
+  ): ClinicTable
+  getClinicTable(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): ClinicTable
+  deleteClinicTable(id: ID!, compare: _CompareClinicTableInput): String
+  getStakeholder(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): Stakeholder
+  getDoctorType(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): DoctorType
+  createPerson(input: _CreatePersonInput!): Person
+  updatePerson(input: _UpdatePersonInput!, compare: _ComparePersonInput): Person
+  getPerson(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): Person
+  deletePerson(id: ID!, compare: _ComparePersonInput): String
+  createClinicDoctor(input: _CreateClinicDoctorInput!): ClinicDoctor
+  updateClinicDoctor(input: _UpdateClinicDoctorInput!): ClinicDoctor
+  getClinicDoctor(
+    id: ID!
+    failOnEmpty: Boolean = null
+    lock: _GetLockMode = NOT_USE
+  ): ClinicDoctor
+  deleteClinicDoctor(id: ID!): String
+  aggregateVersion: Long
+  isIdempotenceResponse: Boolean
+  createManyClinicDoctorAvailability(
+    input: [_CreateClinicDoctorAvailabilityInput!]!
+  ): [String]
+  updateManyClinicDoctorAvailability(
+    input: [_UpdateManyClinicDoctorAvailabilityInput]!
+  ): String
+  deleteManyClinicDoctorAvailability(
+    input: [_DeleteManyClinicDoctorAvailabilityInput]!
+  ): String
+  createManyClinicOffice(input: [_CreateClinicOfficeInput!]!): [String]
+  updateManyClinicOffice(input: [_UpdateManyClinicOfficeInput]!): String
+  deleteManyClinicOffice(input: [_DeleteManyClinicOfficeInput]!): String
+  createManyCustomer(input: [_CreateCustomerInput!]!): [String]
+  updateManyCustomer(input: [_UpdateManyCustomerInput]!): String
+  deleteManyCustomer(input: [_DeleteManyCustomerInput]!): String
+  createManyDoctor(input: [_CreateDoctorInput!]!): [String]
+  updateManyDoctor(input: [_UpdateDoctorInput!]!): String
+  deleteManyDoctor(ids: [ID!]!): String
+  createManyClinic(input: [_CreateClinicInput!]!): [String]
+  updateManyClinic(input: [_UpdateManyClinicInput]!): String
+  deleteManyClinic(input: [_DeleteManyClinicInput]!): String
+  createManyClinicTable(input: [_CreateClinicTableInput!]!): [String]
+  updateManyClinicTable(input: [_UpdateManyClinicTableInput]!): String
+  deleteManyClinicTable(input: [_DeleteManyClinicTableInput]!): String
+  createManyPerson(input: [_CreatePersonInput!]!): [String]
+  updateManyPerson(input: [_UpdateManyPersonInput]!): String
+  deleteManyPerson(input: [_DeleteManyPersonInput]!): String
+  createManyClinicDoctor(input: [_CreateClinicDoctorInput!]!): [String]
+  updateManyClinicDoctor(input: [_UpdateClinicDoctorInput!]!): String
+  deleteManyClinicDoctor(ids: [ID!]!): String
+}
+
+type _Query {
+  merge(
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _MergedEntitiesCollection!
+  resolveReferences(referenceType: String!, ids: [ID!]!): [_Reference!]!
+  selectionByClinic(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_Clinic!
+  selectionByClinicOffice(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_ClinicOffice!
+  selectionByClinicDoctor(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_ClinicDoctor!
+  selectionByClinicTable(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_ClinicTable!
+  selectionByClinicDoctorAvailability(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_ClinicDoctorAvailability!
+  selectionByCustomer(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_Customer!
+  selectionByDoctor(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_Doctor!
+  selectionByDoctorType(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_DoctorType!
+  selectionByPerson(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_Person!
+  selectionByStakeholder(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_Stakeholder!
+  selectionByStatus(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_Status!
+  selectionByStatusGraph(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_StatusGraph!
+  selectionByRootDictionary(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_RootDictionary!
+  selectionBySysRootSecurity(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_SysRootSecurity!
+  selectionBySysAdminSettings(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_SysAdminSettings!
+  selectionBySysOperation(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_SysOperation!
+  selectionBySysCheckSelect(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_SysCheckSelect!
+  selectionBySysParamAddition(
+    cond: String
+    group: [String!]
+    groupCond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+    distinct: Boolean
+  ): _SEC_SysParamAddition!
+  searchClinic(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_Clinic!
+  searchClinicOffice(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicOffice!
+  searchClinicDoctor(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicDoctor!
+  searchClinicTable(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicTable!
+  searchClinicDoctorAvailability(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_ClinicDoctorAvailability!
+  searchCustomer(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_Customer!
+  searchDoctor(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_Doctor!
+  searchDoctorType(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_DoctorType!
+  searchPerson(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_Person!
+  searchStakeholder(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_Stakeholder!
+  searchStatus(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_Status!
+  searchStatusGraph(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_StatusGraph!
+  searchRootDictionary(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_RootDictionary!
+  searchSysRootSecurity(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysRootSecurity!
+  searchSysAdminSettings(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysAdminSettings!
+  searchSysOperation(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysOperation!
+  searchSysCheckSelect(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysCheckSelect!
+  searchSysParamAddition(
+    cond: String
+    limit: Int
+    offset: Int
+    sort: [_SortCriterionSpecification!]
+  ): _EC_SysParamAddition!
+}
+
+type _R_Clinic implements _Reference {
+  entityId: String
+  entity: Clinic
+}
+
+type _R_ClinicDoctor implements _Reference {
+  entityId: String
+  entity: ClinicDoctor
+}
+
+type _R_ClinicDoctorAvailability implements _Reference {
+  entityId: String
+  entity: ClinicDoctorAvailability
+}
+
+type _R_ClinicOffice implements _Reference {
+  entityId: String
+  entity: ClinicOffice
+}
+
+type _R_ClinicTable implements _Reference {
+  entityId: String
+  entity: ClinicTable
+}
+
+type _R_Customer implements _Reference {
+  entityId: String
+  entity: Customer
+}
+
+type _R_Doctor implements _Reference {
+  entityId: String
+  entity: Doctor
+}
+
+type _R_DoctorType implements _Reference {
+  entityId: String
+  entity: DoctorType
+}
+
+type _R_Person implements _Reference {
+  entityId: String
+  entity: Person
+}
+
+type _R_RootDictionary implements _Reference {
+  entityId: String
+  entity: RootDictionary
+}
+
+type _R_Stakeholder implements _Reference {
+  entityId: String
+  entity: Stakeholder
+}
+
+type _R_Status implements _Reference {
+  entityId: String
+  entity: Status
+}
+
+type _R_StatusGraph implements _Reference {
+  entityId: String
+  entity: StatusGraph
+}
+
+type _R_SysAdminSettings implements _Reference {
+  entityId: String
+  entity: SysAdminSettings
+}
+
+type _R_SysCheckSelect implements _Reference {
+  entityId: String
+  entity: SysCheckSelect
+}
+
+type _R_SysOperation implements _Reference {
+  entityId: String
+  entity: SysOperation
+}
+
+type _R_SysParamAddition implements _Reference {
+  entityId: String
+  entity: SysParamAddition
+}
+
+type _R_SysRootSecurity implements _Reference {
+  entityId: String
+  entity: SysRootSecurity
+}
+
+interface _Reference {
+  entityId: String
+}
+
+type _SEC_Clinic {
+  elems: [_SE_Clinic!]!
+  count: Int!
+}
+
+type _SEC_ClinicDoctor {
+  elems: [_SE_ClinicDoctor!]!
+  count: Int!
+}
+
+type _SEC_ClinicDoctorAvailability {
+  elems: [_SE_ClinicDoctorAvailability!]!
+  count: Int!
+}
+
+type _SEC_ClinicOffice {
+  elems: [_SE_ClinicOffice!]!
+  count: Int!
+}
+
+type _SEC_ClinicTable {
+  elems: [_SE_ClinicTable!]!
+  count: Int!
+}
+
+type _SEC_Customer {
+  elems: [_SE_Customer!]!
+  count: Int!
+}
+
+type _SEC_Doctor {
+  elems: [_SE_Doctor!]!
+  count: Int!
+}
+
+type _SEC_DoctorType {
+  elems: [_SE_DoctorType!]!
+  count: Int!
+}
+
+type _SEC_Person {
+  elems: [_SE_Person!]!
+  count: Int!
+}
+
+type _SEC_RootDictionary {
+  elems: [_SE_RootDictionary!]!
+  count: Int!
+}
+
+type _SEC_Stakeholder {
+  elems: [_SE_Stakeholder!]!
+  count: Int!
+}
+
+type _SEC_Status {
+  elems: [_SE_Status!]!
+  count: Int!
+}
+
+type _SEC_StatusGraph {
+  elems: [_SE_StatusGraph!]!
+  count: Int!
+}
+
+type _SEC_SysAdminSettings {
+  elems: [_SE_SysAdminSettings!]!
+  count: Int!
+}
+
+type _SEC_SysCheckSelect {
+  elems: [_SE_SysCheckSelect!]!
+  count: Int!
+}
+
+type _SEC_SysOperation {
+  elems: [_SE_SysOperation!]!
+  count: Int!
+}
+
+type _SEC_SysParamAddition {
+  elems: [_SE_SysParamAddition!]!
+  count: Int!
+}
+
+type _SEC_SysRootSecurity {
+  elems: [_SE_SysRootSecurity!]!
+  count: Int!
+}
+
+type _SE_Clinic {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  name: String
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_ClinicDoctor {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_ClinicDoctorAvailability {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beginDate: _DateTime!
+  endDate: _DateTime!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_ClinicOffice {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  officeNumber: String
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_ClinicTable {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beginDate: _DateTime!
+  comment: String
+  endDate: _DateTime!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_Customer {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  insurancePolicyNumber: String!
+  phoneNumber: String
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_Doctor {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_DoctorType {
+  id: ID!
+  aggVersion: Long!
+  description: String
+  isDel: Boolean!
+  name: String!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_Person {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  birthDate: _Date
+  firstName: String!
+  inn: String
+  lastName: String!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_RootDictionary {
+  id: ID!
+  aggVersion: Long!
+  type: String!
+  _calc: _Calculation!
+}
+
+type _SE_Stakeholder {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  code: String
+  lastChangeDate: _DateTime
+  name: String
+  _calc: _Calculation!
+}
+
+type _SE_Status {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  code: String
+  description: String
+  initial: Boolean
+  lastChangeDate: _DateTime
+  name: String
+  statusType: String
+  _calc: _Calculation!
+}
+
+type _SE_StatusGraph {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  code: String
+  label: String
+  lastChangeDate: _DateTime
+  name: String
+  _calc: _Calculation!
+}
+
+type _SE_SysAdminSettings {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  key: String
+  value: String
+  _calc: _Calculation!
+}
+
+type _SE_SysCheckSelect {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  beforeCommitEnable: Boolean
+  beforeOperationDisable: Boolean
+  conditionValue: String
+  description: String
+  orderValue: Int
+  typeName: String
+  _calc: _Calculation!
+}
+
+type _SE_SysOperation {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  allowEmptyChecks: Boolean
+  body: String
+  disableJwtVerification: Boolean
+  hashValue: String
+  _calc: _Calculation!
+}
+
+type _SE_SysParamAddition {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  paramAddition: String
+  paramName: String
+  _calc: _Calculation!
+}
+
+type _SE_SysRootSecurity {
+  id: ID!
+  aggVersion: Long!
+  chgCnt: Long
+  lastChangeDate: _DateTime
+  ownerId: String
+  type: String!
+  _calc: _Calculation!
+}
+
+input _SingleReferenceInput {
+  entityId: String!
+}
+
+input _SortCriterionSpecification {
+  crit: String!
+  order: _SortOrder! = ASC
+  nullsLast: Boolean
+}
+
+enum _SortOrder {
+  ASC
+  DESC
+}
+
+scalar _Time
+
+input _UpdateClinicDoctorAvailabilityInput {
+  beginDate: _DateTime
+  clinicOffice: ID
+  endDate: _DateTime
+  clinicDoctor: ID
+  id: ID!
+}
+
+input _UpdateClinicDoctorInput {
+  doctor: _SingleReferenceInput
+  clinic: ID
+  id: ID!
+}
+
+input _UpdateClinicInput {
+  name: String
+  id: ID!
+}
+
+input _UpdateClinicOfficeInput {
+  officeNumber: String
+  clinic: ID
+  id: ID!
+}
+
+input _UpdateClinicTableInput {
+  beginDate: _DateTime
+  clinicOffice: ID
+  endDate: _DateTime
+  clinicDoctor: ID
+  comment: String
+  clinic: ID
+  customer: _SingleReferenceInput
+  id: ID!
+}
+
+input _UpdateCustomerInput {
+  phoneNumber: String
+  insurancePolicyNumber: String
+  person: _SingleReferenceInput
+  id: ID!
+}
+
+input _UpdateDoctorInput {
+  doctorType: ID
+  person: _SingleReferenceInput
+  id: ID!
+}
+
+input _UpdateManyClinicDoctorAvailabilityInput {
+  param: _UpdateClinicDoctorAvailabilityInput!
+  compare: _CompareClinicDoctorAvailabilityInput
+}
+
+input _UpdateManyClinicInput {
+  param: _UpdateClinicInput!
+  compare: _CompareClinicInput
+}
+
+input _UpdateManyClinicOfficeInput {
+  param: _UpdateClinicOfficeInput!
+  compare: _CompareClinicOfficeInput
+}
+
+input _UpdateManyClinicTableInput {
+  param: _UpdateClinicTableInput!
+  compare: _CompareClinicTableInput
+}
+
+input _UpdateManyCustomerInput {
+  param: _UpdateCustomerInput!
+  compare: _CompareCustomerInput
+}
+
+input _UpdateManyPersonInput {
+  param: _UpdatePersonInput!
+  compare: _ComparePersonInput
+}
+
+type _UpdateOrCreateDoctorTypeResponse {
+  created: Boolean
+  returning: DoctorType
+}
+
+input _UpdateOrCreateManyDoctorTypeInput {
+  param: _CreateDoctorTypeInput!
+  exist: _ExistDoctorTypeInput
+}
+
+type _UpdateOrCreateManyResponse {
+  id: ID
+  created: Boolean
+}
+
+input _UpdatePersonInput {
+  firstName: String
+  lastName: String
+  inn: String
+  birthDate: _Date
+  id: ID!
+}
