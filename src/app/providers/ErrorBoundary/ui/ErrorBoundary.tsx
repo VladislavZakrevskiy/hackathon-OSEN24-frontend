@@ -1,6 +1,5 @@
+import { Loader } from "@/shared/ui";
 import { Component, ErrorInfo, ReactNode, Suspense } from "react";
-import { PageError } from "@/widgets/PageError";
-import { PageLoader } from "@/widgets/PageLoader";
 
 interface ErrorBoundaryProps {
 	children: ReactNode;
@@ -16,6 +15,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 		this.state = { hasError: false };
 	}
 
+	// @ts-ignore
 	static getDerivedStateFromError(error: Error) {
 		return { hasError: true };
 	}
@@ -29,11 +29,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 		const { children } = this.props;
 
 		if (hasError) {
-			return (
-				<Suspense fallback={<PageLoader />}>
-					<PageError />
-				</Suspense>
-			);
+			return <Suspense fallback={<Loader />}></Suspense>;
 		}
 
 		return children;

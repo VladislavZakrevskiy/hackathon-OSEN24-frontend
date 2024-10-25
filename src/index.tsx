@@ -5,15 +5,18 @@ import "./index.css";
 import App from "@/app/App";
 import { ErrorBoundary } from "@/app/providers/ErrorBoundary";
 import { ThemeProvider } from "./app/providers/ThemeProvider";
+import { ApiProvider } from "./app/providers/ApiProvider";
 
 const container = document.getElementById("root");
-const root = createRoot(container!); // createRoot(container!) if you use TypeScript
+const root = createRoot(container!);
 root.render(
 	<BrowserRouter>
-		<ThemeProvider>
-			<ErrorBoundary>
-				<App />
-			</ErrorBoundary>
-		</ThemeProvider>
+		<ApiProvider>
+			<ThemeProvider>
+				<ErrorBoundary>
+					<App />
+				</ErrorBoundary>
+			</ThemeProvider>
+		</ApiProvider>
 	</BrowserRouter>,
 );

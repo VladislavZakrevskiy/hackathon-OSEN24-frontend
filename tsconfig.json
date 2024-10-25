@@ -1,21 +1,25 @@
 {
 	"compilerOptions": {
-		"outDir": "./dist/",
-		"noImplicitAny": true,
-		"module": "CommonJS",
 		"target": "ES2017",
-		"jsx": "react-jsx",
-		"allowJs": true,
+		"module": "ESNext",
 		"moduleResolution": "node",
-		"resolveJsonModule": true,
+		"outDir": "./dist/",
+		"allowJs": true,
+		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"baseUrl": ".",
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "react-jsx",
 		"strict": true,
+		"noEmit": true,
+		"noImplicitAny": true,
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
-		},
-		"isolatedModules": true,
-		"allowSyntheticDefaultImports": true
+		}
 	},
 
 	"include": ["./src"],
