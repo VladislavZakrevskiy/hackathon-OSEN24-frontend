@@ -1,10 +1,15 @@
 import { useAppStore } from "@/app/model/AppStore";
+import { UserRoles, useUserStore } from "@/entities/User";
+import { useGetId } from "@/shared/api/graphql/requests/useGetId";
 import { LogOut, User, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
 	const { keycloak } = useAppStore();
+	const { userInfo } = useUserStore();
 	const navigate = useNavigate();
+	const { entity, id, isLoading, person } = useGetId(userInfo?.given_name || "", userInfo?.role || UserRoles.CLIENT);
+	console.log(entity, id, isLoading, person);
 
 	return (
 		<div className="flex items-center justify-between w-full p-4 shadow-md bg-gradient-to-r from-green-500 to-green-400">

@@ -20,7 +20,7 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 		if (!apollo) {
 			return new ApolloClient({
 				cache: cache,
-				uri: import.meta.env.NODE_ENV !== "production" ? import.meta.env.VITE_DS_ENDPOINT : "/graphql",
+				uri: import.meta.env.VITE_NODE_ENV === "prod" ? import.meta.env.VITE_DS_ENDPOINT : "/graphql",
 				headers: {
 					Authorization: "Bearer " + keycloak.token,
 				},
