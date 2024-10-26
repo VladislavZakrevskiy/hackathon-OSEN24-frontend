@@ -14,6 +14,10 @@ COPY ./src ./src
 
 COPY ./index.html ./index.html
 
+COPY ./postcss.config.js ./postcss.config.js
+
+COPY ./tailwind.config.js ./tailwind.config.js
+
 COPY ./tsconfig.json ./tsconfig.json
 
 COPY ./tsconfig.node.json ./tsconfig.node.json
