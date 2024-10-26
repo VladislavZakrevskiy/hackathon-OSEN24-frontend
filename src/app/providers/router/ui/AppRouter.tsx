@@ -19,8 +19,10 @@ export const AppRouter = memo(() => {
 	}, []);
 
 	return (
-		<Suspense fallback={<Spin size="large" />}>
-			<Routes>{Object.values(routeConfig).map(renderWithWrapper)}</Routes>
-		</Suspense>
+		<div style={{ flexGrow: 1 }}>
+			<Suspense fallback={<Spin size="large" />}>
+				<Routes>{Object.values(routeConfig).map(renderWithWrapper)}</Routes>
+			</Suspense>
+		</div>
 	);
 });
