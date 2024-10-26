@@ -5,12 +5,7 @@ import { useTranslation } from "react-i18next";
 const MainPage = memo(() => {
 	const { t } = useTranslation("main");
 
-	return (
-		<div>
-			<Header />
-			{t("Главная страница")}
-		</div>
-	);
+	return <div>{t("Главная страница")}</div>;
 });
 
 export default MainPage;

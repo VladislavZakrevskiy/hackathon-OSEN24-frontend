@@ -1,8 +1,8 @@
 import { useAppStore } from "@/app/model/AppStore";
+import { ThemeToggle } from "@/app/providers/ThemeProvider";
 import { UserRoles, useUserStore } from "@/entities/User";
-import { getRouteUserPage } from "@/shared/consts/router";
-import { getRole } from "@/shared/lib/utils/getRole";
-// import { ThemeToggle } from "@/app/providers/ThemeProvider";
+import { getRouteClientPage, getRouteDoctorPage } from "@/shared/consts/router";
+import { Button, Layout, Typography } from "antd";
 import { LogOut, User2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,22 +11,31 @@ export const Header = () => {
 	const { userInfo } = useUserStore();
 	const nav = useNavigate();
 
+	const navByRole = () => {
+		switch (userInfo?.role) {
+			case UserRoles.ADMIN:
+				return nav(getRouteAdminPage());
+			case UserRoles.DOCTOR:
+				return nav(getRouteDoctorPage());
+			case UserRoles.CLIENT:
+				return nav(getRouteClientPage());
+		}
+	};
+
 	return (
-		<div className="flex items-center justify-between w-full ">
-			<h3>CLINIC</h3>
-			<div className="flex gap-2">
-				<button
-					onClick={() =>
-						nav(getRouteUserPage(getRole(userInfo?.roles || []) || UserRoles.CLIENT, userInfo?.app?.id || ""))
-					}
-				>
-					<User2 />
-				</button>
-				<button onClick={() => keycloak?.logout()}>
-					<LogOut />
-				</button>
-				{/* <ThemeToggle /> */}
-			</div>
-		</div>
+		<Layout>
+			<Layout.Header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+				<Typography.Title style={{ margin: 0 }}>CLINIC</Typography.Title>
+				<div className="flex gap-2">
+					<Button onClick={navByRole}>
+						<User2 />
+					</Button>
+					<Button onClick={() => keycloak?.logout()}>
+						<LogOut />
+					</Button>
+					<ThemeToggle />
+				</div>
+			</Layout.Header>
+		</Layout>
 	);
 };

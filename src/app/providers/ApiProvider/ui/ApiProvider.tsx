@@ -44,8 +44,9 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 
 			if (!userInfo) {
 				keycloak!.loadUserInfo().then((value) => {
+					console.log(value, keycloak?.profile, keycloak?.realmAccess, keycloak?.tokenParsed, keycloak?.userInfo);
 					// @ts-ignore
-					setUserInfo({ ...value, ...keycloak?.resourceAccess.account });
+					setUserInfo({ ...value, ...keycloak?.resourceAccess[keycloak.clientId][0] });
 				});
 			}
 		});
