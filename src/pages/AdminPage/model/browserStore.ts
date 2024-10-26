@@ -1,64 +1,82 @@
-import { createStore } from "zustand";
+import { v4 } from "uuid";
+import { create } from "zustand";
 
-interface Filter {}
-
-interface PageState<T> {
-	getBoardDataElement: (el: T) => object;
-	columns: object;
-	getData: () => object;
-}
-
-interface Page<T> {
+// Типы для API данных
+export interface Doctor {
 	id: string;
-	type: "Doctor" | "Office" | "DoctorAvaible" | "New";
-	filters: Filter[];
-	state: PageState<T>;
+	__typename: string;
+	clinic: { id: string; name: string };
+	doctor: {
+		entityId: string;
+		entity: {
+			doctorType: { id: string; name: string };
+			person: {
+				entityId?: string;
+				entity?: {
+					firstName: string;
+					lastName: string;
+					inn?: string | null;
+					birthDate?: string | null;
+				};
+			};
+		};
+	};
+	person: { entityId: string; entity: { firstName: string; lastName: string } };
 }
 
-interface State<T = unknown> {
-	pages: Array<Page>;
-	currentPageId: string;
-	currentPage: Page<T>;
+export interface Office {
+	id: string;
+	__typename: string;
+	clinic: { id: string; name: string };
+	officeNumber: string;
 }
 
-interface Action {
-	setPages: <T>(pages: Page<T>[]) => void;
-	setCurrentPage: (newId: string) => void;
-	updateCurrentPage: <T>(changes: Partial<Page<T>> & { id: string }) => void;
+export interface DoctorAvailability {
+	id: string;
+	beginDate: string;
+	endDate: string;
+	clinicOffice: { id: string; officeNumber: string };
 }
 
-export const useBrowserStore = createStore<State & Action>((set) => ({
-	pages: [
-		{
-			filters: [{}],
-			id: "03e5849d-95f3-4e76-81f5-1c9e98201f0f",
-			state: {
-				columns: [],
-				getBoardDataElement: () => ({}),
-				getData: () => ({}),
-			},
-			type: "New",
-		},
-	],
-	currentPageId: "03e5849d-95f3-4e76-81f5-1c9e98201f0f",
-	currentPage: {
-		filters: [{}],
-		id: "03e5849d-95f3-4e76-81f5-1c9e98201f0f",
-		state: { columns: [], getBoardDataElement: () => ({}), getData: () => ({}) },
-		type: "New",
+export type PageType = "Doctor" | "Office" | "DoctorAvaible" | "New";
+
+interface Page {
+	id: string;
+	type: PageType;
+	data: Doctor[] | Office[] | DoctorAvailability[] | null;
+}
+
+interface State {
+	pages: Page[];
+	currentPageId: string | null;
+	addPage: (type: PageType, id?: string) => void;
+	setCurrentPage: (pageId: string) => void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	setData: (pageId: string, data: any[]) => void;
+}
+
+// Store
+export const usePageStore = create<State>((set) => ({
+	pages: [],
+	currentPageId: null,
+
+	// Добавление новой вкладки
+	addPage: (type, id = v4()) => {
+		const newPage: Page = {
+			id: `${id}`,
+			type,
+			data: null,
+		};
+		set((state) => ({ pages: [...state.pages, newPage], currentPageId: newPage.id }));
 	},
-	setCurrentPage: (newId) =>
-		set((prev) => ({
-			currentPageId: newId,
-			currentPage: prev.pages[prev.pages.findIndex(({ id: _id }) => _id === newId)],
-		})),
-	updateCurrentPage: ({ id, ...changes }) =>
-		set((prev) => {
-			const newPages = [...prev.pages];
-			const currentPage_index = newPages.findIndex(({ id: _id }) => id === _id);
-			const currentPage = newPages.find(({ id: _id }) => id === _id);
-			newPages[currentPage_index!] = { ...currentPage!, ...changes };
-			return { ...prev, currentPage: newPages[currentPage_index!], pages: newPages };
-		}),
-	setPages: (pages) => set(() => ({ pages })),
+
+	// Установка текущей вкладки
+	setCurrentPage: (pageId) => set({ currentPageId: pageId }),
+
+	// Установка данных после загрузки
+	setData: (pageId, data) => {
+		set((state) => ({
+			pages: state.pages.map((page) => (page.id === pageId ? { ...page, data } : page)),
+		}));
+	},
 }));
