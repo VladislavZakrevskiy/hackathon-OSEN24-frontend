@@ -197,19 +197,19 @@ export const PersonList: FC = () => {
                     <Form.Item label="Inn">
                         <Input readOnly={showForm === ShowForm.Update}
                             value={inputParameters.inn!}
-                            onChange={(e: { target: { value: any; }; }) => changeInputParameters({ inn: e.target.value })}
+                            onChange={(e: { target: { value: string; }; }) => changeInputParameters({ inn: e.target.value })}
                         />
                     </Form.Item>
                     <Form.Item label="Last Name">
                         <Input
                             value={inputParameters.lastName!}
-                            onChange={(e: { target: { value: any; }; }) => changeInputParameters({ lastName: e.target.value })}
+                            onChange={(e: { target: { value: string; }; }) => changeInputParameters({ lastName: e.target.value })}
                         />
                     </Form.Item>
                     <Form.Item label="First Name">
                         <Input
                             value={inputParameters.firstName!}
-                            onChange={(e: { target: { value: any; }; }) => changeInputParameters({ firstName: e.target.value })}
+                            onChange={(e: { target: { value: string; }; }) => changeInputParameters({ firstName: e.target.value })}
                         />
                     </Form.Item>
                     <Form.Item label="Birth Date">
