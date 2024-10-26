@@ -2,9 +2,9 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import { ApolloClient, ApolloProvider } from "@apollo/client";
 import Keycloak, { KeycloakInstance } from "keycloak-js";
 import { cache } from "@/shared/api/graphql/cache";
-import { Loader } from "@/shared/ui/Loader";
 import { useUserStore } from "@/entities/User";
 import { useAppStore } from "@/app/model/AppStore";
+import { Spin } from "antd";
 
 interface ApiProviderProps {
 	children: ReactNode;
@@ -44,9 +44,8 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 
 			if (!userInfo) {
 				keycloak!.loadUserInfo().then((value) => {
-					console.log(value, keycloak?.profile, keycloak?.realmAccess, keycloak?.tokenParsed, keycloak?.userInfo);
 					// @ts-ignore
-					setUserInfo({ ...value, ...keycloak?.resourceAccess[keycloak.clientId][0] });
+					setUserInfo({ ...value, role: keycloak?.resourceAccess[keycloak.realm].roles[0] });
 				});
 			}
 		});
@@ -59,7 +58,8 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 		return <ApolloProvider client={apollo!}>{children}</ApolloProvider>;
 	}
 	return (
-		<Loader
+		<Spin
+			size="large"
 			style={{
 				margin: 0,
 				position: "absolute",

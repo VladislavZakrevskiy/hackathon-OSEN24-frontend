@@ -1,4 +1,4 @@
-import { Loader } from "@/shared/ui";
+import { Spin } from "antd";
 import { Component, ErrorInfo, ReactNode, Suspense } from "react";
 
 interface ErrorBoundaryProps {
@@ -29,7 +29,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 		const { children } = this.props;
 
 		if (hasError) {
-			return <Suspense fallback={<Loader />}></Suspense>;
+			return <Suspense fallback={<Spin size="large" />}></Suspense>;
 		}
 
 		return children;
