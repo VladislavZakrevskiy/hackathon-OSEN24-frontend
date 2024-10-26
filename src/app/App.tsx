@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import { AppRouter } from "./providers/router";
-import { Loader } from "@/shared/ui";
 import { Header } from "@/widgets";
-import { Layout } from "antd";
+import { Layout, Spin } from "antd";
 
 const App = () => {
 	return (
 		<div>
-			<Suspense fallback={<Loader />}>
+			<Suspense fallback={<Spin size="large" />}>
 				<Header />
 				<Layout.Content>
 					<AppRouter />
