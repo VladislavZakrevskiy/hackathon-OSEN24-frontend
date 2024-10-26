@@ -1,0 +1,34 @@
+name: production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  checkout:
+    runs-on:
+      labels:
+        - self-hosted
+        - frontend
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+  build:
+    needs: checkout
+    runs-on:
+      labels:
+        - self-hosted
+        - frontend
+    steps:
+      - name: build
+        run: docker build ./ -f dockerfile -t frontend
+  start:
+    needs: build
+    runs-on:
+      labels:
+        - self-hosted
+        - frontend
+    steps:
+      - name: start
+        run: docker compose up -d --build
