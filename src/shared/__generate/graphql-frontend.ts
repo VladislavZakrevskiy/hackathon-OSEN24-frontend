@@ -15,17 +15,462 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  BigDecimal: { input: any; output: any; }
+  Byte: { input: any; output: any; }
+  Char: { input: any; output: any; }
+  Long: { input: any; output: any; }
+  Short: { input: any; output: any; }
   _ByteArray: { input: any; output: any; }
   _Date: { input: any; output: any; }
   _DateTime: { input: any; output: any; }
   _Float4: { input: any; output: any; }
   _OffsetDateTime: { input: any; output: any; }
   _Time: { input: any; output: any; }
-  BigDecimal: { input: any; output: any; }
-  Byte: { input: any; output: any; }
-  Char: { input: any; output: any; }
-  Long: { input: any; output: any; }
-  Short: { input: any; output: any; }
+};
+
+export type Clinic = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  classOfficeList: _Ec_ClinicOffice;
+  clinicDoctorList: _Ec_ClinicDoctor;
+  clinicTableList: _Ec_ClinicTable;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type ClinicClassOfficeListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type ClinicClinicDoctorListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type ClinicClinicTableListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+export type ClinicDoctor = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinic: Clinic;
+  clinicDoctorAvailabilityList: _Ec_ClinicDoctorAvailability;
+  doctor: _G_DoctorReference;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type ClinicDoctorAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicDoctorClinicArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicDoctorClinicDoctorAvailabilityListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+export type ClinicDoctorAvailability = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  beginDate: Scalars['_DateTime']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinicDoctor: ClinicDoctor;
+  clinicOffice: ClinicOffice;
+  endDate: Scalars['_DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type ClinicDoctorAvailabilityAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicDoctorAvailabilityClinicDoctorArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicDoctorAvailabilityClinicOfficeArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ClinicOffice = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinic: Clinic;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  officeNumber?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type ClinicOfficeAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicOfficeClinicArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ClinicTable = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  beginDate: Scalars['_DateTime']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinic: Clinic;
+  clinicDoctor: ClinicDoctor;
+  clinicOffice: ClinicOffice;
+  comment?: Maybe<Scalars['String']['output']>;
+  customer: _G_CustomerReference;
+  endDate: Scalars['_DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type ClinicTableAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicTableClinicArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicTableClinicDoctorArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type ClinicTableClinicOfficeArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Customer = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  insurancePolicyNumber: Scalars['String']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  person: _G_PersonReference;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type Doctor = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  doctorType: DoctorType;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  person: _G_PersonReference;
+  type: Scalars['String']['output'];
+};
+
+
+export type DoctorDoctorTypeArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type DoctorType = {
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isDel: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+
+export type DoctorTypeAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Person = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  birthDate?: Maybe<Scalars['_Date']['output']>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  inn?: Maybe<Scalars['String']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  lastName: Scalars['String']['output'];
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type RootDictionary = {
+  _calc: _Calculation;
+  id: Scalars['ID']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type Stakeholder = {
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type StakeholderAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Status = {
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  initial?: Maybe<Scalars['Boolean']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  stakeholder?: Maybe<Stakeholder>;
+  statusType?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type StatusAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type StatusStakeholderArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type StatusGraph = {
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  label?: Maybe<Scalars['String']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  statusFrom?: Maybe<Status>;
+  statusTo?: Maybe<Status>;
+};
+
+
+export type StatusGraphAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type StatusGraphStatusFromArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type StatusGraphStatusToArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SysAdminSettings = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  key?: Maybe<Scalars['String']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  rootSecurity: SysRootSecurity;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type SysAdminSettingsAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SysAdminSettingsRootSecurityArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SysCheckSelect = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  beforeCommitEnable?: Maybe<Scalars['Boolean']['output']>;
+  beforeOperationDisable?: Maybe<Scalars['Boolean']['output']>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  conditionValue?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  operation: SysOperation;
+  orderValue?: Maybe<Scalars['Int']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  typeName?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type SysCheckSelectAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SysCheckSelectOperationArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SysOperation = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  allowEmptyChecks?: Maybe<Scalars['Boolean']['output']>;
+  body?: Maybe<Scalars['String']['output']>;
+  checkSelects: _Ec_SysCheckSelect;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  disableJwtVerification?: Maybe<Scalars['Boolean']['output']>;
+  hashValue?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  paramAdditions: _Ec_SysParamAddition;
+  rootSecurity: SysRootSecurity;
+};
+
+
+export type SysOperationAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SysOperationCheckSelectsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type SysOperationParamAdditionsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type SysOperationRootSecurityArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SysParamAddition = {
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  operation: SysOperation;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  paramAddition?: Maybe<Scalars['String']['output']>;
+  paramName?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type SysParamAdditionAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type SysParamAdditionOperationArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SysRootSecurity = {
+  _calc: _Calculation;
+  adminSettings: _Ec_SysAdminSettings;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  operations: _Ec_SysOperation;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type SysRootSecurityAdminSettingsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type SysRootSecurityOperationsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
 };
 
 export type _Calculation = {
@@ -279,469 +724,6 @@ export type _DictionaryPacketUpdateOrCreateManyDoctorTypeArgs = {
   input: Array<InputMaybe<_UpdateOrCreateManyDoctorTypeInput>>;
 };
 
-export type _E_Clinic = _Entity & Clinic & {
-  __typename?: '_E_Clinic';
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  classOfficeList: _Ec_ClinicOffice;
-  clinicDoctorList: _Ec_ClinicDoctor;
-  clinicTableList: _Ec_ClinicTable;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_ClinicClassOfficeListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type _E_ClinicClinicDoctorListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type _E_ClinicClinicTableListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-export type _E_ClinicDoctor = _Entity & ClinicDoctor & {
-  __typename?: '_E_ClinicDoctor';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinic: Clinic;
-  clinicDoctorAvailabilityList: _Ec_ClinicDoctorAvailability;
-  doctor: _G_DoctorReference;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_ClinicDoctorAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicDoctorClinicArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicDoctorClinicDoctorAvailabilityListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-export type _E_ClinicDoctorAvailability = _Entity & ClinicDoctorAvailability & {
-  __typename?: '_E_ClinicDoctorAvailability';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  beginDate: Scalars['_DateTime']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinicDoctor: ClinicDoctor;
-  clinicOffice: ClinicOffice;
-  endDate: Scalars['_DateTime']['output'];
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_ClinicDoctorAvailabilityAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicDoctorAvailabilityClinicDoctorArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicDoctorAvailabilityClinicOfficeArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_ClinicOffice = _Entity & ClinicOffice & {
-  __typename?: '_E_ClinicOffice';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinic: Clinic;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  officeNumber?: Maybe<Scalars['String']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_ClinicOfficeAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicOfficeClinicArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_ClinicTable = _Entity & ClinicTable & {
-  __typename?: '_E_ClinicTable';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  beginDate: Scalars['_DateTime']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinic: Clinic;
-  clinicDoctor: ClinicDoctor;
-  clinicOffice: ClinicOffice;
-  comment?: Maybe<Scalars['String']['output']>;
-  customer: _G_CustomerReference;
-  endDate: Scalars['_DateTime']['output'];
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_ClinicTableAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicTableClinicArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicTableClinicDoctorArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_ClinicTableClinicOfficeArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_Customer = _Entity & Customer & {
-  __typename?: '_E_Customer';
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  insurancePolicyNumber: Scalars['String']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  person: _G_PersonReference;
-  phoneNumber?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-export type _E_Doctor = _Entity & Doctor & {
-  __typename?: '_E_Doctor';
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  doctorType: DoctorType;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  person: _G_PersonReference;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_DoctorDoctorTypeArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_DoctorType = _Entity & DoctorType & {
-  __typename?: '_E_DoctorType';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  isDel: Scalars['Boolean']['output'];
-  name: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_DoctorTypeAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_Person = _Entity & Person & {
-  __typename?: '_E_Person';
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  birthDate?: Maybe<Scalars['_Date']['output']>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  firstName: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  inn?: Maybe<Scalars['String']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  lastName: Scalars['String']['output'];
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-export type _E_RootDictionary = _Entity & RootDictionary & {
-  __typename?: '_E_RootDictionary';
-  _calc: _Calculation;
-  id: Scalars['ID']['output'];
-  type: Scalars['String']['output'];
-};
-
-export type _E_Stakeholder = _Entity & Stakeholder & {
-  __typename?: '_E_Stakeholder';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type _E_StakeholderAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_Status = _Entity & Status & {
-  __typename?: '_E_Status';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  initial?: Maybe<Scalars['Boolean']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  stakeholder?: Maybe<Stakeholder>;
-  statusType?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type _E_StatusAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_StatusStakeholderArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_StatusGraph = _Entity & StatusGraph & {
-  __typename?: '_E_StatusGraph';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  label?: Maybe<Scalars['String']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  statusFrom?: Maybe<Status>;
-  statusTo?: Maybe<Status>;
-};
-
-
-export type _E_StatusGraphAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_StatusGraphStatusFromArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_StatusGraphStatusToArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_SysAdminSettings = _Entity & SysAdminSettings & {
-  __typename?: '_E_SysAdminSettings';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  key?: Maybe<Scalars['String']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  rootSecurity: SysRootSecurity;
-  value?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type _E_SysAdminSettingsAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_SysAdminSettingsRootSecurityArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_SysCheckSelect = _Entity & SysCheckSelect & {
-  __typename?: '_E_SysCheckSelect';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  beforeCommitEnable?: Maybe<Scalars['Boolean']['output']>;
-  beforeOperationDisable?: Maybe<Scalars['Boolean']['output']>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  conditionValue?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  operation: SysOperation;
-  orderValue?: Maybe<Scalars['Int']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  typeName?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type _E_SysCheckSelectAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_SysCheckSelectOperationArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_SysOperation = _Entity & SysOperation & {
-  __typename?: '_E_SysOperation';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  allowEmptyChecks?: Maybe<Scalars['Boolean']['output']>;
-  body?: Maybe<Scalars['String']['output']>;
-  checkSelects: _Ec_SysCheckSelect;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  disableJwtVerification?: Maybe<Scalars['Boolean']['output']>;
-  hashValue?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  paramAdditions: _Ec_SysParamAddition;
-  rootSecurity: SysRootSecurity;
-};
-
-
-export type _E_SysOperationAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_SysOperationCheckSelectsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type _E_SysOperationParamAdditionsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type _E_SysOperationRootSecurityArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_SysParamAddition = _Entity & SysParamAddition & {
-  __typename?: '_E_SysParamAddition';
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  operation: SysOperation;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  paramAddition?: Maybe<Scalars['String']['output']>;
-  paramName?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type _E_SysParamAdditionAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type _E_SysParamAdditionOperationArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type _E_SysRootSecurity = _Entity & SysRootSecurity & {
-  __typename?: '_E_SysRootSecurity';
-  _calc: _Calculation;
-  adminSettings: _Ec_SysAdminSettings;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  operations: _Ec_SysOperation;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type _E_SysRootSecurityAdminSettingsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type _E_SysRootSecurityOperationsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
 export type _Ec_Clinic = {
   __typename?: '_EC_Clinic';
   count: Scalars['Int']['output'];
@@ -848,6 +830,469 @@ export type _Ec_SysRootSecurity = {
   __typename?: '_EC_SysRootSecurity';
   count: Scalars['Int']['output'];
   elems: Array<SysRootSecurity>;
+};
+
+export type _E_Clinic = Clinic & _Entity & {
+  __typename?: '_E_Clinic';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  classOfficeList: _Ec_ClinicOffice;
+  clinicDoctorList: _Ec_ClinicDoctor;
+  clinicTableList: _Ec_ClinicTable;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_ClinicClassOfficeListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type _E_ClinicClinicDoctorListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type _E_ClinicClinicTableListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+export type _E_ClinicDoctor = ClinicDoctor & _Entity & {
+  __typename?: '_E_ClinicDoctor';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinic: Clinic;
+  clinicDoctorAvailabilityList: _Ec_ClinicDoctorAvailability;
+  doctor: _G_DoctorReference;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_ClinicDoctorAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicDoctorClinicArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicDoctorClinicDoctorAvailabilityListArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+export type _E_ClinicDoctorAvailability = ClinicDoctorAvailability & _Entity & {
+  __typename?: '_E_ClinicDoctorAvailability';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  beginDate: Scalars['_DateTime']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinicDoctor: ClinicDoctor;
+  clinicOffice: ClinicOffice;
+  endDate: Scalars['_DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_ClinicDoctorAvailabilityAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicDoctorAvailabilityClinicDoctorArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicDoctorAvailabilityClinicOfficeArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_ClinicOffice = ClinicOffice & _Entity & {
+  __typename?: '_E_ClinicOffice';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinic: Clinic;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  officeNumber?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_ClinicOfficeAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicOfficeClinicArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_ClinicTable = ClinicTable & _Entity & {
+  __typename?: '_E_ClinicTable';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<Clinic>;
+  beginDate: Scalars['_DateTime']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  clinic: Clinic;
+  clinicDoctor: ClinicDoctor;
+  clinicOffice: ClinicOffice;
+  comment?: Maybe<Scalars['String']['output']>;
+  customer: _G_CustomerReference;
+  endDate: Scalars['_DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_ClinicTableAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicTableClinicArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicTableClinicDoctorArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_ClinicTableClinicOfficeArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_Customer = Customer & _Entity & {
+  __typename?: '_E_Customer';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  insurancePolicyNumber: Scalars['String']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  person: _G_PersonReference;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type _E_Doctor = Doctor & _Entity & {
+  __typename?: '_E_Doctor';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  doctorType: DoctorType;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  person: _G_PersonReference;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_DoctorDoctorTypeArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_DoctorType = DoctorType & _Entity & {
+  __typename?: '_E_DoctorType';
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isDel: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_DoctorTypeAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_Person = Person & _Entity & {
+  __typename?: '_E_Person';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  birthDate?: Maybe<Scalars['_Date']['output']>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  inn?: Maybe<Scalars['String']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  lastName: Scalars['String']['output'];
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type _E_RootDictionary = RootDictionary & _Entity & {
+  __typename?: '_E_RootDictionary';
+  _calc: _Calculation;
+  id: Scalars['ID']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type _E_Stakeholder = Stakeholder & _Entity & {
+  __typename?: '_E_Stakeholder';
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type _E_StakeholderAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_Status = Status & _Entity & {
+  __typename?: '_E_Status';
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  initial?: Maybe<Scalars['Boolean']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  stakeholder?: Maybe<Stakeholder>;
+  statusType?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type _E_StatusAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_StatusStakeholderArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_StatusGraph = StatusGraph & _Entity & {
+  __typename?: '_E_StatusGraph';
+  _calc: _Calculation;
+  aggregateRoot?: Maybe<RootDictionary>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  label?: Maybe<Scalars['String']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  statusFrom?: Maybe<Status>;
+  statusTo?: Maybe<Status>;
+};
+
+
+export type _E_StatusGraphAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_StatusGraphStatusFromArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_StatusGraphStatusToArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_SysAdminSettings = SysAdminSettings & _Entity & {
+  __typename?: '_E_SysAdminSettings';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  key?: Maybe<Scalars['String']['output']>;
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  rootSecurity: SysRootSecurity;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type _E_SysAdminSettingsAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_SysAdminSettingsRootSecurityArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_SysCheckSelect = SysCheckSelect & _Entity & {
+  __typename?: '_E_SysCheckSelect';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  beforeCommitEnable?: Maybe<Scalars['Boolean']['output']>;
+  beforeOperationDisable?: Maybe<Scalars['Boolean']['output']>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  conditionValue?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  operation: SysOperation;
+  orderValue?: Maybe<Scalars['Int']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  typeName?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type _E_SysCheckSelectAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_SysCheckSelectOperationArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_SysOperation = SysOperation & _Entity & {
+  __typename?: '_E_SysOperation';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  allowEmptyChecks?: Maybe<Scalars['Boolean']['output']>;
+  body?: Maybe<Scalars['String']['output']>;
+  checkSelects: _Ec_SysCheckSelect;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  disableJwtVerification?: Maybe<Scalars['Boolean']['output']>;
+  hashValue?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  paramAdditions: _Ec_SysParamAddition;
+  rootSecurity: SysRootSecurity;
+};
+
+
+export type _E_SysOperationAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_SysOperationCheckSelectsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type _E_SysOperationParamAdditionsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type _E_SysOperationRootSecurityArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_SysParamAddition = SysParamAddition & _Entity & {
+  __typename?: '_E_SysParamAddition';
+  _calc: _Calculation;
+  aggVersion: Scalars['Long']['output'];
+  aggregateRoot?: Maybe<SysRootSecurity>;
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  operation: SysOperation;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  paramAddition?: Maybe<Scalars['String']['output']>;
+  paramName?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type _E_SysParamAdditionAggregateRootArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type _E_SysParamAdditionOperationArgs = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type _E_SysRootSecurity = SysRootSecurity & _Entity & {
+  __typename?: '_E_SysRootSecurity';
+  _calc: _Calculation;
+  adminSettings: _Ec_SysAdminSettings;
+  aggVersion: Scalars['Long']['output'];
+  chgCnt?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['ID']['output'];
+  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
+  operations: _Ec_SysOperation;
+  ownerId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+
+export type _E_SysRootSecurityAdminSettingsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
+};
+
+
+export type _E_SysRootSecurityOperationsArgs = {
+  cond?: InputMaybe<Scalars['String']['input']>;
+  elemAlias?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
 };
 
 export type _Entity = {
@@ -1834,6 +2279,114 @@ export type _Reference = {
   entityId?: Maybe<Scalars['String']['output']>;
 };
 
+export type _Sec_Clinic = {
+  __typename?: '_SEC_Clinic';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_Clinic>;
+};
+
+export type _Sec_ClinicDoctor = {
+  __typename?: '_SEC_ClinicDoctor';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_ClinicDoctor>;
+};
+
+export type _Sec_ClinicDoctorAvailability = {
+  __typename?: '_SEC_ClinicDoctorAvailability';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_ClinicDoctorAvailability>;
+};
+
+export type _Sec_ClinicOffice = {
+  __typename?: '_SEC_ClinicOffice';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_ClinicOffice>;
+};
+
+export type _Sec_ClinicTable = {
+  __typename?: '_SEC_ClinicTable';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_ClinicTable>;
+};
+
+export type _Sec_Customer = {
+  __typename?: '_SEC_Customer';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_Customer>;
+};
+
+export type _Sec_Doctor = {
+  __typename?: '_SEC_Doctor';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_Doctor>;
+};
+
+export type _Sec_DoctorType = {
+  __typename?: '_SEC_DoctorType';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_DoctorType>;
+};
+
+export type _Sec_Person = {
+  __typename?: '_SEC_Person';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_Person>;
+};
+
+export type _Sec_RootDictionary = {
+  __typename?: '_SEC_RootDictionary';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_RootDictionary>;
+};
+
+export type _Sec_Stakeholder = {
+  __typename?: '_SEC_Stakeholder';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_Stakeholder>;
+};
+
+export type _Sec_Status = {
+  __typename?: '_SEC_Status';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_Status>;
+};
+
+export type _Sec_StatusGraph = {
+  __typename?: '_SEC_StatusGraph';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_StatusGraph>;
+};
+
+export type _Sec_SysAdminSettings = {
+  __typename?: '_SEC_SysAdminSettings';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_SysAdminSettings>;
+};
+
+export type _Sec_SysCheckSelect = {
+  __typename?: '_SEC_SysCheckSelect';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_SysCheckSelect>;
+};
+
+export type _Sec_SysOperation = {
+  __typename?: '_SEC_SysOperation';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_SysOperation>;
+};
+
+export type _Sec_SysParamAddition = {
+  __typename?: '_SEC_SysParamAddition';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_SysParamAddition>;
+};
+
+export type _Sec_SysRootSecurity = {
+  __typename?: '_SEC_SysRootSecurity';
+  count: Scalars['Int']['output'];
+  elems: Array<_Se_SysRootSecurity>;
+};
+
 export type _Se_Clinic = {
   __typename?: '_SE_Clinic';
   _calc: _Calculation;
@@ -2056,114 +2609,6 @@ export type _Se_SysRootSecurity = {
   type: Scalars['String']['output'];
 };
 
-export type _Sec_Clinic = {
-  __typename?: '_SEC_Clinic';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_Clinic>;
-};
-
-export type _Sec_ClinicDoctor = {
-  __typename?: '_SEC_ClinicDoctor';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_ClinicDoctor>;
-};
-
-export type _Sec_ClinicDoctorAvailability = {
-  __typename?: '_SEC_ClinicDoctorAvailability';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_ClinicDoctorAvailability>;
-};
-
-export type _Sec_ClinicOffice = {
-  __typename?: '_SEC_ClinicOffice';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_ClinicOffice>;
-};
-
-export type _Sec_ClinicTable = {
-  __typename?: '_SEC_ClinicTable';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_ClinicTable>;
-};
-
-export type _Sec_Customer = {
-  __typename?: '_SEC_Customer';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_Customer>;
-};
-
-export type _Sec_Doctor = {
-  __typename?: '_SEC_Doctor';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_Doctor>;
-};
-
-export type _Sec_DoctorType = {
-  __typename?: '_SEC_DoctorType';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_DoctorType>;
-};
-
-export type _Sec_Person = {
-  __typename?: '_SEC_Person';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_Person>;
-};
-
-export type _Sec_RootDictionary = {
-  __typename?: '_SEC_RootDictionary';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_RootDictionary>;
-};
-
-export type _Sec_Stakeholder = {
-  __typename?: '_SEC_Stakeholder';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_Stakeholder>;
-};
-
-export type _Sec_Status = {
-  __typename?: '_SEC_Status';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_Status>;
-};
-
-export type _Sec_StatusGraph = {
-  __typename?: '_SEC_StatusGraph';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_StatusGraph>;
-};
-
-export type _Sec_SysAdminSettings = {
-  __typename?: '_SEC_SysAdminSettings';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_SysAdminSettings>;
-};
-
-export type _Sec_SysCheckSelect = {
-  __typename?: '_SEC_SysCheckSelect';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_SysCheckSelect>;
-};
-
-export type _Sec_SysOperation = {
-  __typename?: '_SEC_SysOperation';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_SysOperation>;
-};
-
-export type _Sec_SysParamAddition = {
-  __typename?: '_SEC_SysParamAddition';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_SysParamAddition>;
-};
-
-export type _Sec_SysRootSecurity = {
-  __typename?: '_SEC_SysRootSecurity';
-  count: Scalars['Int']['output'];
-  elems: Array<_Se_SysRootSecurity>;
-};
-
 export type _SingleReferenceInput = {
   entityId: Scalars['String']['input'];
 };
@@ -2281,451 +2726,6 @@ export type _UpdatePersonInput = {
   id: Scalars['ID']['input'];
   inn?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type Clinic = {
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  classOfficeList: _Ec_ClinicOffice;
-  clinicDoctorList: _Ec_ClinicDoctor;
-  clinicTableList: _Ec_ClinicTable;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type ClinicClassOfficeListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type ClinicClinicDoctorListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type ClinicClinicTableListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-export type ClinicDoctor = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinic: Clinic;
-  clinicDoctorAvailabilityList: _Ec_ClinicDoctorAvailability;
-  doctor: _G_DoctorReference;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type ClinicDoctorAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicDoctorClinicArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicDoctorClinicDoctorAvailabilityListArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-export type ClinicDoctorAvailability = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  beginDate: Scalars['_DateTime']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinicDoctor: ClinicDoctor;
-  clinicOffice: ClinicOffice;
-  endDate: Scalars['_DateTime']['output'];
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type ClinicDoctorAvailabilityAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicDoctorAvailabilityClinicDoctorArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicDoctorAvailabilityClinicOfficeArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ClinicOffice = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinic: Clinic;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  officeNumber?: Maybe<Scalars['String']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type ClinicOfficeAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicOfficeClinicArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ClinicTable = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<Clinic>;
-  aggVersion: Scalars['Long']['output'];
-  beginDate: Scalars['_DateTime']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  clinic: Clinic;
-  clinicDoctor: ClinicDoctor;
-  clinicOffice: ClinicOffice;
-  comment?: Maybe<Scalars['String']['output']>;
-  customer: _G_CustomerReference;
-  endDate: Scalars['_DateTime']['output'];
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type ClinicTableAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicTableClinicArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicTableClinicDoctorArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type ClinicTableClinicOfficeArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type Customer = {
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  insurancePolicyNumber: Scalars['String']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  person: _G_PersonReference;
-  phoneNumber?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-export type Doctor = {
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  doctorType: DoctorType;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  person: _G_PersonReference;
-  type: Scalars['String']['output'];
-};
-
-
-export type DoctorDoctorTypeArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type DoctorType = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  isDel: Scalars['Boolean']['output'];
-  name: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-};
-
-
-export type DoctorTypeAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type Person = {
-  _calc: _Calculation;
-  aggVersion: Scalars['Long']['output'];
-  birthDate?: Maybe<Scalars['_Date']['output']>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  firstName: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  inn?: Maybe<Scalars['String']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  lastName: Scalars['String']['output'];
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-export type RootDictionary = {
-  _calc: _Calculation;
-  id: Scalars['ID']['output'];
-  type: Scalars['String']['output'];
-};
-
-export type Stakeholder = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type StakeholderAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type Status = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  initial?: Maybe<Scalars['Boolean']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  stakeholder?: Maybe<Stakeholder>;
-  statusType?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type StatusAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type StatusStakeholderArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type StatusGraph = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<RootDictionary>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  code?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  label?: Maybe<Scalars['String']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  statusFrom?: Maybe<Status>;
-  statusTo?: Maybe<Status>;
-};
-
-
-export type StatusGraphAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type StatusGraphStatusFromArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type StatusGraphStatusToArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SysAdminSettings = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  key?: Maybe<Scalars['String']['output']>;
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  rootSecurity: SysRootSecurity;
-  value?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type SysAdminSettingsAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SysAdminSettingsRootSecurityArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SysCheckSelect = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  beforeCommitEnable?: Maybe<Scalars['Boolean']['output']>;
-  beforeOperationDisable?: Maybe<Scalars['Boolean']['output']>;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  conditionValue?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  operation: SysOperation;
-  orderValue?: Maybe<Scalars['Int']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  typeName?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type SysCheckSelectAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SysCheckSelectOperationArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SysOperation = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  allowEmptyChecks?: Maybe<Scalars['Boolean']['output']>;
-  body?: Maybe<Scalars['String']['output']>;
-  checkSelects: _Ec_SysCheckSelect;
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  disableJwtVerification?: Maybe<Scalars['Boolean']['output']>;
-  hashValue?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  paramAdditions: _Ec_SysParamAddition;
-  rootSecurity: SysRootSecurity;
-};
-
-
-export type SysOperationAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SysOperationCheckSelectsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type SysOperationParamAdditionsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type SysOperationRootSecurityArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SysParamAddition = {
-  _calc: _Calculation;
-  aggregateRoot?: Maybe<SysRootSecurity>;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  operation: SysOperation;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  paramAddition?: Maybe<Scalars['String']['output']>;
-  paramName?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type SysParamAdditionAggregateRootArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type SysParamAdditionOperationArgs = {
-  alias?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SysRootSecurity = {
-  _calc: _Calculation;
-  adminSettings: _Ec_SysAdminSettings;
-  aggVersion: Scalars['Long']['output'];
-  chgCnt?: Maybe<Scalars['Long']['output']>;
-  id: Scalars['ID']['output'];
-  lastChangeDate?: Maybe<Scalars['_DateTime']['output']>;
-  operations: _Ec_SysOperation;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  type: Scalars['String']['output'];
-};
-
-
-export type SysRootSecurityAdminSettingsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
-};
-
-
-export type SysRootSecurityOperationsArgs = {
-  cond?: InputMaybe<Scalars['String']['input']>;
-  elemAlias?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<_SortCriterionSpecification>>;
 };
 
 export type DoctorTypeAttributesFragment = { __typename: '_E_DoctorType', id: string, name: string, description?: string | null };
@@ -2969,6 +2969,15 @@ export type SearchClinicTableQueryVariables = Exact<{
 
 export type SearchClinicTableQuery = { __typename?: '_Query', searchClinicTable: { __typename?: '_EC_ClinicTable', elems: Array<{ __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } }> } };
 
+export type SearchClinicTableByCustomerQueryVariables = Exact<{
+  customerId: Scalars['String']['input'];
+  dateFrom: Scalars['_DateTime']['input'];
+  dateTo: Scalars['_DateTime']['input'];
+}>;
+
+
+export type SearchClinicTableByCustomerQuery = { __typename?: '_Query', searchClinicTable: { __typename?: '_EC_ClinicTable', elems: Array<{ __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } }> } };
+
 export type CreateClinicTableMutationVariables = Exact<{
   clinicId: Scalars['ID']['input'];
   clinicDoctorId: Scalars['ID']['input'];
@@ -2979,7 +2988,7 @@ export type CreateClinicTableMutationVariables = Exact<{
 }>;
 
 
-export type CreateClinicTableMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', getClinicDoctor?: { __typename?: '_E_ClinicDoctor', id: string } | null, getClinic?: { __typename?: '_E_Clinic', id: string } | null, createClinicTable?: { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } } | null } | null };
+export type CreateClinicTableMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', createClinicTable?: { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } } | null } | null };
 
 export type DeleteClinicTableMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -4269,23 +4278,55 @@ export type SearchClinicTableQueryHookResult = ReturnType<typeof useSearchClinic
 export type SearchClinicTableLazyQueryHookResult = ReturnType<typeof useSearchClinicTableLazyQuery>;
 export type SearchClinicTableSuspenseQueryHookResult = ReturnType<typeof useSearchClinicTableSuspenseQuery>;
 export type SearchClinicTableQueryResult = Apollo.QueryResult<SearchClinicTableQuery, SearchClinicTableQueryVariables>;
+export const SearchClinicTableByCustomerDocument = gql`
+    query searchClinicTableByCustomer($customerId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+  searchClinicTable(
+    cond: "it.customer.entityId == \${customerId} && it.endDate >= \${dateFrom} && it.beginDate <= \${dateTo}"
+  ) @strExpr(string: $customerId, dateTimes: [$dateFrom, $dateTo]) {
+    elems {
+      ...ClinicTableAttributes
+    }
+  }
+}
+    ${ClinicTableAttributesFragmentDoc}`;
+
+/**
+ * __useSearchClinicTableByCustomerQuery__
+ *
+ * To run a query within a React component, call `useSearchClinicTableByCustomerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchClinicTableByCustomerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchClinicTableByCustomerQuery({
+ *   variables: {
+ *      customerId: // value for 'customerId'
+ *      dateFrom: // value for 'dateFrom'
+ *      dateTo: // value for 'dateTo'
+ *   },
+ * });
+ */
+export function useSearchClinicTableByCustomerQuery(baseOptions: Apollo.QueryHookOptions<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables> & ({ variables: SearchClinicTableByCustomerQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables>(SearchClinicTableByCustomerDocument, options);
+      }
+export function useSearchClinicTableByCustomerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables>(SearchClinicTableByCustomerDocument, options);
+        }
+export function useSearchClinicTableByCustomerSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables>(SearchClinicTableByCustomerDocument, options);
+        }
+export type SearchClinicTableByCustomerQueryHookResult = ReturnType<typeof useSearchClinicTableByCustomerQuery>;
+export type SearchClinicTableByCustomerLazyQueryHookResult = ReturnType<typeof useSearchClinicTableByCustomerLazyQuery>;
+export type SearchClinicTableByCustomerSuspenseQueryHookResult = ReturnType<typeof useSearchClinicTableByCustomerSuspenseQuery>;
+export type SearchClinicTableByCustomerQueryResult = Apollo.QueryResult<SearchClinicTableByCustomerQuery, SearchClinicTableByCustomerQueryVariables>;
 export const CreateClinicTableDocument = gql`
     mutation createClinicTable($clinicId: ID!, $clinicDoctorId: ID!, $beginDate: _DateTime!, $endDate: _DateTime!, $clinicOfficeId: ID!, $customerId: String!) {
   packet {
-    getClinicDoctor(
-      id: "find: it.id == \${clinicDoctorId} && \${beginDate} < \${endDate} && it.clinicDoctorAvailabilityList{cond = it.clinicOffice = \${cliniOffice} && it.beginDate <= \${beginDate} && it.endDate>=\${endDate}}.$exists"
-      failOnEmpty: true
-      lock: WAIT
-    ) {
-      id
-    }
-    getClinic(
-      id: "find: it.id == \${clinicId} && \${beginDate} < \${endDate} && !it.clinicTableList{cond = it.endDate >= \${beginDate} && it.beginDate<=\${endDate} && (it.clinicDoctor.id == \${clinicDoctorId} || it.clinicOffice.id == \${clinicOfficeId} || it.customer.entityId == \${customerId})}.$exists"
-      failOnEmpty: true
-      lock: WAIT
-    ) {
-      id
-    }
     createClinicTable(
       input: {clinic: $clinicId, clinicDoctor: $clinicDoctorId, clinicOffice: $clinicOfficeId, customer: {entityId: $customerId}, beginDate: $beginDate, endDate: $endDate}
     ) {

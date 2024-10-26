@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Form, DatePicker, Button, Card, Select } from "antd";
+import { Form, DatePicker, Button, Card, Select, message } from "antd";
 import {
-	useCreateClinicDoctorAvailabilityMutation,
 	useSearchClinicOfficeLazyQuery,
 	useSearchClinicDoctorLazyQuery,
 	useSearchClinicLazyQuery,
 	useSearchClinicDoctorAvailabilityLazyQuery,
+	useCreateClinicTableMutation,
 } from "@/shared/__generate/graphql-frontend";
+import { useUserStore } from "@/entities/User";
 
 interface FormValues {
-	appointment?: Date;
+	beginDate?: Date;
 	clinicId?: string;
 	doctorId?: string;
 	officeId?: string;
 }
 
 const AppointmentForm: React.FC = () => {
-	const [{ clinicId, doctorId, officeId }, setForm] = useState<FormValues>({});
+	const [{ clinicId, doctorId, officeId, beginDate }, setForm] = useState<FormValues>({});
+	const [messageApi, contextHolder] = message.useMessage();
+	const { user } = useUserStore();
 	const [clinics, setClinics] = useState<Array<{ __typename: "_E_Clinic"; id: string; name?: string | null }>>([]);
 	const [clinicOffices, setClinicOffices] = useState<
 		Array<{
@@ -45,7 +48,7 @@ const AppointmentForm: React.FC = () => {
 							firstName: string;
 							lastName: string;
 							inn?: string | null;
-							birthDate?: any | null;
+							birthDate?: unknown | null;
 						} | null;
 					};
 				} | null;
@@ -56,18 +59,22 @@ const AppointmentForm: React.FC = () => {
 		Array<{
 			__typename: "_E_ClinicDoctorAvailability";
 			id: string;
-			beginDate: any;
-			endDate: any;
+			beginDate: unknown;
+			endDate: unknown;
 			clinicOffice: { __typename?: "_E_ClinicOffice"; id: string; officeNumber?: string | null };
 		}>
 	>([]);
 
-	const [createAppointment] = useCreateClinicDoctorAvailabilityMutation();
+	const [createAppointment, { loading: AppoinmentLoading }] = useCreateClinicTableMutation();
 	const [searchClinic, { loading: clinicsLoading }] = useSearchClinicLazyQuery();
 	const [searchOffice, { loading: officesLoading }] = useSearchClinicOfficeLazyQuery();
 	const [searchDoctor, { loading: doctorsLoading }] = useSearchClinicDoctorLazyQuery();
 	const [searchAvaiblity, { loading: avaiblityLoading }] = useSearchClinicDoctorAvailabilityLazyQuery();
-	console.log(clinicId, doctorId, officeId);
+	console.log(clinicId, doctorId, officeId, avaiblity);
+
+	const showSuccess = () => {
+		messageApi.success("Запись прошла успешно!");
+	};
 
 	// Clinic
 	useEffect(() => {
@@ -76,6 +83,7 @@ const AppointmentForm: React.FC = () => {
 				variables: { searchStr: "" },
 			});
 			setClinics(data?.searchClinic.elems || []);
+			setForm((prev) => ({ ...prev, doctorId: undefined, officeId: undefined, appointment: undefined }));
 		};
 		getData();
 	}, []);
@@ -84,9 +92,10 @@ const AppointmentForm: React.FC = () => {
 	useEffect(() => {
 		const getData = async () => {
 			const { data } = await searchOffice({
-				variables: { clinicId, officeNumber: "" },
+				variables: { clinicId: clinicId || "", officeNumber: "" },
 			});
 			setClinicOffices(data?.searchClinicOffice.elems || []);
+			setForm((prev) => ({ ...prev, doctorId: undefined, appointment: undefined }));
 		};
 		getData();
 	}, [clinicId]);
@@ -95,9 +104,10 @@ const AppointmentForm: React.FC = () => {
 	useEffect(() => {
 		const getData = async () => {
 			const { data } = await searchDoctor({
-				variables: { clinicId, searchStr: "" },
+				variables: { clinicId: clinicId || "", searchStr: "" },
 			});
 			setClinicDoctors(data?.searchClinicDoctor.elems || []);
+			setForm((prev) => ({ ...prev, appointment: undefined }));
 		};
 		getData();
 	}, [clinicId]);
@@ -112,9 +122,9 @@ const AppointmentForm: React.FC = () => {
 
 			const { data } = await searchAvaiblity({
 				variables: {
-					clinicDoctorId: doctorId,
-					dateFrom: fromDate.toISOString(),
-					dateTo: toDate.toISOString(),
+					clinicDoctorId: doctorId || "",
+					dateFrom: fromDate.toISOString().slice(0, -1),
+					dateTo: toDate.toISOString().slice(0, -1),
 				},
 			});
 			setAvaiblity(data?.searchClinicDoctorAvailability.elems || []);
@@ -122,14 +132,29 @@ const AppointmentForm: React.FC = () => {
 		getData();
 	}, [clinicId, doctorId, officeId]);
 
-	const onFinish = () => {
-		// Handle form submission here
+	const onFinish = async () => {
+		const beginDate = new Date();
+		const endDate = new Date();
+		endDate.setMinutes(beginDate.getMinutes() + 15);
+		createAppointment({
+			variables: {
+				beginDate: beginDate.toISOString().slice(0, -1),
+				endDate: endDate.toISOString().slice(0, -1),
+				clinicId: clinicId || "",
+				clinicDoctorId: doctorId || "",
+				clinicOfficeId: officeId || "",
+				customerId: user?.id || "",
+			},
+		});
+		showSuccess();
 	};
 
 	return (
 		<Card title="Запись на прием">
+			{contextHolder}
 			<Form.Item label="Клиника" name="clinicId" rules={[{ required: true, message: "Выберите клинику" }]}>
 				<Select
+					size="large"
 					loading={clinicsLoading}
 					placeholder="Выберите клинику"
 					options={clinics.map((clinic) => ({
@@ -139,13 +164,9 @@ const AppointmentForm: React.FC = () => {
 					onChange={(clinicId) => setForm((prev) => ({ ...prev, clinicId }))}
 				/>
 			</Form.Item>
-			<Form.Item
-				label="Кабинет"
-				name="officeId"
-				dependencies={["clinicId"]}
-				rules={[{ required: true, message: "Выберите кабинет" }]}
-			>
+			<Form.Item label="Кабинет" name="officeId" rules={[{ required: true, message: "Выберите кабинет" }]}>
 				<Select
+					size="large"
 					disabled={!clinicId}
 					loading={officesLoading}
 					placeholder="Выберите кабинет"
@@ -158,6 +179,7 @@ const AppointmentForm: React.FC = () => {
 			</Form.Item>
 			<Form.Item label="Доктор" name="doctorId" rules={[{ required: true, message: "Выберите доктора" }]}>
 				<Select
+					size="large"
 					disabled={!officeId}
 					loading={doctorsLoading}
 					placeholder="Выберите доктора"
@@ -173,10 +195,24 @@ const AppointmentForm: React.FC = () => {
 				name="appointment"
 				rules={[{ required: true, message: "Выберите дату и время" }]}
 			>
-				<DatePicker disabled={!doctorId || avaiblityLoading} showTime />
+				<DatePicker
+					className="w-full"
+					size="large"
+					value={beginDate}
+					onChange={(date) => setForm((prev) => ({ ...prev, beginDate: date }))}
+					disabled={!doctorId || avaiblityLoading}
+					showTime
+				/>
 			</Form.Item>
 			<Form.Item>
-				<Button onClick={onFinish} type="primary" htmlType="submit">
+				<Button
+					size="large"
+					className="w-full"
+					loading={AppoinmentLoading}
+					onClick={onFinish}
+					type="primary"
+					htmlType="submit"
+				>
 					Записаться
 				</Button>
 			</Form.Item>

@@ -3,41 +3,27 @@ import { useAppStore } from "@/app/model/AppStore";
 import { UserRoles, useUserStore } from "@/entities/User";
 import { useGetId } from "@/shared/api/graphql/requests/useGetId";
 import { Button, Layout, Spin } from "antd";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getRouteAdminPage, getRouteClientPage, getRouteDoctorPage } from "@/shared/consts/router";
 
 export const Header = () => {
 	const { keycloak } = useAppStore();
-	const { userInfo } = useUserStore();
+	const { userInfo, setUser } = useUserStore();
 	const navigate = useNavigate();
 	const { entity, isLoading, person } = useGetId(userInfo?.given_name || "", userInfo?.role || UserRoles.CLIENT);
 	const id = person?.id || null;
 
 	useEffect(() => {
-		console.log("Entity:", entity);
-		console.log("ID:", id);
-		console.log("Is Loading:", isLoading);
-		console.log("Person:", person);
-	}, [entity, id, isLoading, person]);
-
-	useEffect(() => {
 		if (id && !isLoading) {
 			localStorage.setItem("userId", id);
-			console.log("User ID saved to localStorage:", id);
-		} else if (isLoading) {
-			console.log("Loading... ID is not yet available.");
 		}
 	}, [id, isLoading]);
 
-	const handleAdminNavigation = () => {
-		const storedId = localStorage.getItem("userId");
-		if (storedId) {
-			navigate(getRouteAdminPage());
-		} else {
-			console.log("User ID not found in localStorage.");
-		}
-	};
+	useEffect(() => {
+		if (entity) setUser(entity!);
+		console.log(entity);
+	}, [entity]);
 
 	const handleProfileNavigation = () => {
 		switch (userInfo?.role) {
@@ -71,17 +57,6 @@ export const Header = () => {
 						<>
 							<User className="w-5 h-5 text-white" />
 							<span className="sr-only">Профиль</span>
-						</>
-					)}
-				</Button>
-
-				<Button onClick={handleAdminNavigation}>
-					{isLoading ? (
-						<Spin size="small" />
-					) : (
-						<>
-							<Settings className="w-5 h-5 text-white" />
-							<span className="sr-only">Админка</span>
 						</>
 					)}
 				</Button>
