@@ -3,7 +3,7 @@ import { ApolloClient, ApolloProvider } from "@apollo/client";
 import Keycloak, { KeycloakInstance } from "keycloak-js";
 import { cache } from "@/shared/api/graphql/cache";
 import { Loader } from "@/shared/ui/Loader";
-import { UserInfo } from "@/entities/User";
+import { useUserStore } from "@/entities/User";
 import { useAppStore } from "@/app/model/AppStore";
 
 interface ApiProviderProps {
@@ -12,9 +12,9 @@ interface ApiProviderProps {
 
 export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 	const [authenticated, setAuthenticated] = useState<boolean>(false);
-	const [userInfo, setUserInfo] = useState<UserInfo>();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { apollo, keycloak, setApollo, setKeycloak } = useAppStore();
+	const { setUserInfo, userInfo } = useUserStore();
 
 	const initClient = async (keycloak: KeycloakInstance) => {
 		if (!apollo) {
@@ -37,7 +37,6 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 		};
 
 		keycloak!.init({ onLoad: "login-required" }).then(async (auth) => {
-			console.log(auth);
 			setKeycloak(keycloak!);
 			setAuthenticated(auth);
 
@@ -45,14 +44,15 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 
 			if (!userInfo) {
 				keycloak!.loadUserInfo().then((value) => {
-					console.log(value);
 					// @ts-ignore
-					setUserInfo(Object.assign(value, keycloak?.resourceAccess![keycloak.clientId!]));
+					setUserInfo({ ...value, ...keycloak?.resourceAccess.account });
 				});
 			}
 		});
 		setIsLoading(false);
 	}, []);
+
+	console.log(userInfo);
 
 	if (!isLoading && authenticated) {
 		return <ApolloProvider client={apollo!}>{children}</ApolloProvider>;
