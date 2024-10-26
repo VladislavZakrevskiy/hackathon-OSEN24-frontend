@@ -13,5 +13,5 @@ export interface UserInfo {
 	family_name: string;
 	email: string;
 	app?: AppUserInfo;
-	role?: UserRoles;
+	role: UserRoles;
 }
