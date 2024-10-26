@@ -1,532 +1,443 @@
-fragment DoctorTypeAttributes on _E_DoctorType{
-  id
-  __typename
-  name
-  description
+fragment DoctorTypeAttributes on _E_DoctorType {
+	id
+	__typename
+	name
+	description
 }
 
-query searchDoctorType($searchStr: String!){
-  searchDoctorType(cond:"(it.id + it.name).$upper $like '%' + ${searchStr}.$upper + '%' && it.isDel == false")
-  @strExpr(string: $searchStr)
-  {
-    elems{
-      ...DoctorTypeAttributes
-    }
-  }
+query searchDoctorType($searchStr: String!) {
+	searchDoctorType(cond: "(it.id + it.name).$upper $like '%' + ${searchStr}.$upper + '%' && it.isDel == false")
+		@strExpr(string: $searchStr) {
+		elems {
+			...DoctorTypeAttributes
+		}
+	}
 }
 
-mutation updateOrCreateDoctorType(
-  $id:ID!
-  $name:String!
-  $description: String
-){
-  dictionaryPacket{
-    updateOrCreateDoctorType(input:{
-      id: $id
-      name: $name 
-      description: $description
-      isDel: false
-    }){
-      returning{
-        ...DoctorTypeAttributes
-      }
-    }
-  }
+mutation updateOrCreateDoctorType($id: ID!, $name: String!, $description: String) {
+	dictionaryPacket {
+		updateOrCreateDoctorType(input: { id: $id, name: $name, description: $description, isDel: false }) {
+			returning {
+				...DoctorTypeAttributes
+			}
+		}
+	}
 }
 
-mutation deleteDoctorType($id:ID!){
-  dictionaryPacket{    
-    getDoctorType(id:"find: it.id == ${id}", failOnEmpty:true){
-      id
-    }
-    updateOrCreateDoctorType(
-      input:{id:$id, name:"", isDel:false}
-      exist:{
-        update:{
-          isDel:true
-      }
-    }){
-      returning{
-        ...DoctorTypeAttributes
-      }
-    }
-  }
+mutation deleteDoctorType($id: ID!) {
+	dictionaryPacket {
+		getDoctorType(id: "find: it.id == ${id}", failOnEmpty: true) {
+			id
+		}
+		updateOrCreateDoctorType(input: { id: $id, name: "", isDel: false }, exist: { update: { isDel: true } }) {
+			returning {
+				...DoctorTypeAttributes
+			}
+		}
+	}
 }
 
 fragment PersonAttributes on _E_Person {
-  id
-  __typename
-  firstName
-  lastName
-  inn
-  birthDate
+	id
+	__typename
+	firstName
+	lastName
+	inn
+	birthDate
 }
 
 query searchPerson($searchStr: String!) {
-  searchPerson(cond: "(it.firstName+it.lastName).$upper $like '%' + ${searchStr}.$upper + '%'")
-  @strExpr(string: $searchStr){
-    elems {
-      ...PersonAttributes
-    }
-  }
+	searchPerson(cond: "(it.firstName+it.lastName).$upper $like '%' + ${searchStr}.$upper + '%'")
+		@strExpr(string: $searchStr) {
+		elems {
+			...PersonAttributes
+		}
+	}
 }
 
 mutation createPerson($input: _CreatePersonInput!) {
-  packet {
-    createPerson(input: $input) {
-      ...PersonAttributes
-    }
-  }
+	packet {
+		createPerson(input: $input) {
+			...PersonAttributes
+		}
+	}
 }
 
 mutation updatePerson($input: _UpdatePersonInput!) {
-  packet {
-    updatePerson(input: $input) {
-      ...PersonAttributes
-    }
-  }
+	packet {
+		updatePerson(input: $input) {
+			...PersonAttributes
+		}
+	}
 }
 
 mutation deletePerson($id: ID!) {
-  packet {
-    deletePerson(id: $id)
-  }
+	packet {
+		deletePerson(id: $id)
+	}
 }
 
 fragment DoctorAttributes on _E_Doctor {
-  id
-  __typename
-  doctorType {
-    id
-    name
-  }
-  person {
-    entityId
-    entity{
-      firstName
-      lastName
-    }
-  }
+	id
+	__typename
+	doctorType {
+		id
+		name
+	}
+	person {
+		entityId
+		entity {
+			firstName
+			lastName
+		}
+	}
 }
 
-query searchDoctor($searchStr: String!){
-  searchDoctor(cond: "(it.person.entity.firstName+it.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'")
-  @strExpr(string: $searchStr)
-  {
-    elems {
-      ...DoctorAttributes
-    }
-  }
+query searchDoctor($searchStr: String!) {
+	searchDoctor(
+		cond: "(it.person.entity.firstName+it.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'"
+	) @strExpr(string: $searchStr) {
+		elems {
+			...DoctorAttributes
+		}
+	}
 }
 
-mutation createDoctor(
-  $doctorTypeId: ID!
-  $personId:String!
-) {
-  packet {
-    createDoctor(input: {
-      doctorType:$doctorTypeId
-      person:{entityId:$personId}
-    }) {
-      ...DoctorAttributes
-    }
-  }
+mutation createDoctor($doctorTypeId: ID!, $personId: String!) {
+	packet {
+		createDoctor(input: { doctorType: $doctorTypeId, person: { entityId: $personId } }) {
+			...DoctorAttributes
+		}
+	}
 }
 
-mutation updateDoctor(
-  $id: ID!
-  $doctorTypeId: ID!
-  $personId:String!
-) {
-  packet {
-    updateDoctor(input: {
-      id: $id
-      doctorType:$doctorTypeId
-      person:{entityId:$personId}      
-    }) {
-      ...DoctorAttributes
-    }
-  }
+mutation updateDoctor($id: ID!, $doctorTypeId: ID!, $personId: String!) {
+	packet {
+		updateDoctor(input: { id: $id, doctorType: $doctorTypeId, person: { entityId: $personId } }) {
+			...DoctorAttributes
+		}
+	}
 }
 
 mutation deleteDoctor($id: ID!) {
-  packet {
-    deleteDoctor(id: $id)
-  }
+	packet {
+		deleteDoctor(id: $id)
+	}
 }
 
 fragment CustomerAttributes on _E_Customer {
-  id
-  __typename
-  insurancePolicyNumber
-  phoneNumber
-  person {
-    entityId
-    entity{
-      firstName
-      lastName
-    }
-  }
+	id
+	__typename
+	insurancePolicyNumber
+	phoneNumber
+	person {
+		entityId
+		entity {
+			firstName
+			lastName
+		}
+	}
 }
 
-query searchCustomer($searchStr: String!){
-  searchCustomer(cond: "(it.person.entity.firstName+it.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'")
-  @strExpr(string: $searchStr)
-  {
-    elems {
-      ...CustomerAttributes
-    }
-  }
+query searchCustomer($searchStr: String!) {
+	searchCustomer(
+		cond: "(it.person.entity.firstName+it.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'"
+	) @strExpr(string: $searchStr) {
+		elems {
+			...CustomerAttributes
+		}
+	}
 }
-mutation createCustomer(
-  $personId:String!
-	$insurancePolicyNumber:String!
-  $phoneNumber:String 
-  
-) {
-  packet {
-    createCustomer(input: {
-      person:{entityId:$personId}      
-      insurancePolicyNumber: $insurancePolicyNumber
-      phoneNumber: $phoneNumber
-      
-    }) {
-      ...CustomerAttributes
-    }
-  }
+mutation createCustomer($personId: String!, $insurancePolicyNumber: String!, $phoneNumber: String) {
+	packet {
+		createCustomer(
+			input: {
+				person: { entityId: $personId }
+				insurancePolicyNumber: $insurancePolicyNumber
+				phoneNumber: $phoneNumber
+			}
+		) {
+			...CustomerAttributes
+		}
+	}
 }
 
-mutation updateCustomer(
-  $id: ID!
-  $phoneNumber:String 
-) {
-  packet {
-    updateCustomer(input: {
-      id: $id
-      phoneNumber:$phoneNumber   
-    }) {
-      ...CustomerAttributes
-    }
-  }
+mutation updateCustomer($id: ID!, $phoneNumber: String) {
+	packet {
+		updateCustomer(input: { id: $id, phoneNumber: $phoneNumber }) {
+			...CustomerAttributes
+		}
+	}
 }
 
 mutation deleteCustomer($id: ID!) {
-  packet {
-    deleteCustomer(id: $id)
-  }
+	packet {
+		deleteCustomer(id: $id)
+	}
 }
 
 fragment ClinicAttributes on _E_Clinic {
-  id
+	id
 	__typename
-  name
+	name
 }
 
 query searchClinic($searchStr: String!) {
-  searchClinic(cond: "(it.name).$upper $like '%' + ${searchStr}.$upper + '%'")
-  @strExpr(string: $searchStr){
-    elems {
-      ...ClinicAttributes
-    }
-  }
+	searchClinic(cond: "(it.name).$upper $like '%' + ${searchStr}.$upper + '%'") @strExpr(string: $searchStr) {
+		elems {
+			...ClinicAttributes
+		}
+	}
 }
 
-mutation createClinic($name:String!) {
-  packet {
-    createClinic(input: {
-      name: $name
-    }) {
-      ...ClinicAttributes
-    }
-  }
+mutation createClinic($name: String!) {
+	packet {
+		createClinic(input: { name: $name }) {
+			...ClinicAttributes
+		}
+	}
 }
 
-mutation updateClinic(
-  $id: ID!
-  $name:String! 
-) {
-  packet {
-    updateClinic(input: {
-      id: $id
-      name: $name
-    }) {
-      ...ClinicAttributes
-    }
-  }
+mutation updateClinic($id: ID!, $name: String!) {
+	packet {
+		updateClinic(input: { id: $id, name: $name }) {
+			...ClinicAttributes
+		}
+	}
 }
 
 mutation deleteClinic($id: ID!) {
-  packet {
-    deleteClinic(id: $id)
-  }
+	packet {
+		deleteClinic(id: $id)
+	}
 }
 
 fragment ClinicOfficeAttributes on _E_ClinicOffice {
-  id
-  __typename
-  clinic {
-    id
-    name
-  }
-  officeNumber
+	id
+	__typename
+	clinic {
+		id
+		name
+	}
+	officeNumber
 }
 
-query searchClinicOffice(
-  $clinicId: String!
-  $officeNumber: String!
-) {
-  searchClinicOffice(cond: "it.clinic.id == ${clinicId} && it.officeNumber.$upper $like '%' + ${officeNumber}.$upper + '%'")
-  @strExpr(strings:[$clinicId, $officeNumber])
-  {
-    elems {
-      ...ClinicOfficeAttributes
-    }
-  }
+query searchClinicOffice($clinicId: String!, $officeNumber: String!) {
+	searchClinicOffice(
+		cond: "it.clinic.id == ${clinicId} && it.officeNumber.$upper $like '%' + ${officeNumber}.$upper + '%'"
+	) @strExpr(strings: [$clinicId, $officeNumber]) {
+		elems {
+			...ClinicOfficeAttributes
+		}
+	}
 }
 
-mutation createClinicOffice(
-  $clinicId: ID!
-  $officeNumber: String!
-) {
-  packet {
-    createClinicOffice(input: {
-      clinic:$clinicId
-      officeNumber: $officeNumber
-    }) {
-      ...ClinicOfficeAttributes
-    }
-  }
+mutation createClinicOffice($clinicId: ID!, $officeNumber: String!) {
+	packet {
+		createClinicOffice(input: { clinic: $clinicId, officeNumber: $officeNumber }) {
+			...ClinicOfficeAttributes
+		}
+	}
 }
 
 mutation deleteClinicOffice($id: ID!) {
-  packet {
-    deleteClinicOffice(id: $id)
-  }
+	packet {
+		deleteClinicOffice(id: $id)
+	}
 }
 
 fragment ClinicDoctorAttributes on _E_ClinicDoctor {
-  id
-  __typename
-  clinic {
-    id
-    name
-  }
-  doctor{
-    entityId
-    entity{
-      doctorType{
-        id
-        name 
-      }
-      person{
-        entityId
-        entity{
-          firstName
-          lastName
-          inn
-          birthDate
-        }
-      }
-    }
-  }
+	id
+	__typename
+	clinic {
+		id
+		name
+	}
+	doctor {
+		entityId
+		entity {
+			doctorType {
+				id
+				name
+			}
+			person {
+				entityId
+				entity {
+					firstName
+					lastName
+					inn
+					birthDate
+				}
+			}
+		}
+	}
 }
 
-query searchClinicDoctor(
-  $clinicId: String!
-  $searchStr: String!
-) {
-  searchClinicDoctor(cond: "it.clinic.id == ${clinicId} && (it.doctor.entity.person.entity.firstName+it.doctor.entity.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'")
-  @strExpr(strings:[$clinicId, $searchStr])
-  {
-    elems {
-      ...ClinicDoctorAttributes
-    }
-  }
+query searchClinicDoctor($clinicId: String!, $searchStr: String!) {
+	searchClinicDoctor(
+		cond: "it.clinic.id == ${clinicId} && (it.doctor.entity.person.entity.firstName+it.doctor.entity.person.entity.lastName).$upper $like '%' + ${searchStr}.$upper + '%'"
+	) @strExpr(strings: [$clinicId, $searchStr]) {
+		elems {
+			...ClinicDoctorAttributes
+		}
+	}
 }
 
-mutation createClinicDoctor(
-  $clinicId: ID!
-  $doctorId: String!
-) {
-  packet {
-    createClinicDoctor(input: {
-      clinic:$clinicId
-      doctor:{entityId: $doctorId}
-    }) {
-      ...ClinicDoctorAttributes
-    }
-  }
+mutation createClinicDoctor($clinicId: ID!, $doctorId: String!) {
+	packet {
+		createClinicDoctor(input: { clinic: $clinicId, doctor: { entityId: $doctorId } }) {
+			...ClinicDoctorAttributes
+		}
+	}
 }
 
 mutation deleteClinicDoctor($id: ID!) {
-  packet {
-    deleteClinicDoctor(id: $id)
-  }
+	packet {
+		deleteClinicDoctor(id: $id)
+	}
 }
 
 fragment ClinicDoctorAvailabilityAttributes on _E_ClinicDoctorAvailability {
-  id
-  __typename
-  beginDate
-  endDate
-  clinicOffice {
-    id
-    officeNumber
-  }
+	id
+	__typename
+	beginDate
+	endDate
+	clinicOffice {
+		id
+		officeNumber
+	}
 }
 
-query searchClinicDoctorAvailability(
-  $clinicDoctorId: String!
-  $dateFrom: _DateTime!
-  $dateTo: _DateTime!
-) {
-  searchClinicDoctorAvailability(cond: "it.clinicDoctor.id == ${clinicDoctorId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
-  @strExpr(string:$clinicDoctorId,dateTimes:[$dateFrom,$dateTo])
-  {
-    elems {
-      ...ClinicDoctorAvailabilityAttributes
-    }
-  }
+query searchClinicDoctorAvailability($clinicDoctorId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+	searchClinicDoctorAvailability(
+		cond: "it.clinicDoctor.id == ${clinicDoctorId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}"
+	) @strExpr(string: $clinicDoctorId, dateTimes: [$dateFrom, $dateTo]) {
+		elems {
+			...ClinicDoctorAvailabilityAttributes
+		}
+	}
 }
 
 mutation createClinicDoctorAvailability(
-  $clinicDoctorId: ID!
-  $beginDate: _DateTime!
-  $endDate: _DateTime!
-  $clinicOfficeId: ID!
+	$clinicDoctorId: ID!
+	$beginDate: _DateTime!
+	$endDate: _DateTime!
+	$clinicOfficeId: ID!
 ) {
-  packet {
-    getClinicDoctor(
-      id:"find: it.id == ${clinicDoctorId} && ${beginDate} < ${endDate} && !it.clinicDoctorAvailabilityList{cond = it.endDate >= ${beginDate} && it.beginDate<=${endDate}}.$exists"
-      failOnEmpty:true
-      lock:WAIT
-    ){
-      id
-    }
-    
-    getClinicOffice(
-      id:"find: it.id == ${clinicOfficeId} && !entities{type = ClinicDoctorAvailability, cond = it.clinicOffice.id == ${clinicOfficeId} && it.endDate >= ${beginDate} && it.beginDate<=${endDate}}.$exists"
-      failOnEmpty:true
-      lock:WAIT
-    ){
-      id
-    }
-    
-    createClinicDoctorAvailability(input: {
-      clinicDoctor: $clinicDoctorId
-      clinicOffice: $clinicOfficeId
-      beginDate: $beginDate
-      endDate: $endDate
-      
-    }) {
-      ...ClinicDoctorAvailabilityAttributes
-    }
-  }
+	packet {
+		getClinicDoctor(
+			id: "find: it.id == ${clinicDoctorId} && ${beginDate} < ${endDate} && !it.clinicDoctorAvailabilityList{cond = it.endDate >= ${beginDate} && it.beginDate<=${endDate}}.$exists"
+			failOnEmpty: true
+			lock: WAIT
+		) {
+			id
+		}
+
+		getClinicOffice(
+			id: "find: it.id == ${clinicOfficeId} && !entities{type = ClinicDoctorAvailability, cond = it.clinicOffice.id == ${clinicOfficeId} && it.endDate >= ${beginDate} && it.beginDate<=${endDate}}.$exists"
+			failOnEmpty: true
+			lock: WAIT
+		) {
+			id
+		}
+
+		createClinicDoctorAvailability(
+			input: { clinicDoctor: $clinicDoctorId, clinicOffice: $clinicOfficeId, beginDate: $beginDate, endDate: $endDate }
+		) {
+			...ClinicDoctorAvailabilityAttributes
+		}
+	}
 }
 
-
 mutation deleteClinicDoctorAvailability($id: ID!) {
-  packet {
-    deleteClinicDoctorAvailability(id: $id)
-  }
+	packet {
+		deleteClinicDoctorAvailability(id: $id)
+	}
 }
 
 fragment ClinicTableAttributes on _E_ClinicTable {
-  id
-  __typename
-  beginDate
-  endDate
-  clinicOffice {
-    id
-    officeNumber
-  }
-  customer{
-    entityId
-    entity{
-      person{
-        entityId
-        entity{
-          firstName
-          lastName
-        }
-      }
-    }
-  }
-  clinicDoctor{
-    id
-    doctor{
-      entityId
-      entity{
-        person{
-          entityId
-          entity{
-            firstName
-            lastName
-          }
-        }
-      }
-    }
-  }
+	id
+	__typename
+	beginDate
+	endDate
+	clinicOffice {
+		id
+		officeNumber
+	}
+	customer {
+		entityId
+		entity {
+			person {
+				entityId
+				entity {
+					firstName
+					lastName
+				}
+			}
+		}
+	}
+	clinicDoctor {
+		id
+		doctor {
+			entityId
+			entity {
+				person {
+					entityId
+					entity {
+						firstName
+						lastName
+					}
+				}
+			}
+		}
+	}
 }
 
-query searchClinicTable(
-  $clinicId: String!
-  $dateFrom: _DateTime!
-  $dateTo: _DateTime!
-) {
-  searchClinicTable(cond: "it.clinic.id == ${clinicId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
-  @strExpr(string:$clinicId,dateTimes:[$dateFrom,$dateTo])
-  {
-    elems {
-      ...ClinicTableAttributes
-    }
-  }
+query searchClinicTable($clinicId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+	searchClinicTable(cond: "it.clinic.id == ${clinicId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
+		@strExpr(string: $clinicId, dateTimes: [$dateFrom, $dateTo]) {
+		elems {
+			...ClinicTableAttributes
+		}
+	}
+}
+
+
+query searchClinicTableByCustomer($customerId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+	searchClinicTable(cond: "it.customer.entityId == ${customerId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
+		@strExpr(string: $customerId, dateTimes: [$dateFrom, $dateTo]) {
+		elems {
+			...ClinicTableAttributes
+		}
+	}
 }
 
 mutation createClinicTable(
-  $clinicId: ID!
-  $clinicDoctorId: ID!
-  $beginDate: _DateTime!
-  $endDate: _DateTime!
-  $clinicOfficeId: ID!
-  $customerId: String!
+	$clinicId: ID!
+	$clinicDoctorId: ID!
+	$beginDate: _DateTime!
+	$endDate: _DateTime!
+	$clinicOfficeId: ID!
+	$customerId: String!
 ) {
-  packet {
-    
-    getClinicDoctor(
-      id:"find: it.id == ${clinicDoctorId} && ${beginDate} < ${endDate} && it.clinicDoctorAvailabilityList{cond = it.clinicOffice = ${cliniOffice} && it.beginDate <= ${beginDate} && it.endDate>=${endDate}}.$exists"
-      failOnEmpty:true
-      lock:WAIT
-    ){
-      id
-    }
-    
-    getClinic(
-      id:"find: it.id == ${clinicId} && ${beginDate} < ${endDate} && !it.clinicTableList{cond = it.endDate >= ${beginDate} && it.beginDate<=${endDate} && (it.clinicDoctor.id == ${clinicDoctorId} || it.clinicOffice.id == ${clinicOfficeId} || it.customer.entityId == ${customerId})}.$exists"
-      failOnEmpty:true
-      lock:WAIT      
-    ){
-      id
-    }
-    
-    createClinicTable(input: {
-      clinic: $clinicId
-      clinicDoctor: $clinicDoctorId
-      clinicOffice: $clinicOfficeId
-      customer: {entityId: $customerId}
-      beginDate: $beginDate
-      endDate: $endDate
-      
-    }) {
-      ...ClinicTableAttributes
-    }
-  }
+	packet {
+		createClinicTable(
+			input: {
+				clinic: $clinicId
+				clinicDoctor: $clinicDoctorId
+				clinicOffice: $clinicOfficeId
+				customer: { entityId: $customerId }
+				beginDate: $beginDate
+				endDate: $endDate
+			}
+		) {
+			...ClinicTableAttributes
+		}
+	}
 }
-
 
 mutation deleteClinicTable($id: ID!) {
-  packet {
-    deleteClinicTable(id: $id)
-  }
+	packet {
+		deleteClinicTable(id: $id)
+	}
 }
-
