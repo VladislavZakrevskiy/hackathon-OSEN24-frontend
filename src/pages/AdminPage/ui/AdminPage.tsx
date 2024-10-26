@@ -40,13 +40,13 @@ const MainScreen: React.FC = () => {
 							<Card className="w-1/3" title="Выберите нужную сущность">
 								<div className="flex flex-col justify-center gap-4">
 									<Button type="primary" className="w-full" onClick={() => handleTypeSelect("Doctor")}>
-										Doctor
+										Врачи
 									</Button>
 									<Button type="primary" className="w-full" onClick={() => handleTypeSelect("Office")}>
-										Office
+										Кабинеты
 									</Button>
 									<Button type="primary" className="w-full" onClick={() => handleTypeSelect("DoctorAvaible")}>
-										DoctorAvaible
+										Часы работы врачей
 									</Button>
 								</div>
 							</Card>

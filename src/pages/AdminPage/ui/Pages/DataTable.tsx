@@ -1,16 +1,25 @@
-import React, { useEffect } from "react";
-import { Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Table } from "antd";
 import { PageType, usePageStore } from "../../model/browserStore";
 import { useGetDoctorAvailabilityData } from "../../model/hooks/useGetDoctorAvailabilityData";
 import { useGetDoctorData } from "../../model/hooks/useGetDoctorData";
 import { useGetOfficeData } from "../../model/hooks/useGetOfficeData";
+import { AddModal } from "./AddModal";
 
 interface DataTableProps {
 	type: PageType;
 	pageId: string;
 }
 
+const roleMap = {
+	Doctor: "Врачи",
+	Office: "Кабинеты",
+	DoctorAvaible: "Часы работы врачей",
+	New: "Новая вкладка",
+};
+
 const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
+	const [isAddOpen, setIsAddOpen] = useState(false);
 	const { pages, setData } = usePageStore();
 	const page = pages.find((p) => p.id === pageId);
 	const { fetchDoctorAvailabilityData, isLoading: isAvailabilityLoading } = useGetDoctorAvailabilityData();
@@ -36,8 +45,23 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	if (isAvailabilityLoading || isDoctorLoading || isOfficeLoading) return <p>Загрузка...</p>;
 
 	const columns = getColumnsByType(type);
-	// @ts-ignore
-	return <Table dataSource={page.data} columns={columns} rowKey="id" />;
+
+	return (
+		<div>
+			<div className="pb-2">
+				<Button onClick={() => setIsAddOpen(false)}>Добавить</Button>
+			</div>
+			<AddModal
+				open={isAddOpen}
+				setIsOpen={setIsAddOpen}
+				// TODO вставить опшины из пейджи
+				options={[]}
+				title={`Добавление в вкладку ${roleMap[page?.type || "Doctor"]}`}
+			/>
+			{/* @ts-ignore */}
+			<Table dataSource={page.data} columns={columns} rowKey="id" />
+		</div>
+	);
 };
 
 export default DataTable;
