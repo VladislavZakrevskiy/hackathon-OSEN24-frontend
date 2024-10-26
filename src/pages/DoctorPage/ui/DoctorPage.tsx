@@ -212,8 +212,6 @@ const DoctorPage: React.FC = () => {
 			);
 		}}
 		/>
-
-
       <Modal
         title="Результат посещения"
         open={!!selectedAppointment}

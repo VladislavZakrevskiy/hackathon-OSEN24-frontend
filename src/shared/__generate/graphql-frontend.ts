@@ -3203,6 +3203,8 @@ export const SearchDoctorTypeDocument = gql`
 }
     ${DoctorTypeAttributesFragmentDoc}`;
 
+
+
 /**
  * __useSearchDoctorTypeQuery__
  *
@@ -3294,6 +3296,27 @@ export const DeleteDoctorTypeDocument = gql`
 }
     ${DoctorTypeAttributesFragmentDoc}`;
 export type DeleteDoctorTypeMutationFn = Apollo.MutationFunction<DeleteDoctorTypeMutation, DeleteDoctorTypeMutationVariables>;
+
+export const CREATE_DOCTOR = gql`
+  mutation CreateDoctor($doctorTypeId: ID!, $personId: String!) {
+    packet {
+      createDoctor(input: { doctorType: $doctorTypeId, person: { entityId: $personId } }) {
+        id
+        doctorType {
+          id
+          name
+        }
+        person {
+          entityId
+          entity {
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  }
+`;
 
 /**
  * __useDeleteDoctorTypeMutation__

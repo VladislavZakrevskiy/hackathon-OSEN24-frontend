@@ -402,10 +402,10 @@ query searchClinicTable($clinicId: String!, $dateFrom: _DateTime!, $dateTo: _Dat
 	}
 }
 
-
 query searchClinicTableByCustomer($customerId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
-	searchClinicTable(cond: "it.customer.entityId == ${customerId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
-		@strExpr(string: $customerId, dateTimes: [$dateFrom, $dateTo]) {
+	searchClinicTable(
+		cond: "it.customer.entityId == ${customerId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}"
+	) @strExpr(string: $customerId, dateTimes: [$dateFrom, $dateTo]) {
 		elems {
 			...ClinicTableAttributes
 		}
