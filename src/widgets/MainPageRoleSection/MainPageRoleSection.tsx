@@ -1,9 +1,10 @@
-import { useUserStore } from "@/entities/User";
-import { getRole } from "@/shared/lib/utils/getRole";
+import { UserRoles, useUserStore } from "@/entities/User";
 
 export const MainPageRoleSection = () => {
 	const { userInfo } = useUserStore();
 
-	// switch (getRole(userInfo?.roles)) {
-	// }
+	switch (userInfo?.role) {
+		case UserRoles.ADMIN:
+			return;
+	}
 };

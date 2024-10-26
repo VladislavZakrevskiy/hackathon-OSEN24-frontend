@@ -11,6 +11,13 @@ export default defineConfig({
 		alias: [{ find: "@", replacement: "/src" }],
 	},
 	server: {
+		proxy: {
+			"/graphql": {
+				target: "https://smapi.pv-api.sbc.space/ds-7429590172239724545/graphql",
+				secure: false,
+				changeOrigin: true,
+			},
+		},
 		port: 3000,
 	},
 });
