@@ -3,6 +3,7 @@ import { LazyMainPage } from "@/pages/MainPage";
 import {
 	AppRoutes,
 	getRouteAdminPage,
+	getRouteAdminPage,
 	getRouteClientPage,
 	getRouteDoctorPage,
 	getRouteMain,
@@ -12,6 +13,7 @@ import { AppRouteProps } from "@/shared/types/router";
 import { UserRoles } from "@/entities/User";
 import { LazyDoctorPage } from "@/pages/DoctorPage";
 import { LazyClientPage } from "@/pages/ClientPage";
+import { LazyAdminPage } from "@/pages/AdminPage";
 import { LazyAdminPage } from "@/pages/AdminPage";
 
 export const routeConfig: Record<AppRoutes, AppRouteProps> = {

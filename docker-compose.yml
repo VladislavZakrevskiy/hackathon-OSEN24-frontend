@@ -1,0 +1,13 @@
+services:
+  frontend:
+    container_name: frontend
+    restart: always
+    image: frontend
+    networks:
+      - frontend
+    ports:
+      - 80:80
+      
+networks:
+  frontend:
+    name: frontend
