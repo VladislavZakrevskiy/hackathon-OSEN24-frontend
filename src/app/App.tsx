@@ -5,7 +5,7 @@ import { Layout, Spin } from "antd";
 
 const App = () => {
 	return (
-		<div style={{ minHeight: "100vh" }}>
+		<div className="min-h-screen flex flex-col">
 			<Suspense fallback={<Spin size="large" />}>
 				<Header />
 				<Layout>
