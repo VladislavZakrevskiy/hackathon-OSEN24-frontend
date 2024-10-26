@@ -5,6 +5,7 @@ import { DatePicker, Spin, Alert, Button, List, Card, Typography } from 'antd';
 import moment from 'moment';
 import { SearchClinicTableDocument, SearchClinicTableQueryVariables } from '@/shared/__generate/graphql-frontend';
 import { Link } from 'react-router-dom';
+import { getRouteClientPage } from '@/shared/consts/router';
 
 const { Text } = Typography;
 
@@ -128,7 +129,12 @@ const DoctorPage: React.FC = () => {
                 </Text>
                 <p>Office: {appointment.clinicOffice.officeNumber}</p>
 
-				<Link to={`/client/${formattedCustomerName}`} style={{ color: 'cyan', marginLeft: '5px' }}>
+				<Link 
+				to={getRouteClientPage(
+					(appointment.customer.entity.person.entity.firstName || "") +
+					appointment.customer.entity.person.entity.lastName,
+				)}
+				style={{ color: 'cyan', marginLeft: '5px' }}>
 					<p style={{ color: 'white' }}>
 						Customer: {customerName}
 					</p>
