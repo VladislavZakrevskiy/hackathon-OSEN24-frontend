@@ -36,7 +36,7 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
 		element: <LazyClientPage />,
 	},
 	[AppRoutes.ADMIN_BY_ID]: {
-		path: getRouteAdminPage(":id"),
+		path: getRouteAdminPage(),
 		authOnly: true,
 		roles: [UserRoles.ADMIN],
 		element: <LazyAdminPage />,

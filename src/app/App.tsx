@@ -1,16 +1,17 @@
 import { Suspense } from "react";
 import { AppRouter } from "./providers/router";
-import { Header } from "@/widgets";
+import { FooterComponent, Header } from "@/widgets";
 import { Layout, Spin } from "antd";
 
 const App = () => {
 	return (
-		<div>
+		<div className="min-h-screen">
 			<Suspense fallback={<Spin size="large" />}>
 				<Header />
-				<Layout.Content>
+				<Layout>
 					<AppRouter />
-				</Layout.Content>
+				</Layout>
+				<FooterComponent />
 			</Suspense>
 		</div>
 	);

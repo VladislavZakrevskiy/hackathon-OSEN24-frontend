@@ -10,4 +10,4 @@ export const getRouteMain = () => "/";
 export const getRouteNotFound = () => "*";
 export const getRouteDoctorPage = (id: string) => "/doctor/" + id;
 export const getRouteClientPage = (id: string) => "/client/" + id;
-export const getRouteAdminPage = (id: string) => "/admin/" + id;
+export const getRouteAdminPage = () => "/admin/";

@@ -2,19 +2,17 @@ import { useEffect } from "react";
 import { useAppStore } from "@/app/model/AppStore";
 import { UserRoles, useUserStore } from "@/entities/User";
 import { useGetId } from "@/shared/api/graphql/requests/useGetId";
-import { Spin } from "antd";
+import { Button, Layout, Spin } from "antd";
 import { LogOut, User, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getRouteAdminPage, getRouteClientPage, getRouteDoctorPage } from "@/shared/consts/router";
 
 export const Header = () => {
 	const { keycloak } = useAppStore();
 	const { userInfo } = useUserStore();
 	const navigate = useNavigate();
-	const { entity, isLoading, person } = useGetId(
-		userInfo?.given_name || "",
-		userInfo?.role || UserRoles.CLIENT
-	);
-	const id = person?.id || null; 
+	const { entity, isLoading, person } = useGetId(userInfo?.given_name || "", userInfo?.role || UserRoles.CLIENT);
+	const id = person?.id || null;
 
 	useEffect(() => {
 		console.log("Entity:", entity);
@@ -35,23 +33,38 @@ export const Header = () => {
 	const handleAdminNavigation = () => {
 		const storedId = localStorage.getItem("userId");
 		if (storedId) {
-			navigate(`/admin/${storedId}`);
+			navigate(getRouteAdminPage());
 		} else {
 			console.log("User ID not found in localStorage.");
 		}
 	};
 
+	const handleProfileNavigation = () => {
+		switch (userInfo?.role) {
+			case UserRoles.CLIENT:
+				navigate(getRouteClientPage((person?.firstName || "") + (person?.lastName || "")));
+				break;
+			case UserRoles.DOCTOR:
+				navigate(getRouteDoctorPage((person?.firstName || "") + (person?.lastName || "")));
+				break;
+			case UserRoles.ADMIN:
+				navigate(getRouteAdminPage());
+				break;
+		}
+	};
+
 	return (
-		<div className="flex items-center justify-between w-full p-4 shadow-md bg-gradient-to-r from-green-500 to-green-400">
-			<button onClick={() => navigate("/")} className="text-xl font-bold text-white hover:text-gray-200 transition">
+		<Layout.Header className="flex justify-between items-center">
+			<Button
+				size="large"
+				onClick={() => navigate("/")}
+				className="text-xl font-bold text-white hover:text-gray-200 transition"
+			>
 				CLINIC
-			</button>
+			</Button>
 
 			<div className="flex items-center gap-4">
-				<button
-					className="flex items-center justify-center p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition"
-					onClick={() => navigate("/client")}
-				>
+				<Button onClick={handleProfileNavigation}>
 					{isLoading ? (
 						<Spin size="small" />
 					) : (
@@ -60,12 +73,9 @@ export const Header = () => {
 							<span className="sr-only">Профиль</span>
 						</>
 					)}
-				</button>
+				</Button>
 
-				<button
-					className="flex items-center p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition"
-					onClick={handleAdminNavigation}
-				>
+				<Button onClick={handleAdminNavigation}>
 					{isLoading ? (
 						<Spin size="small" />
 					) : (
@@ -74,12 +84,9 @@ export const Header = () => {
 							<span className="sr-only">Админка</span>
 						</>
 					)}
-				</button>
+				</Button>
 
-				<button
-					className="flex items-center p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition"
-					onClick={() => keycloak?.logout()}
-				>
+				<Button onClick={() => keycloak?.logout()}>
 					{isLoading ? (
 						<Spin size="small" />
 					) : (
@@ -88,8 +95,8 @@ export const Header = () => {
 							<span className="sr-only">Выйти</span>
 						</>
 					)}
-				</button>
+				</Button>
 			</div>
-		</div>
+		</Layout.Header>
 	);
 };

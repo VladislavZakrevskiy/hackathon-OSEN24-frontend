@@ -1,11 +1,16 @@
-import { FooterComponent, ServiceCard } from "@/widgets";
-import { memo } from "react";
+import { ServiceCard } from "@/widgets";
+import { memo, useEffect } from "react";
 import { ContactInfo, AdvantagesSection } from "@/widgets";
 import { ReviewsSection } from "@/widgets/ReviewsSection";
+import { Layout } from "antd";
 
 const MainPage = memo(() => {
+	useEffect(() => {
+		document.title = "Клиника Pepper_coding";
+	}, []);
+
 	return (
-		<>
+		<Layout>
 			<div className="min-h-screen text-white flex flex-col items-center">
 				<div className="flex flex-col items-center p-8 max-w-5xl w-full mx-auto">
 					<h1 className="text-3xl font-bold mb-4">Добро пожаловать в нашу клинику</h1>
@@ -23,10 +28,7 @@ const MainPage = memo(() => {
 							<ServiceCard title="Анализы" description="Проходите анализы в удобное для вас время." />
 						</div>
 						<div className="flex-1 min-w-[250px]">
-							<ServiceCard
-								title="Физиотерапия"
-								description="Восстановление после заболеваний с помощью физиотерапии."
-							/>
+							<ServiceCard title="Физиотерапия" description="Восстановление после заболеваний физиотерапией." />
 						</div>
 					</div>
 
@@ -41,8 +43,7 @@ const MainPage = memo(() => {
 					</div>
 				</div>
 			</div>
-			<FooterComponent />
-		</>
+		</Layout>
 	);
 });
 

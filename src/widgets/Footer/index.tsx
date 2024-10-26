@@ -1,19 +1,17 @@
-import React from 'react';
-import { Layout } from 'antd';
+import React from "react";
+import { Layout, Typography } from "antd";
 
 const { Footer } = Layout;
 
 const FooterComponent: React.FC = () => {
-  return (
-    <Footer className="bg-gradient-to-r from-green-500 to-green-400 text-white text-center">
-      <hr className="border-white my-2 w-full" />
-      <div className="container mx-auto">
-        ©2024 Клиника pepper_coding. Все права защищены.
-        <br />
-        Телефон: +7 (904) 447-58-65
-      </div>
-    </Footer>
-  );
+	return (
+		<Footer className="flex flex-col gap-1">
+			<hr className="mb-3" />
+			<Typography.Text>©2024 Клиника pepper_coding. Все права защищены.</Typography.Text>
+			<Typography.Text>Телефон: +7 (904) 447-58-65</Typography.Text>
+			<Typography.Text>Телефон ГлавВрача: +7 (996) 336-20-57</Typography.Text>
+		</Footer>
+	);
 };
 
 export default FooterComponent;
