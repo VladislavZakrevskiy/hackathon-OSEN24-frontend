@@ -171,6 +171,7 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
           onChange: handleTableChange,
         }}
       />
+	  
     </div>
   );
 };
