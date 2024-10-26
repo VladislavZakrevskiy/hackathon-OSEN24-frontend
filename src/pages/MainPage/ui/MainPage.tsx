@@ -1,6 +1,5 @@
-import { ServiceCard } from "@/widgets";
+import { ServiceCard, ContactInfo, AdvantagesSection } from "@/widgets";
 import { memo, useEffect } from "react";
-import { ContactInfo, AdvantagesSection } from "@/widgets";
 import { ReviewsSection } from "@/widgets/ReviewsSection";
 import { Layout } from "antd";
 

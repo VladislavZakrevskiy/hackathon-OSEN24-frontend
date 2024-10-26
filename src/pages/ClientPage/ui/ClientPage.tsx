@@ -54,8 +54,8 @@ const ClientPage: React.FC = () => {
 	}
 
 	return (
-		<Content className="p-12 grid grid-cols-2 gap-2">
-			<Card title={<h1>Личный кабинет</h1>}>
+		<Content className="p-12 grid lg:grid-cols-2 lg:gap-2 grid-cols-1 gap-5">
+			<Card title={<h1>Личный кабинет</h1>} className="h-fit">
 				<div className="flex flex-col gap-4">
 					<div className="flex flex-col gap-2">
 						<div className="flex gap-2 items-center">

@@ -5,15 +5,15 @@ import { Layout, Spin } from "antd";
 
 const App = () => {
 	return (
-		<Suspense fallback={<Spin size="large" />}>
-			<div className="flex flex-col ">
+		<div className="min-h-screen flex flex-col">
+			<Suspense fallback={<Spin size="large" />}>
 				<Header />
 				<Layout>
 					<AppRouter />
 				</Layout>
 				<FooterComponent />
-			</div>
-		</Suspense>
+			</Suspense>
+		</div>
 	);
 };
 

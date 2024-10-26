@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { format } from 'date-fns';
-import { DatePicker, Spin, Alert, Button } from 'antd';
+import { DatePicker, Spin, Alert, Button, List, Card, Typography } from 'antd';
 import moment from 'moment';
 import { SearchClinicTableDocument, SearchClinicTableQueryVariables } from '@/shared/__generate/graphql-frontend';
+import { Link } from 'react-router-dom';
+import { getRouteClientPage } from '@/shared/consts/router';
+
+const { Text } = Typography;
 
 type Appointment = {
   id: string;
@@ -88,9 +92,9 @@ const DoctorPage: React.FC = () => {
   console.log(data);
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h2>Doctor Appointments</h2>
-      <div>
+      <div style={{ marginBottom: '20px' }}>
         <DatePicker
           value={inputParameters.startDate ? moment(inputParameters.startDate, "YYYY-MM-DD") : null}
           onChange={(date) => changeInputParameters({ startDate: date?.format("YYYY-MM-DD") })}
@@ -98,40 +102,50 @@ const DoctorPage: React.FC = () => {
           placeholder="Start Date"
         />
         <DatePicker
+          style={{ marginLeft: '10px' }}
           value={inputParameters.endDate ? moment(inputParameters.endDate, "YYYY-MM-DD") : null}
           onChange={(date) => changeInputParameters({ endDate: date?.format("YYYY-MM-DD") })}
           format="YYYY-MM-DD"
           placeholder="End Date"
         />
-        <Button onClick={handleFetchAppointments} disabled={!inputParameters.startDate || !inputParameters.endDate}>
+        <Button onClick={handleFetchAppointments} style={{ marginLeft: '10px' }} disabled={!inputParameters.startDate || !inputParameters.endDate}>
           Fetch Appointments
         </Button>
       </div>
-      <ul>
-        {data?.searchClinicTable.elems.map((appointment: Appointment) => {
-          const customerName = `${appointment.customer.entity.person.entity.firstName} ${appointment.customer.entity.person.entity.lastName}`;
-          const doctorName = `${appointment.clinicDoctor.doctor.entity?.person.entity?.firstName} ${appointment.clinicDoctor.doctor.entity?.person.entity?.lastName}`;
-          
-          console.log(`Customer: ${customerName}`);
-          console.log(`Doctor: ${doctorName}`);
 
+      <List
+        itemLayout="vertical"
+        size="large"
+        dataSource={data?.searchClinicTable.elems}
+        renderItem={(appointment: Appointment) => {
+          const customerName = `${appointment.customer.entity.person.entity.firstName} ${appointment.customer.entity.person.entity.lastName}`;
+          const doctorName = `${appointment.clinicDoctor.doctor.entity.person.entity.firstName} ${appointment.clinicDoctor.doctor.entity.person.entity.lastName}`;
           return (
-            <li key={appointment.id}>
-              <p style={{ color: 'white' }}>
-                {format(new Date(appointment.beginDate), 'yyyy-MM-dd HH:mm:ss')} -{' '}
-                {format(new Date(appointment.endDate), 'yyyy-MM-dd HH:mm:ss')}
-              </p>
-              <p>Office: {appointment.clinicOffice.officeNumber}</p>
-              <p style={{ color: 'white' }}>
-                Customer: {customerName}
-              </p>
-              <p style={{ color: 'white' }}>
-                Doctor: {doctorName}
-              </p>
-            </li>
+            <List.Item key={appointment.id}>
+              <Card style={{ backgroundColor: '#282c34', color: 'white', marginBottom: '10px' }}>
+                <Text style={{ color: 'white' }}>
+                  {format(new Date(appointment.beginDate), 'yyyy-MM-dd HH:mm:ss')} - {format(new Date(appointment.endDate), 'yyyy-MM-dd HH:mm:ss')}
+                </Text>
+                <p>Office: {appointment.clinicOffice.officeNumber}</p>
+
+				<Link 
+				to={getRouteClientPage(
+					(appointment.customer.entity.person.entity.firstName || "") +
+					appointment.customer.entity.person.entity.lastName,
+				)}
+				style={{ color: 'cyan', marginLeft: '5px' }}>
+					<p style={{ color: 'white' }}>
+						Customer: {customerName}
+					</p>
+				</Link>
+                <p style={{ color: 'white' }}>
+                  Doctor: {doctorName}
+                </p>
+              </Card>
+            </List.Item>
           );
-        })}
-      </ul>
+        }}
+      />
     </div>
   );
 };
