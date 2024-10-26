@@ -1,3 +1,5 @@
+import { UserRoles } from "./UserRoles";
+
 export interface AppUserInfo {
 	id: string;
 	name: string;
@@ -11,5 +13,5 @@ export interface UserInfo {
 	family_name: string;
 	email: string;
 	app?: AppUserInfo;
-	roles?: Array<string>;
+	roles?: Array<UserRoles>;
 }
