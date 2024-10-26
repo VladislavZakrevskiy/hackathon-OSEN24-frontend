@@ -16,7 +16,7 @@ services:
       - frontend
       - nginx
     volumes:
-      ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
       
