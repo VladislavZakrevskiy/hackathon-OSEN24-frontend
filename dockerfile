@@ -32,4 +32,4 @@ COPY ./tsconfig.node.json ./tsconfig.node.json
 
 COPY ./vite.config.ts ./vite.config.ts
 
-CMD ["yarn", "run", "dev"]
+CMD ["yarn", "run", "dev", "--host"]
