@@ -2660,6 +2660,51 @@ export type _UpdateClinicTableInput = {
   id: Scalars['ID']['input'];
 };
 
+export const UpdateClinicTableDocument = gql`
+  mutation updateClinicTableEntry($input: _UpdateClinicTableInput!) {
+    packet {
+      updateClinicTable(input: $input) {
+        id
+        beginDate
+        endDate
+        comment
+        clinicOffice {
+          id
+          officeNumber
+        }
+        customer {
+          entityId
+          entity {
+            person {
+              entityId
+              entity {
+                firstName
+                lastName
+              }
+            }
+          }
+        }
+        clinicDoctor {
+          id
+          doctor {
+            entityId
+            entity {
+              person {
+                entityId
+                entity {
+                  firstName
+                  lastName
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+
 export type _UpdateCustomerInput = {
   id: Scalars['ID']['input'];
   insurancePolicyNumber?: InputMaybe<Scalars['String']['input']>;
@@ -2958,7 +3003,7 @@ export type DeleteClinicDoctorAvailabilityMutationVariables = Exact<{
 
 export type DeleteClinicDoctorAvailabilityMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', deleteClinicDoctorAvailability?: string | null } | null };
 
-export type ClinicTableAttributesFragment = { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
+export type ClinicTableAttributesFragment = { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, comment?: string | null, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
 
 export type SearchClinicTableQueryVariables = Exact<{
   clinicId: Scalars['String']['input'];
@@ -3032,6 +3077,7 @@ export const DoctorAttributesFragmentDoc = gql`
   }
 }
     `;
+    
 export const CustomerAttributesFragmentDoc = gql`
     fragment CustomerAttributes on _E_Customer {
   id
@@ -3111,6 +3157,7 @@ export const ClinicTableAttributesFragmentDoc = gql`
   __typename
   beginDate
   endDate
+  comment
   clinicOffice {
     id
     officeNumber
