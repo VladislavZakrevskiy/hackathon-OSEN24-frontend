@@ -170,6 +170,19 @@ mutation updateCustomer($id: ID!, $phoneNumber: String) {
 	}
 }
 
+mutation updateAllCustomer(
+	$id: ID!
+	$phoneNumber: String
+	$insurancePolicyNumber: String
+	$new_person_id: String!
+) {
+	packet {
+		updateCustomer(input: { id: $id, phoneNumber: $phoneNumber, insurancePolicyNumber: $insurancePolicyNumber, person: {entityId: $new_person_id} }) {
+			...CustomerAttributes
+		}
+	}
+}
+
 mutation deleteCustomer($id: ID!) {
 	packet {
 		deleteCustomer(id: $id)
@@ -402,10 +415,10 @@ query searchClinicTable($clinicId: String!, $dateFrom: _DateTime!, $dateTo: _Dat
 	}
 }
 
-
 query searchClinicTableByCustomer($customerId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
-	searchClinicTable(cond: "it.customer.entityId == ${customerId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
-		@strExpr(string: $customerId, dateTimes: [$dateFrom, $dateTo]) {
+	searchClinicTable(
+		cond: "it.customer.entityId == ${customerId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}"
+	) @strExpr(string: $customerId, dateTimes: [$dateFrom, $dateTo]) {
 		elems {
 			...ClinicTableAttributes
 		}

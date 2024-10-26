@@ -40,14 +40,14 @@ const AppointmentForm: React.FC = () => {
 			title: "Кабинет",
 			nextButtonProps: { children: "Дальше" },
 			prevButtonProps: { children: "Назад" },
-			description: "После выбора клиники можно выбрать кабинет врача...",
+			description: "После выбора клиники можно выбрать тип врача...",
 			target: () => ref2.current!,
 		},
 		{
 			title: "Доктор",
 			nextButtonProps: { children: "Дальше" },
 			prevButtonProps: { children: "Назад" },
-			description: "...а также самого врача",
+			description: "...а потом и самого врача",
 			target: () => ref3.current!,
 		},
 		{

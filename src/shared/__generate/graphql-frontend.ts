@@ -2660,51 +2660,6 @@ export type _UpdateClinicTableInput = {
   id: Scalars['ID']['input'];
 };
 
-export const UpdateClinicTableDocument = gql`
-  mutation updateClinicTableEntry($input: _UpdateClinicTableInput!) {
-    packet {
-      updateClinicTable(input: $input) {
-        id
-        beginDate
-        endDate
-        comment
-        clinicOffice {
-          id
-          officeNumber
-        }
-        customer {
-          entityId
-          entity {
-            person {
-              entityId
-              entity {
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-        clinicDoctor {
-          id
-          doctor {
-            entityId
-            entity {
-              person {
-                entityId
-                entity {
-                  firstName
-                  lastName
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-
 export type _UpdateCustomerInput = {
   id: Scalars['ID']['input'];
   insurancePolicyNumber?: InputMaybe<Scalars['String']['input']>;
@@ -2887,6 +2842,16 @@ export type UpdateCustomerMutationVariables = Exact<{
 
 export type UpdateCustomerMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', updateCustomer?: { __typename: '_E_Customer', id: string, insurancePolicyNumber: string, phoneNumber?: string | null, person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } | null };
 
+export type UpdateAllCustomerMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  insurancePolicyNumber?: InputMaybe<Scalars['String']['input']>;
+  new_person_id: Scalars['String']['input'];
+}>;
+
+
+export type UpdateAllCustomerMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', updateCustomer?: { __typename: '_E_Customer', id: string, insurancePolicyNumber: string, phoneNumber?: string | null, person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } | null };
+
 export type DeleteCustomerMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -3003,7 +2968,7 @@ export type DeleteClinicDoctorAvailabilityMutationVariables = Exact<{
 
 export type DeleteClinicDoctorAvailabilityMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', deleteClinicDoctorAvailability?: string | null } | null };
 
-export type ClinicTableAttributesFragment = { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, comment?: string | null, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
+export type ClinicTableAttributesFragment = { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
 
 export type SearchClinicTableQueryVariables = Exact<{
   clinicId: Scalars['String']['input'];
@@ -3077,7 +3042,6 @@ export const DoctorAttributesFragmentDoc = gql`
   }
 }
     `;
-    
 export const CustomerAttributesFragmentDoc = gql`
     fragment CustomerAttributes on _E_Customer {
   id
@@ -3157,7 +3121,6 @@ export const ClinicTableAttributesFragmentDoc = gql`
   __typename
   beginDate
   endDate
-  comment
   clinicOffice {
     id
     officeNumber
@@ -3737,6 +3700,46 @@ export function useUpdateCustomerMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateCustomerMutationHookResult = ReturnType<typeof useUpdateCustomerMutation>;
 export type UpdateCustomerMutationResult = Apollo.MutationResult<UpdateCustomerMutation>;
 export type UpdateCustomerMutationOptions = Apollo.BaseMutationOptions<UpdateCustomerMutation, UpdateCustomerMutationVariables>;
+export const UpdateAllCustomerDocument = gql`
+    mutation updateAllCustomer($id: ID!, $phoneNumber: String, $insurancePolicyNumber: String, $new_person_id: String!) {
+  packet {
+    updateCustomer(
+      input: {id: $id, phoneNumber: $phoneNumber, insurancePolicyNumber: $insurancePolicyNumber, person: {entityId: $new_person_id}}
+    ) {
+      ...CustomerAttributes
+    }
+  }
+}
+    ${CustomerAttributesFragmentDoc}`;
+export type UpdateAllCustomerMutationFn = Apollo.MutationFunction<UpdateAllCustomerMutation, UpdateAllCustomerMutationVariables>;
+
+/**
+ * __useUpdateAllCustomerMutation__
+ *
+ * To run a mutation, you first call `useUpdateAllCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAllCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAllCustomerMutation, { data, loading, error }] = useUpdateAllCustomerMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      phoneNumber: // value for 'phoneNumber'
+ *      insurancePolicyNumber: // value for 'insurancePolicyNumber'
+ *      new_person_id: // value for 'new_person_id'
+ *   },
+ * });
+ */
+export function useUpdateAllCustomerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAllCustomerMutation, UpdateAllCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAllCustomerMutation, UpdateAllCustomerMutationVariables>(UpdateAllCustomerDocument, options);
+      }
+export type UpdateAllCustomerMutationHookResult = ReturnType<typeof useUpdateAllCustomerMutation>;
+export type UpdateAllCustomerMutationResult = Apollo.MutationResult<UpdateAllCustomerMutation>;
+export type UpdateAllCustomerMutationOptions = Apollo.BaseMutationOptions<UpdateAllCustomerMutation, UpdateAllCustomerMutationVariables>;
 export const DeleteCustomerDocument = gql`
     mutation deleteCustomer($id: ID!) {
   packet {
