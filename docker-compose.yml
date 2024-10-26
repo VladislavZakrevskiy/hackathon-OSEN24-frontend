@@ -5,9 +5,23 @@ services:
     image: frontend
     networks:
       - frontend
+      - nginx
+    ports:
+      - 3000:3000
+  nginx:
+    container_name: nginx
+    restart: always
+    image: nginx
+    networks:
+      - frontend
+      - nginx
+    volumes:
+      ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
       
 networks:
   frontend:
     name: frontend
+  nginx:
+    name: nginx
