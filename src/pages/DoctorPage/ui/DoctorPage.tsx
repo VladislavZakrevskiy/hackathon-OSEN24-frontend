@@ -120,7 +120,6 @@ const DoctorPage: React.FC = () => {
         renderItem={(appointment: Appointment) => {
           const customerName = `${appointment.customer.entity.person.entity.firstName} ${appointment.customer.entity.person.entity.lastName}`;
           const doctorName = `${appointment.clinicDoctor.doctor.entity.person.entity.firstName} ${appointment.clinicDoctor.doctor.entity.person.entity.lastName}`;
-		  const formattedCustomerName = customerName.replace(/\s+/g, '');
           return (
             <List.Item key={appointment.id}>
               <Card style={{ backgroundColor: '#282c34', color: 'white', marginBottom: '10px' }}>
