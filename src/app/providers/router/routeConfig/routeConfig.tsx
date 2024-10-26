@@ -1,9 +1,11 @@
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { LazyMainPage } from "@/pages/MainPage";
-import { AppRoutes, getRouteLogin, getRouteMain, getRouteNotFound, getRouteRegister } from "@/shared/consts/router";
+import { AppRoutes, getRouteDoctor, getRouteMain, getRouteNotFound } from "@/shared/consts/router";
 import { AppRouteProps } from "@/shared/types/router";
 import { LazyLoginPage } from "@/pages/Login";
 import { LazyRegisterPage } from "@/pages/Register";
+import { LazyDoctorPage } from "@/pages/DoctorPage";
+
 
 export const routeConfig: Record<AppRoutes, AppRouteProps> = {
 	[AppRoutes.MAIN]: {
@@ -15,11 +17,15 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
 		element: <NotFoundPage />,
 	},
 	[AppRoutes.LOGIN]: {
-		path: getRouteLogin(),
-		element: <LazyLoginPage />,
+		path: getRouteNotFound(),
+		element: <LazyLoginPage />
 	},
 	[AppRoutes.REGISTER]: {
-		path: getRouteRegister(),
-		element: <LazyRegisterPage />,
+		path: getRouteDoctor(),
+		element: <LazyRegisterPage />
+	},
+	[AppRoutes.DOCTOR_PAGE]: {
+		path: getRouteDoctor(),
+		element: <LazyDoctorPage />
 	},
 };
