@@ -1,5 +1,9 @@
-import React from "react";
+import { useUserStore } from "@/entities/User";
+import { getRole } from "@/shared/lib/utils/getRole";
 
 export const MainPageRoleSection = () => {
-	return <div>MainPageRoleSection</div>;
+	const { userInfo } = useUserStore();
+
+	switch (getRole(userInfo?.roles)) {
+	}
 };

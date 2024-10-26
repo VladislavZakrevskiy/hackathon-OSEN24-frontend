@@ -52,6 +52,8 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 		setIsLoading(false);
 	}, []);
 
+	console.log(userInfo);
+
 	if (!isLoading && authenticated) {
 		return <ApolloProvider client={apollo!}>{children}</ApolloProvider>;
 	}

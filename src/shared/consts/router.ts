@@ -1,11 +1,11 @@
-import { UserRoles } from "@/entities/User";
-
 export enum AppRoutes {
 	MAIN = "main",
 	NOT_FOUND = "not_found",
-	USER_PAGE = 'user_page'
+	DOCTOR_BY_ID = "doctor",
+	CLIENT_BY_ID = "client_by_id",
 }
 
 export const getRouteMain = () => "/";
 export const getRouteNotFound = () => "*";
-export const getRouteUserPage = (type: UserRoles | ":type", id: string) => `/${type}/${id}`;
+export const getRouteDoctorPage = (id: string) => "/doctor/" + id;
+export const getRouteClientPage = (id: string) => "/client/" + id;

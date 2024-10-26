@@ -1,6 +1,7 @@
 import { useAppStore } from "@/app/model/AppStore";
 import { UserRoles, useUserStore } from "@/entities/User";
 import { getRouteUserPage } from "@/shared/consts/router";
+import { getRole } from "@/shared/lib/utils/getRole";
 // import { ThemeToggle } from "@/app/providers/ThemeProvider";
 import { LogOut, User2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +16,9 @@ export const Header = () => {
 			<h3>CLINIC</h3>
 			<div className="flex gap-2">
 				<button
-					onClick={() => nav(getRouteUserPage(userInfo?.roles?.[0] || UserRoles.CLIENT, userInfo?.app?.id || ""))}
+					onClick={() =>
+						nav(getRouteUserPage(getRole(userInfo?.roles || []) || UserRoles.CLIENT, userInfo?.app?.id || ""))
+					}
 				>
 					<User2 />
 				</button>
