@@ -22,7 +22,7 @@ const ClientPage: React.FC = () => {
 	}, [user]);
 
 	if (isLoading) {
-		return <Spin tip="Загрузка..." />;
+		return <Spin />;
 	}
 
 	if (!customer) {

@@ -251,7 +251,7 @@ const AppointmentForm: React.FC = () => {
 						value={avaibleId}
 						placeholder="Выберите время записи"
 						options={avaiblity.map((avaible) => ({
-							label: `${moment(avaible.beginDate as string).format("DD.MM")} ${moment(avaible.beginDate as string).format("hh:mm")}-${moment(avaible.endDate as string).format("hh:mm")}`,
+							label: `${moment(avaible.beginDate as string).format("DD.MM")} ${moment(avaible.beginDate as string).format("hh:mm")}-${moment(avaible.endDate as string).format("HH:mm")}`,
 							value: avaible.id,
 						}))}
 						onChange={(id) =>

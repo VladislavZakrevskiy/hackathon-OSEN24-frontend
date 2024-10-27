@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, Skeleton, Table } from "antd";
+import React, { Key, useEffect, useState } from "react";
+import { Button, Flex, Skeleton, Table } from "antd";
 import { Doctor, DoctorAvailability, Office, PageType, usePageStore } from "../../model/browserStore";
 import { useGetDoctorAvailabilityData } from "../../model/hooks/useGetDoctorAvailabilityData";
 import { useGetDoctorData } from "../../model/hooks/useGetDoctorData";
@@ -10,9 +10,13 @@ import {
 	useCreatePersonMutation,
 	useSearchDoctorTypeQuery,
 	useSearchDoctorQuery,
+	useDeleteDoctorMutation,
+	useDeleteClinicDoctorAvailabilityMutation,
+	useDeleteClinicOfficeMutation,
 } from "@/shared/__generate/graphql-frontend";
 import { AddOfficeModal } from "../AddOfficeModal";
 import { AddAvaibleModal } from "../AddAvaibleModal";
+import { TableRowSelection } from "antd/es/table/interface";
 
 type OptionInput = {
 	type: "text" | "date" | "select";
@@ -58,6 +62,7 @@ const getColumnsByType = (type: PageType) => {
 
 const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	const [isAddOpen, setIsAddOpen] = useState(false);
+	const [rowSelectedKeys, setSelectedRowKeys] = useState<Key[]>([]);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [doctorTypeOptions, setDoctorTypeOptions] = useState<{ label: string; value: string }[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +73,21 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	const { fetchOfficeData, isLoading: isOfficeLoading } = useGetOfficeData();
 	const [createPersonMutation] = useCreatePersonMutation();
 	const [createDoctorMutation] = useCreateDoctorMutation();
+	const [deleteDoctor, { loading: DeleteDoctorLoading }] = useDeleteDoctorMutation();
+	const [deleteAvailability, { loading: DeleteAvailabilityLoading }] = useDeleteClinicDoctorAvailabilityMutation();
+	const [deleteOffice, { loading: DeleteOfficeLoading }] = useDeleteClinicOfficeMutation();
+
+	const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+		console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+		setSelectedRowKeys(newSelectedRowKeys);
+	};
+
+	const rowSelection: TableRowSelection = {
+		selectedRowKeys: rowSelectedKeys,
+		onChange: onSelectChange,
+	};
+
+	const hasSelected = rowSelectedKeys.length > 0;
 
 	const { data: doctorTypeData } = useSearchDoctorTypeQuery({ variables: { searchStr: "" } });
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,7 +106,10 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 					fetchOfficeData().then((data) => setData(pageId, data));
 					break;
 				case "Часы работы врачей":
-					fetchDoctorAvailabilityData().then((data) => setData(pageId, data || []));
+					fetchDoctorAvailabilityData().then((data) => {
+						console.log(data);
+						setData(pageId, data || []);
+					});
 					break;
 			}
 		}
@@ -183,6 +206,28 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 				});
 				break;
 		}
+	};
+
+	const deleteByType = async () => {
+		switch (type) {
+			case "Врачи":
+				for (const id of rowSelectedKeys) {
+					await deleteDoctor({ variables: { id: id.toString() } });
+				}
+				break;
+			case "Кабинеты":
+				for (const id of rowSelectedKeys) {
+					await deleteOffice({ variables: { id: id.toString() } });
+				}
+				break;
+			case "Часы работы врачей":
+				for (const id of rowSelectedKeys) {
+					await deleteAvailability({ variables: { id: id.toString() } });
+				}
+				break;
+		}
+		refetchByType();
+		setSelectedRowKeys([]);
 	};
 
 	if (isAvailabilityLoading || isDoctorLoading || isOfficeLoading)
@@ -287,6 +332,17 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 			<div className="pb-2 flex gap-3">
 				<Button onClick={() => setIsAddOpen(true)}>Добавить</Button>
 				<Button onClick={refetchByType}>Обновить вручную</Button>
+				<Flex align="center" gap="middle">
+					<Button
+						danger
+						onClick={deleteByType}
+						disabled={!hasSelected}
+						loading={DeleteDoctorLoading || DeleteAvailabilityLoading || DeleteOfficeLoading}
+					>
+						Удалить
+					</Button>
+					{hasSelected ? `Выбрано ${rowSelectedKeys.length} элементов` : null}
+				</Flex>
 			</div>
 			{type === "Врачи" ? (
 				<AddModal
@@ -318,6 +374,8 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 				/>
 			)}
 			<Table
+				// @ts-ignore
+				rowSelection={rowSelection}
 				// @ts-ignore
 				dataSource={page?.data || []}
 				columns={columns}

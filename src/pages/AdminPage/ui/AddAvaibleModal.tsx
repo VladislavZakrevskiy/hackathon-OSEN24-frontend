@@ -7,6 +7,7 @@ import {
 import { Button, Form, Modal, Select } from "antd";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { DatePicker } from "antd";
+import moment from "moment";
 const { RangePicker } = DatePicker;
 
 interface FormValues {
@@ -103,8 +104,14 @@ export const AddAvaibleModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpe
 	const onFinish = async () => {
 		await createAvailablity({
 			variables: {
-				beginDate: new Date(beginDate || new Date())?.toISOString().slice(0, -1),
-				endDate: new Date(endDate || new Date())?.toISOString().slice(0, -1),
+				beginDate: moment(beginDate || new Date())
+					.add(3, "hour")
+					?.toISOString()
+					.slice(0, -1),
+				endDate: moment(endDate || new Date())
+					.add(3, "hour")
+					?.toISOString()
+					.slice(0, -1),
 				clinicDoctorId: doctorId || "",
 				clinicOfficeId: officeId || "",
 			},
