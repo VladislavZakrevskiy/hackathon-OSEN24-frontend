@@ -10,9 +10,10 @@ interface ReadProfileCardProps {
 	setMode: Dispatch<SetStateAction<"edit" | "read">>;
 	user: _E_Customer | _E_Doctor | null;
 	customer: _E_Customer;
+	TableLoading: boolean;
 }
 
-export const ReadProfileCard: FC<ReadProfileCardProps> = ({ setMode, tables, customer }) => {
+export const ReadProfileCard: FC<ReadProfileCardProps> = ({ setMode, tables, customer, TableLoading }) => {
 	return (
 		<Card
 			title={
@@ -40,7 +41,7 @@ export const ReadProfileCard: FC<ReadProfileCardProps> = ({ setMode, tables, cus
 						</div>
 					</div>
 				</div>
-				<ProfileTable tables={tables} />
+				<ProfileTable tables={tables} TableLoading={TableLoading} />
 			</div>
 		</Card>
 	);

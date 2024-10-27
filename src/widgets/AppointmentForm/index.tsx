@@ -5,10 +5,13 @@ import {
 	useSearchClinicLazyQuery,
 	useSearchClinicDoctorAvailabilityLazyQuery,
 	useCreateClinicTableMutation,
+	Scalars,
+	Exact,
 } from "@/shared/__generate/graphql-frontend";
 import { useUserStore } from "@/entities/User";
 import { TourProps } from "antd/lib";
 import moment from "moment";
+import { ApolloQueryResult } from "@apollo/client";
 
 interface FormValues {
 	beginDate?: Date;
@@ -20,7 +23,19 @@ interface FormValues {
 	avaibleId?: string;
 }
 
-const AppointmentForm: React.FC = () => {
+interface AppointmentProps {
+	refetch: (
+		variables?: Partial<
+			Exact<{
+				customerId: Scalars["String"]["input"];
+				dateFrom: Scalars["_DateTime"]["input"];
+				dateTo: Scalars["_DateTime"]["input"];
+			}>
+		>,
+	) => Promise<ApolloQueryResult<unknown>>;
+}
+
+const AppointmentForm: React.FC<AppointmentProps> = ({ refetch }) => {
 	const [isTourOpen, setIsTourOpen] = useState<boolean>(!localStorage.getItem("isPersonWasOnClientPage"));
 	const ref1 = useRef<HTMLDivElement | null>(null);
 	const ref2 = useRef<HTMLDivElement | null>(null);
@@ -179,7 +194,7 @@ const AppointmentForm: React.FC = () => {
 	}, [clinicId, doctorId]);
 
 	const onFinish = async () => {
-		createAppointment({
+		await createAppointment({
 			variables: {
 				beginDate: beginDate?.toISOString().slice(0, -1),
 				endDate: endDate?.toISOString().slice(0, -1),
@@ -188,6 +203,23 @@ const AppointmentForm: React.FC = () => {
 				clinicOfficeId: officeId || "",
 				customerId: user?.id || "",
 			},
+		});
+		await refetch({
+			customerId: user?.id || "",
+			dateFrom: moment(
+				moment(new Date())
+					.year(new Date().getFullYear() - 1)
+					.toDate(),
+			)
+				.startOf("day")
+				.format("YYYY-MM-DDTHH:mm:ss.SSS"),
+			dateTo: moment(
+				moment(new Date())
+					.year(new Date().getFullYear() + 1)
+					.toDate(),
+			)
+				.startOf("day")
+				.format("YYYY-MM-DDTHH:mm:ss.SSS"),
 		});
 		showSuccess();
 	};

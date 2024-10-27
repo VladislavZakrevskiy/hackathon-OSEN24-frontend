@@ -18,6 +18,7 @@ interface EditProfileCardProps {
 	setMode: Dispatch<SetStateAction<"edit" | "read">>;
 	user: _E_Customer | _E_Doctor | null;
 	customer: _E_Customer;
+	TableLoading: boolean;
 }
 
 interface FormValues {
@@ -29,7 +30,7 @@ interface FormValues {
 	phoneNumber: string;
 }
 
-export const EditProfileCard: FC<EditProfileCardProps> = ({ setMode, tables, customer }) => {
+export const EditProfileCard: FC<EditProfileCardProps> = ({ setMode, tables, customer, TableLoading }) => {
 	const [messageApi, contextHolder] = message.useMessage();
 	const { setUser } = useUserStore();
 	const [form, setForm] = useState<FormValues>({
@@ -155,7 +156,7 @@ export const EditProfileCard: FC<EditProfileCardProps> = ({ setMode, tables, cus
 					</Button>
 				</div>
 
-				<ProfileTable tables={tables} />
+				<ProfileTable tables={tables} TableLoading={TableLoading} />
 			</div>
 		</Card>
 	);

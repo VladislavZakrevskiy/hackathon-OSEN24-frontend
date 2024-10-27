@@ -1,10 +1,49 @@
 import { SearchClinicTableByCustomerQuery } from "@/shared/__generate/graphql-frontend";
 import { getRouteViewDoctorPage } from "@/shared/consts/router";
-import { Empty, Table, Typography } from "antd";
+import { Empty, Skeleton, Table, Typography } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
-export const ProfileTable = ({ tables }: { tables: SearchClinicTableByCustomerQuery }) => {
+export const ProfileTable = ({
+	tables,
+	TableLoading,
+}: {
+	tables: SearchClinicTableByCustomerQuery;
+	TableLoading: boolean;
+}) => {
+	if (TableLoading) {
+		return (
+			<Table
+				dataSource={[
+					{ loading1: <Skeleton />, loading2: <Skeleton />, loading3: <Skeleton />, loading4: <Skeleton /> },
+					{ loading1: <Skeleton />, loading2: <Skeleton />, loading3: <Skeleton />, loading4: <Skeleton /> },
+				]}
+				columns={[
+					{
+						key: "loading1",
+						dataIndex: "loading1",
+						title: "Loading",
+					},
+					{
+						key: "loading2",
+						dataIndex: "loading2",
+						title: "Loading",
+					},
+					{
+						key: "loading3",
+						dataIndex: "loading3",
+						title: "Loading",
+					},
+					{
+						key: "loading4",
+						dataIndex: "loading4",
+						title: "Loading",
+					},
+				]}
+			/>
+		);
+	}
+
 	return (
 		<Table
 			pagination={{ pageSize: 3 }}
