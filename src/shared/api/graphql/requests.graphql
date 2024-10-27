@@ -331,6 +331,39 @@ query searchClinicDoctorAvailability($clinicDoctorId: String!, $dateFrom: _DateT
 	}
 }
 
+fragment ClinicDoctorAvailabilityAttributes1 on _E_ClinicDoctorAvailability {
+	id
+	__typename
+	beginDate
+	endDate
+	clinicOffice {
+		id
+		officeNumber
+	}
+	clinicDoctor {
+		doctor {
+			entity {
+				person {
+					entity {
+						firstName
+						lastName
+					}
+				}
+			}
+		}
+	}
+}
+
+query searchClinicDoctorWithNameAvailability($clinicDoctorId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+	searchClinicDoctorAvailability(
+		cond: "it.clinicDoctor.id == ${clinicDoctorId} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}"
+	) @strExpr(string: $clinicDoctorId, dateTimes: [$dateFrom, $dateTo]) {
+		elems {
+			...ClinicDoctorAvailabilityAttributes1
+		}
+	}
+}
+
 mutation createClinicDoctorAvailability(
 	$clinicDoctorId: ID!
 	$beginDate: _DateTime!

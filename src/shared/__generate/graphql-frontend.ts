@@ -1713,50 +1713,6 @@ export type _PacketUpdateClinicTableArgs = {
   input: _UpdateClinicTableInput;
 };
 
-export const UpdateClinicTableDocument = gql`
-  mutation updateClinicTableEntry($input: _UpdateClinicTableInput!) {
-    packet {
-      updateClinicTable(input: $input) {
-        id
-        beginDate
-        endDate
-        comment
-        clinicOffice {
-          id
-          officeNumber
-        }
-        customer {
-          entityId
-          entity {
-            person {
-              entityId
-              entity {
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-        clinicDoctor {
-          id
-          doctor {
-            entityId
-            entity {
-              person {
-                entityId
-                entity {
-                  firstName
-                  lastName
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 
 export type _PacketUpdateCustomerArgs = {
   compare?: InputMaybe<_CompareCustomerInput>;
@@ -2995,6 +2951,17 @@ export type SearchClinicDoctorAvailabilityQueryVariables = Exact<{
 
 export type SearchClinicDoctorAvailabilityQuery = { __typename?: '_Query', searchClinicDoctorAvailability: { __typename?: '_EC_ClinicDoctorAvailability', elems: Array<{ __typename: '_E_ClinicDoctorAvailability', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null } }> } };
 
+export type ClinicDoctorAvailabilityAttributes1Fragment = { __typename: '_E_ClinicDoctorAvailability', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', doctor: { __typename?: '_G_DoctorReference', entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
+
+export type SearchClinicDoctorWithNameAvailabilityQueryVariables = Exact<{
+  clinicDoctorId: Scalars['String']['input'];
+  dateFrom: Scalars['_DateTime']['input'];
+  dateTo: Scalars['_DateTime']['input'];
+}>;
+
+
+export type SearchClinicDoctorWithNameAvailabilityQuery = { __typename?: '_Query', searchClinicDoctorAvailability: { __typename?: '_EC_ClinicDoctorAvailability', elems: Array<{ __typename: '_E_ClinicDoctorAvailability', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', doctor: { __typename?: '_G_DoctorReference', entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } }> } };
+
 export type CreateClinicDoctorAvailabilityMutationVariables = Exact<{
   clinicDoctorId: Scalars['ID']['input'];
   beginDate: Scalars['_DateTime']['input'];
@@ -3012,7 +2979,7 @@ export type DeleteClinicDoctorAvailabilityMutationVariables = Exact<{
 
 export type DeleteClinicDoctorAvailabilityMutation = { __typename?: '_Mutation', packet?: { __typename?: '_Packet', deleteClinicDoctorAvailability?: string | null } | null };
 
-export type ClinicTableAttributesFragment = { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, comment: string, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
+export type ClinicTableAttributesFragment = { __typename: '_E_ClinicTable', id: string, beginDate: any, endDate: any, clinicOffice: { __typename?: '_E_ClinicOffice', id: string, officeNumber?: string | null }, customer: { __typename?: '_G_CustomerReference', entityId?: string | null, entity?: { __typename?: '_E_Customer', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null }, clinicDoctor: { __typename?: '_E_ClinicDoctor', id: string, doctor: { __typename?: '_G_DoctorReference', entityId?: string | null, entity?: { __typename?: '_E_Doctor', person: { __typename?: '_G_PersonReference', entityId?: string | null, entity?: { __typename?: '_E_Person', firstName: string, lastName: string } | null } } | null } } };
 
 export type SearchClinicTableQueryVariables = Exact<{
   clinicId: Scalars['String']['input'];
@@ -3159,13 +3126,36 @@ export const ClinicDoctorAvailabilityAttributesFragmentDoc = gql`
   }
 }
     `;
+export const ClinicDoctorAvailabilityAttributes1FragmentDoc = gql`
+    fragment ClinicDoctorAvailabilityAttributes1 on _E_ClinicDoctorAvailability {
+  id
+  __typename
+  beginDate
+  endDate
+  clinicOffice {
+    id
+    officeNumber
+  }
+  clinicDoctor {
+    doctor {
+      entity {
+        person {
+          entity {
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 export const ClinicTableAttributesFragmentDoc = gql`
     fragment ClinicTableAttributes on _E_ClinicTable {
   id
   __typename
   beginDate
   endDate
-  comment
   clinicOffice {
     id
     officeNumber
@@ -4240,6 +4230,52 @@ export type SearchClinicDoctorAvailabilityQueryHookResult = ReturnType<typeof us
 export type SearchClinicDoctorAvailabilityLazyQueryHookResult = ReturnType<typeof useSearchClinicDoctorAvailabilityLazyQuery>;
 export type SearchClinicDoctorAvailabilitySuspenseQueryHookResult = ReturnType<typeof useSearchClinicDoctorAvailabilitySuspenseQuery>;
 export type SearchClinicDoctorAvailabilityQueryResult = Apollo.QueryResult<SearchClinicDoctorAvailabilityQuery, SearchClinicDoctorAvailabilityQueryVariables>;
+export const SearchClinicDoctorWithNameAvailabilityDocument = gql`
+    query searchClinicDoctorWithNameAvailability($clinicDoctorId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+  searchClinicDoctorAvailability(
+    cond: "it.clinicDoctor.id == \${clinicDoctorId} && it.endDate >= \${dateFrom} && it.beginDate <= \${dateTo}"
+  ) @strExpr(string: $clinicDoctorId, dateTimes: [$dateFrom, $dateTo]) {
+    elems {
+      ...ClinicDoctorAvailabilityAttributes1
+    }
+  }
+}
+    ${ClinicDoctorAvailabilityAttributes1FragmentDoc}`;
+
+/**
+ * __useSearchClinicDoctorWithNameAvailabilityQuery__
+ *
+ * To run a query within a React component, call `useSearchClinicDoctorWithNameAvailabilityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchClinicDoctorWithNameAvailabilityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchClinicDoctorWithNameAvailabilityQuery({
+ *   variables: {
+ *      clinicDoctorId: // value for 'clinicDoctorId'
+ *      dateFrom: // value for 'dateFrom'
+ *      dateTo: // value for 'dateTo'
+ *   },
+ * });
+ */
+export function useSearchClinicDoctorWithNameAvailabilityQuery(baseOptions: Apollo.QueryHookOptions<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables> & ({ variables: SearchClinicDoctorWithNameAvailabilityQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables>(SearchClinicDoctorWithNameAvailabilityDocument, options);
+      }
+export function useSearchClinicDoctorWithNameAvailabilityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables>(SearchClinicDoctorWithNameAvailabilityDocument, options);
+        }
+export function useSearchClinicDoctorWithNameAvailabilitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables>(SearchClinicDoctorWithNameAvailabilityDocument, options);
+        }
+export type SearchClinicDoctorWithNameAvailabilityQueryHookResult = ReturnType<typeof useSearchClinicDoctorWithNameAvailabilityQuery>;
+export type SearchClinicDoctorWithNameAvailabilityLazyQueryHookResult = ReturnType<typeof useSearchClinicDoctorWithNameAvailabilityLazyQuery>;
+export type SearchClinicDoctorWithNameAvailabilitySuspenseQueryHookResult = ReturnType<typeof useSearchClinicDoctorWithNameAvailabilitySuspenseQuery>;
+export type SearchClinicDoctorWithNameAvailabilityQueryResult = Apollo.QueryResult<SearchClinicDoctorWithNameAvailabilityQuery, SearchClinicDoctorWithNameAvailabilityQueryVariables>;
 export const CreateClinicDoctorAvailabilityDocument = gql`
     mutation createClinicDoctorAvailability($clinicDoctorId: ID!, $beginDate: _DateTime!, $endDate: _DateTime!, $clinicOfficeId: ID!) {
   packet {

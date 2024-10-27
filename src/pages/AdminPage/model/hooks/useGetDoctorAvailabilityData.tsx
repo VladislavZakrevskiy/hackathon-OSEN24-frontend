@@ -1,6 +1,6 @@
 import {
-	useSearchClinicDoctorAvailabilityLazyQuery,
 	useSearchClinicDoctorLazyQuery,
+	useSearchClinicDoctorWithNameAvailabilityLazyQuery,
 	useSearchClinicLazyQuery,
 } from "@/shared/__generate/graphql-frontend";
 import { Doctor, DoctorAvailability } from "../browserStore";
@@ -9,9 +9,10 @@ import moment from "moment";
 export const useGetDoctorAvailabilityData = () => {
 	const [searchClinic, { loading: ClinicLoading }] = useSearchClinicLazyQuery();
 	const [searchClinicDoctors, { loading: DoctorLoading }] = useSearchClinicDoctorLazyQuery();
-	const [searchDoctorAvailability, { loading: AvaibleLoading, refetch }] = useSearchClinicDoctorAvailabilityLazyQuery({
-		fetchPolicy: "no-cache",
-	});
+	const [searchDoctorAvailability, { loading: AvaibleLoading, refetch }] =
+		useSearchClinicDoctorWithNameAvailabilityLazyQuery({
+			fetchPolicy: "no-cache",
+		});
 
 	const fetchDoctorAvailabilityData = async () => {
 		const { data: clinics } = await searchClinic({ variables: { searchStr: "" } });

@@ -75,7 +75,7 @@ export const AddOfficeModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpen
 	};
 
 	return (
-		<Modal title="Добавить кабинет" onClose={() => setIsOpen(false)} open={open}>
+		<Modal title="Добавить кабинет" onCancel={() => setIsOpen(false)} open={open}>
 			<Form.Item label="Клиника" name="clinicId" rules={[{ required: true, message: "Выберите клинику" }]}>
 				<Select
 					size="large"

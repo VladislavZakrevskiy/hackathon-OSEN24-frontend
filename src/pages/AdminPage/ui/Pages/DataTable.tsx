@@ -52,6 +52,16 @@ const getColumnsByType = (type: PageType) => {
 			return [
 				{ title: "ID", dataIndex: "id", key: "id" },
 				{ title: "Дата начала", dataIndex: "beginDate", key: "beginDate" },
+				{
+					title: "Имя",
+					dataIndex: ["clinicDoctor", "doctor", "entity", "person", "entity", "firstName"],
+					key: "first_name",
+				},
+				{
+					title: "Фамилия",
+					dataIndex: ["clinicDoctor", "doctor", "entity", "person", "entity", "lastName"],
+					key: "last_name",
+				},
 				{ title: "Дата окончания", dataIndex: "endDate", key: "endDate" },
 				{ title: "Номер кабинета", dataIndex: ["clinicOffice", "officeNumber"], key: "officeNumber" },
 			];
@@ -230,7 +240,18 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 		setSelectedRowKeys([]);
 	};
 
-	if (isAvailabilityLoading || isDoctorLoading || isOfficeLoading)
+	if (
+		(() => {
+			switch (type) {
+				case "Врачи":
+					return isDoctorLoading;
+				case "Кабинеты":
+					return isOfficeLoading;
+				case "Часы работы врачей":
+					return isAvailabilityLoading;
+			}
+		})()
+	)
 		return (
 			<div>
 				<div className="pb-2 flex gap-3">

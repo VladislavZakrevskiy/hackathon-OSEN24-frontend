@@ -121,7 +121,7 @@ export const AddAvaibleModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpe
 	};
 
 	return (
-		<Modal title="Добавить график работы врача" onClose={() => setIsOpen(false)} open={open}>
+		<Modal title="Добавить график работы врача" onCancel={() => setIsOpen(false)} open={open}>
 			<Form.Item label="Клиника" name="clinicId" rules={[{ required: true, message: "Выберите клинику" }]}>
 				<Select
 					size="large"
