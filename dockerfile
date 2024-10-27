@@ -1,6 +1,6 @@
 FROM node:22.10.0 AS node
 
-ARG VITE_DS_ENDPOINT=https://smapi.pv-api.sbc.space/ds-7429590172239724545/graphql
+ARG VITE_DS_ENDPOINT=https://smapi.pv-api.sbc.space/ds-7430345669871992834/graphql
 
 ARG VITE_NODE_ENV=dev
 
