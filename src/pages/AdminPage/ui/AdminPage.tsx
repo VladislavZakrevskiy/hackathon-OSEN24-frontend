@@ -41,6 +41,9 @@ const MainScreen: React.FC = () => {
             <Button type="primary" className="w-full" onClick={() => handleTypeSelect("Часы работы врачей")}>
               Часы работы врачей
             </Button>
+            <Button type="primary" className="w-full" onClick={() => handleTypeSelect("Клиники")}>
+              Клиники
+            </Button>
           </div>
         </Card>
       </div>

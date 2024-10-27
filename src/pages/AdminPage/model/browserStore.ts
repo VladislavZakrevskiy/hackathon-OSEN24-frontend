@@ -38,7 +38,7 @@ export interface DoctorAvailability {
   clinicOffice: { id: string; officeNumber: string };
 }
 
-export type PageType = "Врачи" | "Кабинеты" | "Часы работы врачей" | "Новая вкладка";
+export type PageType = "Врачи" | "Кабинеты" | "Часы работы врачей" | "Новая вкладка" | "Клиники";
 
 interface Page {
   id: string;
