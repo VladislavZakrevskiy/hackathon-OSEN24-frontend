@@ -1,10 +1,8 @@
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { Link } from "react-router-dom";
-import { getRouteDoctorPage } from "@/shared/consts/router";
-import { Button, Card, Empty, Image, Table, Typography } from "antd";
+import { Dispatch, FC, SetStateAction } from "react";
+import { Button, Card, Image, Typography } from "antd";
 import { Edit } from "lucide-react";
 import { _E_Customer, _E_Doctor, SearchClinicTableByCustomerQuery } from "@/shared/__generate/graphql-frontend";
-import moment from "moment";
+import { ProfileTable } from "./ProfileTable";
 const { Title, Text } = Typography;
 
 interface ReadProfileCardProps {
@@ -42,52 +40,7 @@ export const ReadProfileCard: FC<ReadProfileCardProps> = ({ setMode, tables, cus
 						</div>
 					</div>
 				</div>
-				<Table
-					pagination={{ pageSize: 3 }}
-					locale={{
-						emptyText: (
-							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={<span>Нет данных для отображения</span>} />
-						),
-					}}
-					dataSource={tables?.searchClinicTable.elems.map((table, i) => ({
-						number: i + 1,
-						date: `${moment(table.beginDate).format("YYYY-MM-DD")} ${moment(table.beginDate).format("hh:mm")}-${moment(table.endDate).format("hh:mm")}`,
-						doctor: (
-							<Link
-								to={getRouteDoctorPage(
-									(table.clinicDoctor.doctor.entity?.person.entity?.firstName || "") +
-										table.clinicDoctor.doctor.entity?.person.entity?.lastName,
-								)}
-							>
-								{table.clinicDoctor.doctor.entity?.person.entity?.firstName}{" "}
-								{table.clinicDoctor.doctor.entity?.person.entity?.lastName}
-							</Link>
-						),
-						officeNumber: table.clinicOffice.officeNumber,
-					}))}
-					columns={[
-						{
-							title: "Номер",
-							dataIndex: "number",
-							key: "number",
-						},
-						{
-							title: "Дата",
-							dataIndex: "date",
-							key: "date",
-						},
-						{
-							title: "Врач",
-							dataIndex: "doctor",
-							key: "doctor",
-						},
-						{
-							title: "Номер кабинета",
-							dataIndex: "officeNumber",
-							key: "officeNumber",
-						},
-					]}
-				/>
+				<ProfileTable tables={tables} />
 			</div>
 		</Card>
 	);

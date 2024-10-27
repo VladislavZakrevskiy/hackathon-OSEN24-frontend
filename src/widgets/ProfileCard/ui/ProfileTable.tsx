@@ -1,6 +1,6 @@
 import { SearchClinicTableByCustomerQuery } from "@/shared/__generate/graphql-frontend";
-import { getRouteDoctorPage } from "@/shared/consts/router";
-import { Empty, Table } from "antd";
+import { getRouteViewDoctorPage } from "@/shared/consts/router";
+import { Empty, Table, Typography } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
@@ -16,13 +16,15 @@ export const ProfileTable = ({ tables }: { tables: SearchClinicTableByCustomerQu
 				date: `${moment(table.beginDate).format("YYYY-MM-DD")} ${moment(table.beginDate).format("hh:mm")}-${moment(table.endDate).format("hh:mm")}`,
 				doctor: (
 					<Link
-						to={getRouteDoctorPage(
+						to={getRouteViewDoctorPage(
 							(table.clinicDoctor.doctor.entity?.person.entity?.firstName || "") +
 								table.clinicDoctor.doctor.entity?.person.entity?.lastName,
 						)}
 					>
-						{table.clinicDoctor.doctor.entity?.person.entity?.firstName}{" "}
-						{table.clinicDoctor.doctor.entity?.person.entity?.lastName}
+						<Typography.Link>
+							{table.clinicDoctor.doctor.entity?.person.entity?.firstName}{" "}
+							{table.clinicDoctor.doctor.entity?.person.entity?.lastName}
+						</Typography.Link>
 					</Link>
 				),
 				officeNumber: table.clinicOffice.officeNumber,
