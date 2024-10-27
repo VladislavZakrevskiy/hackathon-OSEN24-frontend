@@ -3,11 +3,21 @@ import { Routes, Route } from "react-router-dom";
 import { routeConfig } from "../routeConfig/routeConfig";
 import { RequireAuth } from "./RequireAuth";
 import { AppRouteProps } from "@/shared/types/router";
-import { Spin } from "antd";
+import { Layout, Spin } from "antd";
 
 export const AppRouter = memo(() => {
 	const renderWithWrapper = useCallback((route: AppRouteProps) => {
-		const element = <Suspense fallback={<Spin size="large" />}>{route.element}</Suspense>;
+		const element = (
+			<Suspense
+				fallback={
+					<Layout>
+						<Spin size="large" />
+					</Layout>
+				}
+			>
+				{route.element}
+			</Suspense>
+		);
 
 		return (
 			<Route
@@ -20,7 +30,13 @@ export const AppRouter = memo(() => {
 
 	return (
 		<div style={{ flexGrow: 1 }}>
-			<Suspense fallback={<Spin size="large" />}>
+			<Suspense
+				fallback={
+					<Layout>
+						<Spin size="large" />
+					</Layout>
+				}
+			>
 				<Routes>{Object.values(routeConfig).map(renderWithWrapper)}</Routes>
 			</Suspense>
 		</div>

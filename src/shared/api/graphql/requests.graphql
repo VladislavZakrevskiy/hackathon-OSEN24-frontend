@@ -447,6 +447,17 @@ query searchClinicTable($clinicId: String!, $dateFrom: _DateTime!, $dateTo: _Dat
 		}
 	}
 }
+ 
+
+
+query searchClinicWithoutOfficeTable($clinicId: String!, $notoffice: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
+	searchClinicTable(cond: "it.clinic.id == ${clinicId} && it.clinicOffice.id != ${notoffice} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
+		@strExpr(strings: [$clinicId, $notoffice], dateTimes: [$dateFrom, $dateTo]) {
+		elems {
+			...ClinicTableAttributes
+		}
+	}
+}
 
 query searchClinicTableByCustomer($customerId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
 	searchClinicTable(

@@ -227,96 +227,94 @@ const AppointmentForm: React.FC<AppointmentProps> = ({ refetch }) => {
 	return (
 		<Card title="Запись на прием">
 			<Form onFinish={onFinish}>
-
-			
-			{contextHolder}
-			<Tour open={isTourOpen} onClose={() => setIsTourOpen(false)} steps={steps} />
-			<div ref={ref1}>
-				<Form.Item label="Клиника" name="clinicId" rules={[{ required: true, message: "Выберите клинику" }]}>
-					<Select
+				{contextHolder}
+				<Tour open={isTourOpen} onClose={() => setIsTourOpen(false)} steps={steps} />
+				<div ref={ref1}>
+					<Form.Item label="Клиника" name="clinicId" rules={[{ required: true, message: "Выберите клинику" }]}>
+						<Select
+							size="large"
+							loading={clinicsLoading}
+							placeholder="Выберите клинику"
+							value={clinicId}
+							options={clinics.map((clinic) => ({
+								label: clinic.name,
+								value: clinic.id,
+							}))}
+							onChange={(clinicId) => setForm((prev) => ({ ...prev, clinicId }))}
+						/>
+					</Form.Item>
+				</div>
+				<div ref={ref2}>
+					<Form.Item label="Врач" rules={[{ required: true, message: "Выберите тип врача" }]}>
+						<Select
+							size="large"
+							disabled={!clinicId}
+							placeholder="Какой врач вам нужен"
+							value={doctorType}
+							options={doctorTypes.map((type) => ({
+								label: `${type}`,
+								value: type,
+							}))}
+							onChange={(type) => setForm((prev) => ({ ...prev, doctorType: type }))}
+						/>
+					</Form.Item>
+				</div>
+				<div ref={ref3}>
+					<Form.Item label="Доктор" name="doctorId" rules={[{ required: true, message: "Выберите доктора" }]}>
+						<Select
+							size="large"
+							disabled={!doctorType}
+							loading={doctorsLoading}
+							value={doctorId}
+							placeholder="Выберите доктора"
+							options={typedDoctors.map((doctor) => ({
+								label: `${doctor.doctor.entity?.person.entity?.firstName} ${doctor.doctor.entity?.person.entity?.lastName}`,
+								value: doctor.id,
+							}))}
+							onChange={(doctorId) => setForm((prev) => ({ ...prev, doctorId }))}
+						/>
+					</Form.Item>
+				</div>
+				<div ref={ref4}>
+					<Form.Item label="Дата и время визита" rules={[{ required: true, message: "Выберите дату и время" }]}>
+						<Select
+							size="large"
+							disabled={!doctorId}
+							loading={avaiblityLoading}
+							value={avaibleId}
+							placeholder="Выберите время записи"
+							options={avaiblity.map((avaible) => ({
+								label: `${moment(avaible.beginDate as string).format("DD.MM")} ${moment(avaible.beginDate as string).format("hh:mm")}-${moment(avaible.endDate as string).format("HH:mm")}`,
+								value: avaible.id,
+							}))}
+							onChange={(id) =>
+								setForm((prev) => {
+									const find_avaible = avaiblity.find(({ id: _id }) => _id === id);
+									return {
+										...prev,
+										beginDate: new Date(find_avaible?.beginDate as string),
+										endDate: new Date(find_avaible?.endDate as string),
+										officeId: find_avaible?.clinicOffice.id,
+										avaibleId: id,
+									};
+								})
+							}
+						/>
+					</Form.Item>
+				</div>
+				<Form.Item>
+					<Button
+						ref={ref5}
 						size="large"
-						loading={clinicsLoading}
-						placeholder="Выберите клинику"
-						value={clinicId}
-						options={clinics.map((clinic) => ({
-							label: clinic.name,
-							value: clinic.id,
-						}))}
-						onChange={(clinicId) => setForm((prev) => ({ ...prev, clinicId }))}
-					/>
+						className="w-full"
+						loading={AppoinmentLoading}
+						onClick={onFinish}
+						type="primary"
+						htmlType="submit"
+					>
+						Записаться
+					</Button>
 				</Form.Item>
-			</div>
-			<div ref={ref2}>
-				<Form.Item label="Врач" rules={[{ required: true, message: "Выберите тип врача" }]}>
-					<Select
-						size="large"
-						disabled={!clinicId}
-						placeholder="Какой врач вам нужен"
-						value={doctorType}
-						options={doctorTypes.map((type) => ({
-							label: `${type}`,
-							value: type,
-						}))}
-						onChange={(type) => setForm((prev) => ({ ...prev, doctorType: type }))}
-					/>
-				</Form.Item>
-			</div>
-			<div ref={ref3}>
-				<Form.Item label="Доктор" name="doctorId" rules={[{ required: true, message: "Выберите доктора" }]}>
-					<Select
-						size="large"
-						disabled={!doctorType}
-						loading={doctorsLoading}
-						value={doctorId}
-						placeholder="Выберите доктора"
-						options={typedDoctors.map((doctor) => ({
-							label: `${doctor.doctor.entity?.person.entity?.firstName} ${doctor.doctor.entity?.person.entity?.lastName}`,
-							value: doctor.id,
-						}))}
-						onChange={(doctorId) => setForm((prev) => ({ ...prev, doctorId }))}
-					/>
-				</Form.Item>
-			</div>
-			<div ref={ref4}>
-				<Form.Item label="Дата и время визита" rules={[{ required: true, message: "Выберите дату и время" }]}>
-					<Select
-						size="large"
-						disabled={!doctorId}
-						loading={avaiblityLoading}
-						value={avaibleId}
-						placeholder="Выберите время записи"
-						options={avaiblity.map((avaible) => ({
-							label: `${moment(avaible.beginDate as string).format("DD.MM")} ${moment(avaible.beginDate as string).format("hh:mm")}-${moment(avaible.endDate as string).format("HH:mm")}`,
-							value: avaible.id,
-						}))}
-						onChange={(id) =>
-							setForm((prev) => {
-								const find_avaible = avaiblity.find(({ id: _id }) => _id === id);
-								return {
-									...prev,
-									beginDate: new Date(find_avaible?.beginDate as string),
-									endDate: new Date(find_avaible?.endDate as string),
-									officeId: find_avaible?.clinicOffice.id,
-									avaibleId: id,
-								};
-							})
-						}
-					/>
-				</Form.Item>
-			</div>
-			<Form.Item>
-				<Button
-					ref={ref5}
-					size="large"
-					className="w-full"
-					loading={AppoinmentLoading}
-					onClick={onFinish}
-					type="primary"
-					htmlType="submit"
-				>
-					Записаться
-				</Button>
-			</Form.Item>
 			</Form>
 		</Card>
 	);

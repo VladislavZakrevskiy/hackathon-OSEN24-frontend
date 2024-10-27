@@ -28,50 +28,6 @@ export type Scalars = {
 	_Time: { input: any; output: any };
 };
 
-export const UpdateClinicTableDocument = gql`
-	mutation updateClinicTableEntry($input: _UpdateClinicTableInput!) {
-		packet {
-			updateClinicTable(input: $input) {
-				id
-				beginDate
-				endDate
-				comment
-				clinicOffice {
-					id
-					officeNumber
-				}
-				customer {
-					entityId
-					entity {
-						person {
-							entityId
-							entity {
-								firstName
-								lastName
-							}
-						}
-					}
-				}
-				clinicDoctor {
-					id
-					doctor {
-						entityId
-						entity {
-							person {
-								entityId
-								entity {
-									firstName
-									lastName
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-`;
-
 export type Clinic = {
 	_calc: _Calculation;
 	aggVersion: Scalars["Long"]["output"];
@@ -3333,6 +3289,55 @@ export type SearchClinicTableQuery = {
 	};
 };
 
+export type SearchClinicWithoutOfficeTableQueryVariables = Exact<{
+	clinicId: Scalars["String"]["input"];
+	notoffice: Scalars["String"]["input"];
+	dateFrom: Scalars["_DateTime"]["input"];
+	dateTo: Scalars["_DateTime"]["input"];
+}>;
+
+export type SearchClinicWithoutOfficeTableQuery = {
+	__typename?: "_Query";
+	searchClinicTable: {
+		__typename?: "_EC_ClinicTable";
+		elems: Array<{
+			__typename: "_E_ClinicTable";
+			id: string;
+			beginDate: any;
+			endDate: any;
+			clinicOffice: { __typename?: "_E_ClinicOffice"; id: string; officeNumber?: string | null };
+			customer: {
+				__typename?: "_G_CustomerReference";
+				entityId?: string | null;
+				entity?: {
+					__typename?: "_E_Customer";
+					person: {
+						__typename?: "_G_PersonReference";
+						entityId?: string | null;
+						entity?: { __typename?: "_E_Person"; firstName: string; lastName: string } | null;
+					};
+				} | null;
+			};
+			clinicDoctor: {
+				__typename?: "_E_ClinicDoctor";
+				id: string;
+				doctor: {
+					__typename?: "_G_DoctorReference";
+					entityId?: string | null;
+					entity?: {
+						__typename?: "_E_Doctor";
+						person: {
+							__typename?: "_G_PersonReference";
+							entityId?: string | null;
+							entity?: { __typename?: "_E_Person"; firstName: string; lastName: string } | null;
+						};
+					} | null;
+				};
+			};
+		}>;
+	};
+};
+
 export type SearchClinicTableByCustomerQueryVariables = Exact<{
 	customerId: Scalars["String"]["input"];
 	dateFrom: Scalars["_DateTime"]["input"];
@@ -3579,7 +3584,7 @@ export const ClinicTableAttributesFragmentDoc = gql`
 		__typename
 		beginDate
 		endDate
-    comment
+		comment
 		clinicOffice {
 			id
 			officeNumber
@@ -3834,6 +3839,50 @@ export const CreatePersonDocument = gql`
 	${PersonAttributesFragmentDoc}
 `;
 export type CreatePersonMutationFn = Apollo.MutationFunction<CreatePersonMutation, CreatePersonMutationVariables>;
+
+export const UpdateClinicTableDocument = gql`
+	mutation updateClinicTableEntry($input: _UpdateClinicTableInput!) {
+		packet {
+			updateClinicTable(input: $input) {
+				id
+				beginDate
+				endDate
+				comment
+				clinicOffice {
+					id
+					officeNumber
+				}
+				customer {
+					entityId
+					entity {
+						person {
+							entityId
+							entity {
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+				clinicDoctor {
+					id
+					doctor {
+						entityId
+						entity {
+							person {
+								entityId
+								entity {
+									firstName
+									lastName
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`;
 
 /**
  * __useCreatePersonMutation__
@@ -5202,6 +5251,93 @@ export type SearchClinicTableQueryHookResult = ReturnType<typeof useSearchClinic
 export type SearchClinicTableLazyQueryHookResult = ReturnType<typeof useSearchClinicTableLazyQuery>;
 export type SearchClinicTableSuspenseQueryHookResult = ReturnType<typeof useSearchClinicTableSuspenseQuery>;
 export type SearchClinicTableQueryResult = Apollo.QueryResult<SearchClinicTableQuery, SearchClinicTableQueryVariables>;
+export const SearchClinicWithoutOfficeTableDocument = gql`
+	query searchClinicWithoutOfficeTable(
+		$clinicId: String!
+		$notoffice: String!
+		$dateFrom: _DateTime!
+		$dateTo: _DateTime!
+	) {
+		searchClinicTable(
+			cond: "it.clinic.id == \${clinicId} && it.clinicOffice.id != \${notoffice} && it.endDate >= \${dateFrom} && it.beginDate <= \${dateTo}"
+		) @strExpr(strings: [$clinicId, $notoffice], dateTimes: [$dateFrom, $dateTo]) {
+			elems {
+				...ClinicTableAttributes
+			}
+		}
+	}
+	${ClinicTableAttributesFragmentDoc}
+`;
+
+/**
+ * __useSearchClinicWithoutOfficeTableQuery__
+ *
+ * To run a query within a React component, call `useSearchClinicWithoutOfficeTableQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchClinicWithoutOfficeTableQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchClinicWithoutOfficeTableQuery({
+ *   variables: {
+ *      clinicId: // value for 'clinicId'
+ *      notoffice: // value for 'notoffice'
+ *      dateFrom: // value for 'dateFrom'
+ *      dateTo: // value for 'dateTo'
+ *   },
+ * });
+ */
+export function useSearchClinicWithoutOfficeTableQuery(
+	baseOptions: Apollo.QueryHookOptions<
+		SearchClinicWithoutOfficeTableQuery,
+		SearchClinicWithoutOfficeTableQueryVariables
+	> &
+		({ variables: SearchClinicWithoutOfficeTableQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<SearchClinicWithoutOfficeTableQuery, SearchClinicWithoutOfficeTableQueryVariables>(
+		SearchClinicWithoutOfficeTableDocument,
+		options,
+	);
+}
+export function useSearchClinicWithoutOfficeTableLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		SearchClinicWithoutOfficeTableQuery,
+		SearchClinicWithoutOfficeTableQueryVariables
+	>,
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<SearchClinicWithoutOfficeTableQuery, SearchClinicWithoutOfficeTableQueryVariables>(
+		SearchClinicWithoutOfficeTableDocument,
+		options,
+	);
+}
+export function useSearchClinicWithoutOfficeTableSuspenseQuery(
+	baseOptions?:
+		| Apollo.SkipToken
+		| Apollo.SuspenseQueryHookOptions<
+				SearchClinicWithoutOfficeTableQuery,
+				SearchClinicWithoutOfficeTableQueryVariables
+		  >,
+) {
+	const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+	return Apollo.useSuspenseQuery<SearchClinicWithoutOfficeTableQuery, SearchClinicWithoutOfficeTableQueryVariables>(
+		SearchClinicWithoutOfficeTableDocument,
+		options,
+	);
+}
+export type SearchClinicWithoutOfficeTableQueryHookResult = ReturnType<typeof useSearchClinicWithoutOfficeTableQuery>;
+export type SearchClinicWithoutOfficeTableLazyQueryHookResult = ReturnType<
+	typeof useSearchClinicWithoutOfficeTableLazyQuery
+>;
+export type SearchClinicWithoutOfficeTableSuspenseQueryHookResult = ReturnType<
+	typeof useSearchClinicWithoutOfficeTableSuspenseQuery
+>;
+export type SearchClinicWithoutOfficeTableQueryResult = Apollo.QueryResult<
+	SearchClinicWithoutOfficeTableQuery,
+	SearchClinicWithoutOfficeTableQueryVariables
+>;
 export const SearchClinicTableByCustomerDocument = gql`
 	query searchClinicTableByCustomer($customerId: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
 		searchClinicTable(

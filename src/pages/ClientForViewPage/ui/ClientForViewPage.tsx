@@ -1,12 +1,18 @@
 import { useGetCustomerById } from "@/shared/api/graphql/requests/useGetById";
 import { Card, Image, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 const { Text, Title } = Typography;
 
 const ClientForViewPage = () => {
 	const { id } = useParams<{ id: string }>();
-	const { customer } = useGetCustomerById(id || "");
+	const { customer, fetchCustomer } = useGetCustomerById(id || "");
+	console.log(customer);
+
+	useEffect(() => {
+		fetchCustomer();
+	}, [id]);
 
 	if (!customer) {
 		return (
