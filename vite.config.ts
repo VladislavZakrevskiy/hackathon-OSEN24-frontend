@@ -13,7 +13,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			"/graphql": {
-				target: "https://smapi.pv-api.sbc.space/ds-7430345669871992834/graphql",
+				target: "https://smapi.pv-api.sbc.space/ds-7429590172239724545/graphql",
 				secure: false,
 				changeOrigin: true,
 			},

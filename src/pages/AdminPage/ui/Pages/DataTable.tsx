@@ -68,6 +68,8 @@ const getColumnsByType = (type: PageType) => {
 				{ title: "Дата окончания", dataIndex: "endDate", key: "endDate" },
 				{ title: "Номер кабинета", dataIndex: ["clinicOffice", "officeNumber"], key: "officeNumber" },
 			];
+		case "Клиники":
+			return [];
 		default:
 			return [];
 	}
@@ -124,6 +126,8 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 						console.log(data);
 						setData(pageId, data || []);
 					});
+					break;
+				case "Клиники":
 					break;
 			}
 		}
