@@ -7,6 +7,7 @@ type OptionInput = {
 	name: string;
 	key: string;
 	options?: { label: string; value: string }[];
+	isRequired?: boolean;
 };
 
 interface AddModalProps {
@@ -54,11 +55,15 @@ export const AddModal: FC<AddModalProps> = ({ title, open, options, setIsOpen, o
 									key={option.key}
 									name={option.key}
 									label={option.name}
-									rules={[
-										{ required: true, message: `Пожалуйста, введите ${option.name}` },
-										{ max: 15, message: "Длина не может быть больше 15 символов" },
-										{ pattern: /^[^\d]*$/, message: "Поле не должно содержать цифры" },
-									]}
+									rules={
+										option.isRequired
+											? [
+													{ required: true, message: `Пожалуйста, введите ${option.name}` },
+													{ max: 15, message: "Длина не может быть больше 15 символов" },
+													{ pattern: /^[^\d]*$/, message: "Поле не должно содержать цифры" },
+												]
+											: undefined
+									}
 									style={{ marginBottom: "12px" }}
 								>
 									<Input style={{ borderRadius: "4px" }} />

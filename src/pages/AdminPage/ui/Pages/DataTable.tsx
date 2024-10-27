@@ -13,16 +13,19 @@ import {
 	useDeleteDoctorMutation,
 	useDeleteClinicDoctorAvailabilityMutation,
 	useDeleteClinicOfficeMutation,
+	useUpdateOrCreateDoctorTypeMutation,
 } from "@/shared/__generate/graphql-frontend";
 import { AddOfficeModal } from "../AddOfficeModal";
 import { AddAvaibleModal } from "../AddAvaibleModal";
 import { TableRowSelection } from "antd/es/table/interface";
+import { v4 } from "uuid";
 
 type OptionInput = {
 	type: "text" | "date" | "select";
 	name: string;
 	key: string;
 	options?: { label: string; value: string }[];
+	isRequired?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,6 +89,7 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	const [deleteDoctor, { loading: DeleteDoctorLoading }] = useDeleteDoctorMutation();
 	const [deleteAvailability, { loading: DeleteAvailabilityLoading }] = useDeleteClinicDoctorAvailabilityMutation();
 	const [deleteOffice, { loading: DeleteOfficeLoading }] = useDeleteClinicOfficeMutation();
+	const [createDoctorType] = useUpdateOrCreateDoctorTypeMutation();
 
 	const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
 		console.log("selectedRowKeys changed: ", newSelectedRowKeys);
@@ -137,22 +141,10 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 
 	const columns = getColumnsByType(type);
 	const options: OptionInput[] = [
-		{ type: "text", name: "Имя", key: "firstName" },
-		{ type: "text", name: "Фамилия", key: "lastName" },
-		{
-			type: "select",
-			name: "Тип врача",
-			key: "doctorType",
-			options: [
-				{ label: "Хирург", value: "Хирург" },
-				{ label: "Патологоанатом", value: "Патологоанатом" },
-				{ label: "Педиатр", value: "Педиатр" },
-				{ label: "Окулист", value: "Окулист" },
-				{ label: "ЛОР", value: "ЛОР" },
-				{ label: "Психолог", value: "Психолог" },
-				{ label: "Венеролог", value: "Венеролог" },
-			],
-		},
+		{ type: "text", name: "Имя", key: "firstName", isRequired: true },
+		{ type: "text", name: "Фамилия", key: "lastName", isRequired: true },
+		{ type: "text", name: "Врач", key: "doctorTypeName", isRequired: true },
+		{ type: "text", name: "Описание (необзательно)", key: "doctorTypeDescription" },
 	];
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -167,15 +159,19 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 						},
 					},
 				});
+				const { data } = await createDoctorType({
+					variables: { id: v4(), name: values.doctorTypeName, description: values.doctorTypeDescription },
+				});
 
 				const personId = personResult.data?.packet?.createPerson?.id;
-				if (!personId) {
+				const doctorType = data?.dictionaryPacket?.updateOrCreateDoctorType?.returning?.id;
+				if (!personId || !doctorType) {
 					throw new Error("Не удалось создать запись о человеке");
 				}
 
 				await createDoctorMutation({
 					variables: {
-						doctorTypeId: values.doctorType,
+						doctorTypeId: doctorType,
 						personId: personId,
 					},
 				});
