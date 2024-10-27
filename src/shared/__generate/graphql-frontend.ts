@@ -3155,6 +3155,7 @@ export type ClinicTableAttributesFragment = {
 	id: string;
 	beginDate: any;
 	endDate: any;
+	comment?: string | null;
 	clinicOffice: { __typename?: "_E_ClinicOffice"; id: string; officeNumber?: string | null };
 	customer: {
 		__typename?: "_G_CustomerReference";
@@ -3383,6 +3384,7 @@ export const CustomerAttributesFragmentDoc = gql`
 		__typename
 		insurancePolicyNumber
 		phoneNumber
+		comment
 		person {
 			entityId
 			entity {
@@ -3456,6 +3458,7 @@ export const ClinicTableAttributesFragmentDoc = gql`
 		__typename
 		beginDate
 		endDate
+		comment
 		clinicOffice {
 			id
 			officeNumber
