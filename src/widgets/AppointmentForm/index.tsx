@@ -226,6 +226,9 @@ const AppointmentForm: React.FC<AppointmentProps> = ({ refetch }) => {
 
 	return (
 		<Card title="Запись на прием">
+			<Form onFinish={onFinish}>
+
+			
 			{contextHolder}
 			<Tour open={isTourOpen} onClose={() => setIsTourOpen(false)} steps={steps} />
 			<div ref={ref1}>
@@ -314,6 +317,7 @@ const AppointmentForm: React.FC<AppointmentProps> = ({ refetch }) => {
 					Записаться
 				</Button>
 			</Form.Item>
+			</Form>
 		</Card>
 	);
 };
