@@ -47,7 +47,11 @@ const ClientPage: React.FC = () => {
 	}, [user]);
 
 	if (isLoading) {
-		return <Spin />;
+		return (
+			<Layout>
+				<Spin size="large" />
+			</Layout>
+		);
 	}
 
 	if (!customer) {

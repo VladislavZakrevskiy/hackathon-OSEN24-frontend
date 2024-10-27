@@ -4,7 +4,7 @@ import Keycloak, { KeycloakInstance } from "keycloak-js";
 import { cache } from "@/shared/api/graphql/cache";
 import { useUserStore } from "@/entities/User";
 import { useAppStore } from "@/app/model/AppStore";
-import { Spin } from "antd";
+import { Layout, Spin } from "antd";
 
 interface ApiProviderProps {
 	children: ReactNode;
@@ -52,20 +52,20 @@ export const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 		setIsLoading(false);
 	}, []);
 
-	console.log(userInfo);
-
 	if (!isLoading && authenticated) {
 		return <ApolloProvider client={apollo!}>{children}</ApolloProvider>;
 	}
 	return (
-		<Spin
-			size="large"
-			style={{
-				margin: 0,
-				position: "absolute",
-				top: "45%",
-				left: "45%",
-			}}
-		/>
+		<Layout>
+			<Spin
+				size="large"
+				style={{
+					margin: 0,
+					position: "absolute",
+					top: "45%",
+					left: "45%",
+				}}
+			/>
+		</Layout>
 	);
 };

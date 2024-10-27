@@ -6,7 +6,13 @@ import { Layout, Spin } from "antd";
 const App = () => {
 	return (
 		<div className="min-h-screen flex flex-col">
-			<Suspense fallback={<Spin size="large" />}>
+			<Suspense
+				fallback={
+					<Layout>
+						<Spin size="large" />
+					</Layout>
+				}
+			>
 				<Header />
 				<Layout>
 					<AppRouter />

@@ -23,9 +23,9 @@ const MainPage = memo(() => {
 		return () => clearInterval(interval);
 	}, []);
 
-	// if (userInfo?.role === UserRoles.ADMIN) {
-	// 	return <Dashboard />;
-	// }
+	if (userInfo?.role === UserRoles.ADMIN) {
+		return <Dashboard />;
+	}
 
 	return (
 		<Layout>

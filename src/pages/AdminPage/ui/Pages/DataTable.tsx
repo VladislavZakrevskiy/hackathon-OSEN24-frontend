@@ -14,6 +14,8 @@ import {
 	useDeleteClinicDoctorAvailabilityMutation,
 	useDeleteClinicOfficeMutation,
 	useUpdateOrCreateDoctorTypeMutation,
+	useSearchClinicQuery,
+	useCreateClinicDoctorMutation,
 } from "@/shared/__generate/graphql-frontend";
 import { AddOfficeModal } from "../AddOfficeModal";
 import { AddAvaibleModal } from "../AddAvaibleModal";
@@ -89,7 +91,9 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	const [deleteDoctor, { loading: DeleteDoctorLoading }] = useDeleteDoctorMutation();
 	const [deleteAvailability, { loading: DeleteAvailabilityLoading }] = useDeleteClinicDoctorAvailabilityMutation();
 	const [deleteOffice, { loading: DeleteOfficeLoading }] = useDeleteClinicOfficeMutation();
+	const [createClinicDoctor] = useCreateClinicDoctorMutation();
 	const [createDoctorType] = useUpdateOrCreateDoctorTypeMutation();
+	const { data } = useSearchClinicQuery({ variables: { searchStr: "" } });
 
 	const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
 		console.log("selectedRowKeys changed: ", newSelectedRowKeys);
@@ -141,6 +145,13 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 
 	const columns = getColumnsByType(type);
 	const options: OptionInput[] = [
+		{
+			type: "select",
+			name: "Клиника",
+			key: "clinic",
+			// @ts-ignore
+			options: data?.searchClinic.elems.map((clinic) => ({ label: clinic.name, value: clinic.id })),
+		},
 		{ type: "text", name: "Имя", key: "firstName", isRequired: true },
 		{ type: "text", name: "Фамилия", key: "lastName", isRequired: true },
 		{ type: "text", name: "Врач", key: "doctorTypeName", isRequired: true },
@@ -169,11 +180,15 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 					throw new Error("Не удалось создать запись о человеке");
 				}
 
-				await createDoctorMutation({
+				const { data: doctor } = await createDoctorMutation({
 					variables: {
 						doctorTypeId: doctorType,
 						personId: personId,
 					},
+				});
+
+				await createClinicDoctor({
+					variables: { clinicId: values.clinic, doctorId: doctor?.packet?.createDoctor?.id || "" },
 				});
 
 				console.log("Новый врач успешно добавлен");

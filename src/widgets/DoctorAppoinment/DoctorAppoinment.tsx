@@ -1,7 +1,7 @@
 import { SearchClinicTableDocument, SearchClinicTableQueryVariables } from "@/shared/__generate/graphql-frontend";
 import { getRouteViewClientPage, getRouteViewDoctorPage } from "@/shared/consts/router";
 import { useQuery } from "@apollo/client";
-import { Empty, Spin, Table, Typography } from "antd";
+import { Empty, Layout, Spin, Table, Typography } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
@@ -64,7 +64,11 @@ export const DoctorAppoinmentTable = ({ daysTo }: { daysTo: number }) => {
 	const tables = data?.searchClinicTable.elems;
 
 	if (loading) {
-		return <Spin size="large" />;
+		return (
+			<Layout>
+				<Spin size="large" />
+			</Layout>
+		);
 	}
 
 	return (

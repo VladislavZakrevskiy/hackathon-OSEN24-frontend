@@ -1,77 +1,81 @@
-import { useSearchClinicQuery, useSearchClinicTableLazyQuery } from "@/shared/__generate/graphql-frontend";
+import {
+	useSearchClinicQuery,
+	useSearchClinicWithoutOfficeTableLazyQuery,
+	useSearchCustomerQuery,
+	useSearchDoctorQuery,
+} from "@/shared/__generate/graphql-frontend";
 import moment from "moment";
 import { useEffect, useState } from "react";
 
 export const useGetStatFromTable = () => {
-	const { data } = useSearchClinicQuery({ variables: { searchStr: "" } });
-	const [searchClinicTable] = useSearchClinicTableLazyQuery();
+	const { data, loading: ClinicLoading } = useSearchClinicQuery({ variables: { searchStr: "" } });
+	const { data: doctors, loading: DoctorLoading } = useSearchDoctorQuery({ variables: { searchStr: "" } });
+	const { data: customers, loading: CustomerLoading } = useSearchCustomerQuery({ variables: { searchStr: "" } });
+	const [searchClinicTable, { loading: TableLoading }] = useSearchClinicWithoutOfficeTableLazyQuery();
 	const clinics = data?.searchClinic.elems || [];
-	const [tables, setTables] = useState([]);
 
-	const [statistics, setStatistics] = useState({
-		frequentPatients: 0,
-		monthlyRecords: {},
-		recordsPerClinic: {},
-		recordsPerDoctor: {},
-	});
+	const [tables, setTables] = useState<
+		Array<{
+			__typename: "_E_ClinicTable";
+			id: string;
+			beginDate: string;
+			endDate: string;
+			clinicOffice: { __typename?: "_E_ClinicOffice"; id: string; officeNumber?: string | null };
+			customer: {
+				__typename?: "_G_CustomerReference";
+				entityId?: string | null;
+				entity?: {
+					__typename?: "_E_Customer";
+					person: {
+						__typename?: "_G_PersonReference";
+						entityId?: string | null;
+						entity?: { __typename?: "_E_Person"; firstName: string; lastName: string } | null;
+					};
+				} | null;
+			};
+			clinicDoctor: {
+				__typename?: "_E_ClinicDoctor";
+				id: string;
+				doctor: {
+					__typename?: "_G_DoctorReference";
+					entityId?: string | null;
+					entity?: {
+						__typename?: "_E_Doctor";
+						person: {
+							__typename?: "_G_PersonReference";
+							entityId?: string | null;
+							entity?: { __typename?: "_E_Person"; firstName: string; lastName: string } | null;
+						};
+					} | null;
+				};
+			};
+		}>
+	>([]);
 
 	useEffect(() => {
 		const getTables = async () => {
-			const allRecords = [];
 			for (const clinic of clinics) {
 				const { data } = await searchClinicTable({
 					variables: {
 						clinicId: clinic.id,
-						dateFrom: moment().subtract(1, "y").toISOString(),
-						dateTo: moment().add(1, "y").toISOString(),
+						notoffice: "7429620459189698562",
+						dateFrom: moment().add(-1, "y").toISOString().slice(0, -1),
+						dateTo: moment().add(1, "y").toISOString().slice(0, -1),
 					},
 				});
 				const records = data?.searchClinicTable.elems || [];
-				allRecords.push(...records);
 				setTables((prev) => [...prev, ...records]);
 			}
-
-			// Calculate statistics
-			calculateStatistics(allRecords);
 		};
 
 		getTables();
 	}, [clinics]);
 
-	const calculateStatistics = (records) => {
-		const monthlyRecords = {};
-		const recordsPerClinic = {};
-		const recordsPerDoctor = {};
-		const patientVisitCount = {};
-
-		records.forEach((record) => {
-			const month = moment(record.beginDate).format("YYYY-MM");
-			const clinicId = record.clinicOffice.id;
-			const doctorId = record.clinicDoctor.id;
-			const patientId = record.customer.entityId;
-
-			// Count records per month
-			monthlyRecords[month] = (monthlyRecords[month] || 0) + 1;
-
-			// Count records per clinic
-			recordsPerClinic[clinicId] = (recordsPerClinic[clinicId] || 0) + 1;
-
-			// Count records per doctor
-			recordsPerDoctor[doctorId] = (recordsPerDoctor[doctorId] || 0) + 1;
-
-			// Count patient visits
-			patientVisitCount[patientId] = (patientVisitCount[patientId] || 0) + 1;
-		});
-
-		const frequentPatients = Object.values(patientVisitCount).filter((count) => count >= 2).length;
-
-		setStatistics({
-			frequentPatients,
-			monthlyRecords,
-			recordsPerClinic,
-			recordsPerDoctor,
-		});
+	return {
+		tables,
+		clinics,
+		doctors: doctors?.searchDoctor.elems || [],
+		customers: customers?.searchCustomer.elems || [],
+		loading: TableLoading || CustomerLoading || DoctorLoading || ClinicLoading,
 	};
-
-	return { statistics, tables };
 };
