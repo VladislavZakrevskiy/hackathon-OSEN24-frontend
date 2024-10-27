@@ -3,8 +3,12 @@ import { memo, useEffect, useState } from "react";
 import { ReviewsSection } from "@/widgets/ReviewsSection";
 import { Layout } from "antd";
 import "./MainPage.css";
+import { UserRoles, useUserStore } from "@/entities/User";
+import { Dashboard } from "./Dashboard/Dashboard";
 
 const MainPage = memo(() => {
+	const { userInfo } = useUserStore();
+
 	useEffect(() => {
 		document.title = "Сервис записи к врачу Pepper_coding";
 	}, []);
@@ -13,11 +17,15 @@ const MainPage = memo(() => {
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setHighlighted(prev => (prev + 1) % 3);
+			setHighlighted((prev) => (prev + 1) % 3);
 		}, 3000);
 
 		return () => clearInterval(interval);
 	}, []);
+
+	// if (userInfo?.role === UserRoles.ADMIN) {
+	// 	return <Dashboard />;
+	// }
 
 	return (
 		<Layout>
@@ -37,7 +45,10 @@ const MainPage = memo(() => {
 							<ServiceCard title="Выбор врача" description="Найдите подходящего специалиста по вашим требованиям" />
 						</div>
 						<div className={`flex-1 min-w-[250px] ${highlighted === 2 ? "highlight" : ""}`}>
-							<ServiceCard title="История посещений" description="Всегда под рукой прошедшие посещения с вашими специалистами" />
+							<ServiceCard
+								title="История посещений"
+								description="Всегда под рукой прошедшие посещения с вашими специалистами"
+							/>
 						</div>
 					</div>
 
