@@ -7,9 +7,9 @@ export const AdvantagesSection = () => (
 		<hr className="border-white mb-4" />
 		<ul className="list-disc list-inside">
 			<li className="text-lg">Высококвалифицированные специалисты</li>
-			<li className="text-lg">Современное оборудование</li>
+			<li className="text-lg">Большой выбор клиник</li>
 			<li className="text-lg">Индивидуальный подход к каждому пациенту</li>
-			<li className="text-lg">Комфортабельные условия</li>
+			<li className="text-lg">Удобный интерфейс</li>
 		</ul>
 	</Card>
 );

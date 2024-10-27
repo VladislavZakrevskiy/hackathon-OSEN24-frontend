@@ -1,0 +1,14 @@
+/* MainPage.css */
+@keyframes glow {
+	0%, 100% {
+		box-shadow: 0 0 8px rgba(1, 26, 172, 0.2);
+	}
+	50% {
+		box-shadow: 0 0 16px rgba(18, 49, 153, 0.7);
+	}
+}
+
+.highlight {
+	animation: glow 3s ease infinite;
+	border-radius: 8px;
+}

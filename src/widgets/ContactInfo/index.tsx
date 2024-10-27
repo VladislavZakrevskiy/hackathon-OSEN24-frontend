@@ -9,7 +9,7 @@ export const ContactInfo = () => {
 
 	return (
 		<Card>
-			<div className="flex gap-4 justify-center items-center">
+			<div className="flex gap-4 justify-center items-center flex-wrap">
 				<Button type="primary" size="large" href="tel:+1234567890">
 					Позвонить
 				</Button>
@@ -23,7 +23,7 @@ export const ContactInfo = () => {
 						nav(getRouteClientPage(user?.person.entity?.firstName + (user?.person.entity?.lastName || "")))
 					}
 				>
-					Записаться на прием
+					Записаться на приём
 				</Button>
 			</div>
 		</Card>
