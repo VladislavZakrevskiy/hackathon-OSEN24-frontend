@@ -32,4 +32,4 @@ COPY ./tsconfig.node.json ./tsconfig.node.json
 
 COPY ./vite.config.ts ./vite.config.ts
 
-CMD ["yarn", "run", "dev", "--host"]
+CMD ["VITE_DS_ENDPOINT=https://smapi.pv-api.sbc.space/ds-7430345669871992834/graphql", "VITE_NODE_ENV=dev", "yarn", "run", "dev", "--host"]
