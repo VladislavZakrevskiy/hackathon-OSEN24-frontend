@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table } from "antd";
+import { Button, Skeleton, Table } from "antd";
 import { Doctor, DoctorAvailability, Office, PageType, usePageStore } from "../../model/browserStore";
 import { useGetDoctorAvailabilityData } from "../../model/hooks/useGetDoctorAvailabilityData";
 import { useGetDoctorData } from "../../model/hooks/useGetDoctorData";
@@ -11,6 +11,8 @@ import {
 	useSearchDoctorTypeQuery,
 	useSearchDoctorQuery,
 } from "@/shared/__generate/graphql-frontend";
+import { AddOfficeModal } from "../AddOfficeModal";
+import { AddAvaibleModal } from "../AddAvaibleModal";
 
 type OptionInput = {
 	type: "text" | "date" | "select";
@@ -66,9 +68,13 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	const { fetchOfficeData, isLoading: isOfficeLoading } = useGetOfficeData();
 	const [createPersonMutation] = useCreatePersonMutation();
 	const [createDoctorMutation] = useCreateDoctorMutation();
+
 	const { data: doctorTypeData } = useSearchDoctorTypeQuery({ variables: { searchStr: "" } });
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { data: doctorData, refetch: refetchDoctor } = useSearchDoctorQuery({ variables: { searchStr: "" } });
+	const { data: doctorData, refetch: refetchDoctor } = useSearchDoctorQuery({
+		variables: { searchStr: "" },
+		fetchPolicy: "no-cache",
+	});
 
 	useEffect(() => {
 		if (!page?.data) {
@@ -118,37 +124,39 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handleAddSubmit = async (values: Record<string, any>) => {
-		try {
-			const personResult = await createPersonMutation({
-				variables: {
-					input: {
-						firstName: values.firstName,
-						lastName: values.lastName,
+		if (type === "Врачи") {
+			try {
+				const personResult = await createPersonMutation({
+					variables: {
+						input: {
+							firstName: values.firstName,
+							lastName: values.lastName,
+						},
 					},
-				},
-			});
+				});
 
-			const personId = personResult.data?.packet?.createPerson?.id;
-			if (!personId) {
-				throw new Error("Не удалось создать запись о человеке");
+				const personId = personResult.data?.packet?.createPerson?.id;
+				if (!personId) {
+					throw new Error("Не удалось создать запись о человеке");
+				}
+
+				await createDoctorMutation({
+					variables: {
+						doctorTypeId: values.doctorType,
+						personId: personId,
+					},
+				});
+
+				console.log("Новый врач успешно добавлен");
+
+				await refetchDoctor().then((updatedData) => {
+					setData(pageId, updatedData.data?.searchDoctor?.elems || []);
+				});
+
+				setIsAddOpen(false);
+			} catch (error) {
+				console.error("Ошибка при добавлении врача:", error);
 			}
-
-			await createDoctorMutation({
-				variables: {
-					doctorTypeId: values.doctorType,
-					personId: personId,
-				},
-			});
-
-			console.log("Новый врач успешно добавлен");
-
-			await refetchDoctor().then((updatedData) => {
-				setData(pageId, updatedData.data?.searchDoctor?.elems || []);
-			});
-
-			setIsAddOpen(false);
-		} catch (error) {
-			console.error("Ошибка при добавлении врача:", error);
 		}
 	};
 
@@ -157,21 +165,160 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 		setCurrentPage(pagination.current);
 	};
 
-	if (isAvailabilityLoading || isDoctorLoading || isOfficeLoading) return <p>Загрузка...</p>;
+	const refetchByType = async () => {
+		switch (type) {
+			case "Врачи":
+				await refetchDoctor().then((updatedData) => {
+					setData(pageId, updatedData.data?.searchDoctor?.elems || []);
+				});
+				break;
+			case "Кабинеты":
+				fetchOfficeData().then((updatedData) => {
+					setData(pageId, updatedData || []);
+				});
+				break;
+			case "Часы работы врачей":
+				fetchDoctorAvailabilityData().then((updatedData) => {
+					setData(pageId, updatedData || []);
+				});
+				break;
+		}
+	};
+
+	if (isAvailabilityLoading || isDoctorLoading || isOfficeLoading)
+		return (
+			<div>
+				<div className="pb-2 flex gap-3">
+					<Button onClick={() => setIsAddOpen(true)}>Добавить</Button>
+					<Button onClick={refetchByType}>Обновить вручную</Button>
+				</div>
+				{type === "Врачи" ? (
+					<AddModal
+						open={isAddOpen}
+						setIsOpen={setIsAddOpen}
+						options={options}
+						title={`Добавление в вкладку ${type}`}
+						onSubmit={handleAddSubmit}
+					/>
+				) : type === "Кабинеты" ? (
+					<AddOfficeModal
+						open={isAddOpen}
+						setIsOpen={setIsAddOpen}
+						onOk={() =>
+							fetchOfficeData().then((updatedData) => {
+								setData(pageId, updatedData || []);
+							})
+						}
+					/>
+				) : (
+					<AddAvaibleModal
+						open={isAddOpen}
+						setIsOpen={setIsAddOpen}
+						onOk={() =>
+							fetchDoctorAvailabilityData().then((updatedData) => {
+								setData(pageId, updatedData || []);
+							})
+						}
+					/>
+				)}
+				<Table
+					dataSource={[
+						{
+							loading1: <Skeleton />,
+							loading2: <Skeleton />,
+							loading3: <Skeleton />,
+							loading4: <Skeleton />,
+							loading5: <Skeleton />,
+						},
+						{
+							loading1: <Skeleton />,
+							loading2: <Skeleton />,
+							loading3: <Skeleton />,
+							loading4: <Skeleton />,
+							loading5: <Skeleton />,
+						},
+						{
+							loading1: <Skeleton />,
+							loading2: <Skeleton />,
+							loading3: <Skeleton />,
+							loading4: <Skeleton />,
+							loading5: <Skeleton />,
+						},
+					]}
+					columns={[
+						{
+							key: "loading1",
+							title: "Loading",
+							dataIndex: "loading1",
+						},
+						{
+							key: "loading2",
+							title: "Loading",
+							dataIndex: "loading2",
+						},
+						{
+							key: "loading3",
+							title: "Loading",
+							dataIndex: "loading3",
+						},
+						{
+							key: "loading4",
+							title: "Loading",
+							dataIndex: "loading4",
+						},
+						{
+							key: "loading5",
+							title: "Loading",
+							dataIndex: "loading5",
+						},
+					]}
+					rowKey="id"
+					pagination={{
+						current: currentPage,
+						pageSize: 6,
+						onChange: handleTableChange,
+					}}
+				/>
+			</div>
+		);
 
 	return (
 		<div>
-			<div className="pb-2">
+			<div className="pb-2 flex gap-3">
 				<Button onClick={() => setIsAddOpen(true)}>Добавить</Button>
+				<Button onClick={refetchByType}>Обновить вручную</Button>
 			</div>
-			<AddModal
-				open={isAddOpen}
-				setIsOpen={setIsAddOpen}
-				options={options}
-				title={`Добавление в вкладку ${type}`}
-				onSubmit={handleAddSubmit}
-			/>
+			{type === "Врачи" ? (
+				<AddModal
+					open={isAddOpen}
+					setIsOpen={setIsAddOpen}
+					options={options}
+					title={`Добавление в вкладку ${type}`}
+					onSubmit={handleAddSubmit}
+				/>
+			) : type === "Кабинеты" ? (
+				<AddOfficeModal
+					open={isAddOpen}
+					setIsOpen={setIsAddOpen}
+					onOk={() =>
+						fetchOfficeData().then((updatedData) => {
+							setData(pageId, updatedData || []);
+						})
+					}
+				/>
+			) : (
+				<AddAvaibleModal
+					open={isAddOpen}
+					setIsOpen={setIsAddOpen}
+					onOk={() =>
+						fetchDoctorAvailabilityData().then((updatedData) => {
+							setData(pageId, updatedData || []);
+						})
+					}
+				/>
+			)}
 			<Table
+				// @ts-ignore
 				dataSource={page?.data || []}
 				columns={columns}
 				rowKey="id"

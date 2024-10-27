@@ -3,7 +3,9 @@ import { Office } from "../browserStore";
 
 export const useGetOfficeData = () => {
 	const [searchClinic, { loading: ClinicLoading }] = useSearchClinicLazyQuery();
-	const [searchOffice, { loading: OfficeLoading }] = useSearchClinicOfficeLazyQuery();
+	const [searchOffice, { loading: OfficeLoading, refetch }] = useSearchClinicOfficeLazyQuery({
+		fetchPolicy: "no-cache",
+	});
 
 	const fetchOfficeData = async () => {
 		const { data: clinics } = await searchClinic({ variables: { searchStr: "" } });
@@ -16,5 +18,5 @@ export const useGetOfficeData = () => {
 		return offices;
 	};
 
-	return { isLoading: ClinicLoading || OfficeLoading, fetchOfficeData };
+	return { isLoading: ClinicLoading || OfficeLoading, fetchOfficeData, refetchOfficeData: refetch };
 };
