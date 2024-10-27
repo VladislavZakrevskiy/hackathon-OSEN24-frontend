@@ -40,7 +40,6 @@ export const useGetId = (given_name: string, role: UserRoles) => {
 		};
 		fetchEntity();
 	}, [person, role]);
-	console.log("id", id);
 
 	return {
 		id,

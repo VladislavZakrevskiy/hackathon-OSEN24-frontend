@@ -170,14 +170,16 @@ mutation updateCustomer($id: ID!, $phoneNumber: String) {
 	}
 }
 
-mutation updateAllCustomer(
-	$id: ID!
-	$phoneNumber: String
-	$insurancePolicyNumber: String
-	$new_person_id: String!
-) {
+mutation updateAllCustomer($id: ID!, $phoneNumber: String, $insurancePolicyNumber: String, $new_person_id: String!) {
 	packet {
-		updateCustomer(input: { id: $id, phoneNumber: $phoneNumber, insurancePolicyNumber: $insurancePolicyNumber, person: {entityId: $new_person_id} }) {
+		updateCustomer(
+			input: {
+				id: $id
+				phoneNumber: $phoneNumber
+				insurancePolicyNumber: $insurancePolicyNumber
+				person: { entityId: $new_person_id }
+			}
+		) {
 			...CustomerAttributes
 		}
 	}
@@ -447,12 +449,16 @@ query searchClinicTable($clinicId: String!, $dateFrom: _DateTime!, $dateTo: _Dat
 		}
 	}
 }
- 
 
-
-query searchClinicWithoutOfficeTable($clinicId: String!, $notoffice: String!, $dateFrom: _DateTime!, $dateTo: _DateTime!) {
-	searchClinicTable(cond: "it.clinic.id == ${clinicId} && it.clinicOffice.id != ${notoffice} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}")
-		@strExpr(strings: [$clinicId, $notoffice], dateTimes: [$dateFrom, $dateTo]) {
+query searchClinicWithoutOfficeTable(
+	$clinicId: String!
+	$notoffice: String!
+	$dateFrom: _DateTime!
+	$dateTo: _DateTime!
+) {
+	searchClinicTable(
+		cond: "it.clinic.id == ${clinicId} && it.clinicOffice.id != ${notoffice} && it.endDate >= ${dateFrom} && it.beginDate <= ${dateTo}"
+	) @strExpr(strings: [$clinicId, $notoffice], dateTimes: [$dateFrom, $dateTo]) {
 		elems {
 			...ClinicTableAttributes
 		}

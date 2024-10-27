@@ -8,7 +8,6 @@ const { Text, Title } = Typography;
 const ClientForViewPage = () => {
 	const { id } = useParams<{ id: string }>();
 	const { customer, fetchCustomer } = useGetCustomerById(id || "");
-	console.log(customer);
 
 	useEffect(() => {
 		fetchCustomer();

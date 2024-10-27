@@ -1,8 +1,8 @@
 import {
 	useCreateClinicDoctorAvailabilityMutation,
+	useSearchClinicDoctorLazyQuery,
 	useSearchClinicLazyQuery,
 	useSearchClinicOfficeLazyQuery,
-	useSearchDoctorLazyQuery,
 } from "@/shared/__generate/graphql-frontend";
 import { Button, Form, Modal, Select } from "antd";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
@@ -30,13 +30,27 @@ export const AddAvaibleModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpe
 	const [clinics, setClinics] = useState<Array<{ __typename: "_E_Clinic"; id: string; name?: string | null }>>([]);
 	const [clinicDoctors, setClinicDoctors] = useState<
 		Array<{
-			__typename: "_E_Doctor";
+			__typename: "_E_ClinicDoctor";
 			id: string;
-			doctorType: { __typename?: "_E_DoctorType"; id: string; name: string };
-			person: {
-				__typename?: "_G_PersonReference";
+			clinic: { __typename?: "_E_Clinic"; id: string; name?: string | null };
+			doctor: {
+				__typename?: "_G_DoctorReference";
 				entityId?: string | null;
-				entity?: { __typename?: "_E_Person"; firstName: string; lastName: string } | null;
+				entity?: {
+					__typename?: "_E_Doctor";
+					doctorType: { __typename?: "_E_DoctorType"; id: string; name: string };
+					person: {
+						__typename?: "_G_PersonReference";
+						entityId?: string | null;
+						entity?: {
+							__typename?: "_E_Person";
+							firstName: string;
+							lastName: string;
+							inn?: string | null;
+							birthDate?: unknown | null;
+						} | null;
+					};
+				} | null;
 			};
 		}>
 	>([]);
@@ -50,7 +64,7 @@ export const AddAvaibleModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpe
 	>([]);
 
 	const [searchClinic, { loading: clinicsLoading }] = useSearchClinicLazyQuery();
-	const [searchDoctor, { loading: doctorsLoading }] = useSearchDoctorLazyQuery();
+	const [searchDoctor, { loading: doctorsLoading }] = useSearchClinicDoctorLazyQuery();
 	const [searchOffice, { loading: officeLoading }] = useSearchClinicOfficeLazyQuery();
 	const [createAvailablity, { loading: availablityLoading }] = useCreateClinicDoctorAvailabilityMutation();
 
@@ -70,9 +84,9 @@ export const AddAvaibleModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpe
 	useEffect(() => {
 		const getData = async () => {
 			const { data } = await searchDoctor({
-				variables: { searchStr: "" },
+				variables: { clinicId: clinicId || "", searchStr: "" },
 			});
-			setClinicDoctors(data?.searchDoctor.elems || []);
+			setClinicDoctors(data?.searchClinicDoctor.elems || []);
 			setForm((prev) => ({ ...prev, appointment: undefined }));
 		};
 		getData();
@@ -129,7 +143,7 @@ export const AddAvaibleModal: FC<AddAvaibleModalProps> = ({ onOk, open, setIsOpe
 					loading={doctorsLoading}
 					value={doctorId}
 					options={clinicDoctors.map((doctor) => ({
-						label: `${doctor.person.entity?.firstName} ${doctor.person.entity?.lastName}`,
+						label: `${doctor.doctor.entity?.person.entity?.firstName} ${doctor.doctor.entity?.person.entity?.lastName}`,
 						value: doctor.id,
 					}))}
 					onChange={(doctorId) => setForm((prev) => ({ ...prev, doctorId }))}

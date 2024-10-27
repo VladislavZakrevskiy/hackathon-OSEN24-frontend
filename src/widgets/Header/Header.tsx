@@ -13,7 +13,6 @@ export const Header = () => {
 	const navigate = useNavigate();
 	const { entity, isLoading, person } = useGetId(userInfo?.given_name || "", userInfo?.role || UserRoles.CLIENT);
 	const id = person?.id || null;
-	console.log(person, entity);
 
 	useEffect(() => {
 		if (id && !isLoading) {
@@ -23,7 +22,6 @@ export const Header = () => {
 
 	useEffect(() => {
 		if (entity) setUser(entity!);
-		console.log(entity);
 	}, [entity]);
 
 	const handleProfileNavigation = () => {

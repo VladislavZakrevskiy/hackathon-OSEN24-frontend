@@ -96,7 +96,6 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 	const { data } = useSearchClinicQuery({ variables: { searchStr: "" } });
 
 	const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-		console.log("selectedRowKeys changed: ", newSelectedRowKeys);
 		setSelectedRowKeys(newSelectedRowKeys);
 	};
 
@@ -125,7 +124,6 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 					break;
 				case "Часы работы врачей":
 					fetchDoctorAvailabilityData().then((data) => {
-						console.log(data);
 						setData(pageId, data || []);
 					});
 					break;
@@ -190,8 +188,6 @@ const DataTable: React.FC<DataTableProps> = ({ type, pageId }) => {
 				await createClinicDoctor({
 					variables: { clinicId: values.clinic, doctorId: doctor?.packet?.createDoctor?.id || "" },
 				});
-
-				console.log("Новый врач успешно добавлен");
 
 				await refetchDoctor().then((updatedData) => {
 					setData(pageId, updatedData.data?.searchDoctor?.elems || []);
